@@ -217,7 +217,7 @@
 
 // Final slide
 #thanks-slide(
-  thanks-text: "Thank you for your attention",
+  thanks-text: "Thank you for your attention!",
   contact-author: "Dr. Jane Doe",
   email: "jane.doe@leibniz-bips.de",
 )

@@ -246,10 +246,10 @@
   contact-author: "",
   email: "",
 ) = {
-  slide(setting: body => {
-    set page(background: none)
-    set align(center)
-  })[
+  slide[
+    #set page(background: none)
+    #set align(center)
+    
     #v(1cm)
     
     // Thanks message
@@ -266,37 +266,37 @@
     
     #v(1cm)
     
-    // Contact information and logo - flush to bottom
+    // Contact information and logo - positioned at bottom
     #place(
       bottom,
-      dy: -0.1cm,
+      dy: -0.5cm,
       grid(
         columns: (1fr, 1fr),
         align: (right, left),
         gutter: 2em,
-        {
-          align(right)[
+        [
+          #align(right)[
             #text(size: 14pt, fill: bips-text-gray)[
               *Contact*
               
-              #text(fill: bips-blue)[#contact-author]
+              #text(fill: bips-blue)[#contact-author]\
+              Leibniz Institute for Prevention Research\ 
+              and Epidemiology -- BIPS\
+              Achterstraße 30\
+              D-28359 Bremen\
+              Germany
               
-              Leibniz Institute for Prevention Research\
-              and Epidemiology -- BIPS
-              
-              Achterstraße 30
-              
-              D-28359 Bremen
-              
-              #text(fill: bips-blue)[#email]
+              #if email != "" [
+                #text(fill: bips-blue)[#email.replace("@", "(at)")]
+              ]
             ]
           ]
-        },
-        {
-          align(left)[
+        ],
+        [
+          #align(left)[
             #image("bips-logo.png", width: 5cm)
           ]
-        }
+        ]
       )
     )
   ]
