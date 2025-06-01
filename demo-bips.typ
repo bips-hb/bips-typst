@@ -13,10 +13,10 @@
 )
 
 // Regular content slides
-#slide(
-  title: [Introduction to BIPS Typst Theme],
-  subtitle: [Modern slide design with Typst],
-)[
+#slide[
+  = Introduction to BIPS Typst Theme
+  == Modern slide design with Typst
+
   - The BIPS Typst theme brings the institutional design to modern presentation tools
   - Built on top of the powerful *Touying* package for Typst
   - Maintains consistency with BIPS branding and visual identity
@@ -27,16 +27,15 @@
     + Easy customization and theming
 ]
 
-#slide(
-  title: [Key Features],
-)[
+#slide[
+  = Key Features
+
   The BIPS Typst theme includes:
 
   1. *Color Scheme*: Official BIPS colors (blue, orange, green)
-  2. *Typography*: Helvetica default with Fira Sans option
-  3. *Layouts*: Title slides, content slides, section slides, thanks slides
-  4. *Branding*: BIPS logo positioning and institutional information
-  5. *Flexibility*: Easy customization and content formatting
+  2. *Layouts*: Title slides, content slides, section slides, thanks slides
+  3. *Branding*: BIPS logo positioning and institutional information
+  4. *Flexibility*: Easy customization and content formatting
 
   Mathematical equations work seamlessly:
   
@@ -48,10 +47,10 @@
 // Section slide
 #section-slide[Research Applications]
 
-#slide(
-  title: [Research Use Cases],
-  subtitle: [Where this theme excels],
-)[
+#slide[
+  = Research Use Cases
+  == Where this theme excels
+
   Perfect for:
 
   - *Academic Presentations*: Conference talks, seminars, thesis defenses
@@ -62,9 +61,9 @@
   #emph[Emphasis] uses BIPS blue color for highlighting important concepts.
 ]
 
-#slide(
-  title: [Technical Advantages],
-)[
+#slide[
+  = Technical Advantages
+
   Compared to traditional presentation tools:
 
   === PowerPoint vs. Typst
@@ -93,13 +92,77 @@
   ]
 ]
 
+// Animation examples section
+#section-slide[Animation Examples]
+
+#slide[
+  = Manual Incremental Reveals
+  == Using \#pause for step-by-step presentation
+
+  Here are some key points:
+  
+  - First point appears immediately
+  #pause
+  - Second point appears on next click
+  #pause
+  - Final point completes the slide
+  
+  #pause
+  You can also reveal blocks of content:
+  #pause
+  
+  Mathematical equations work too:
+  $ f(x) = x^2 + 2x + 1 $
+  #pause
+  $ f(x) = (x + 1)^2 $
+  
+  #pause
+  *This text should appear last and be in BIPS blue!*
+]
+
+#slide[
+  = Two-Column Animation
+  == Using \#meanwhile for synchronized reveals
+
+  #grid(columns: (1fr, 1fr), gutter: 1em)[
+    Left column starts:
+    - First item here
+    #pause
+    - Second item appears
+    #pause
+    - Third item follows
+  ][
+    #meanwhile
+    Right column content appears when #meanwhile is triggered
+    #pause
+    
+    More right content on next click
+  ]
+]
+
+#slide[
+  = Math Step-by-Step
+  == Revealing equation steps
+
+  Let's solve this equation step by step:
+  
+  $ f(x) &= x^2 + 4x + 4 \
+    #pause
+    &= x^2 + 4x + 4 \
+    #pause  
+    &= (x + 2)^2 $
+    
+  #pause
+  Therefore, the vertex is at $x = -2$.
+]
+
 // Another section
 #section-slide[Getting Started]
 
-#slide(
-  title: [Using the BIPS Theme],
-  subtitle: [Quick start guide],
-)[
+#slide[
+  = Using the BIPS Theme
+  == Quick start guide
+
   #grid(
     columns: (1fr, 1fr),
     gutter: 1em,
@@ -126,7 +189,8 @@
         // ... other parameters
       )
       
-      #slide(title: [Slide Title])[
+      #slide[
+        = Slide Title
         Your content here
       ]
       ```
@@ -134,9 +198,9 @@
   )
 ]
 
-#slide(
-  title: [Customization Options],
-)[
+#slide[
+  = Customization Options
+
   Theme customization includes:
 
   - *Language*: English ("en") or German ("de") support
