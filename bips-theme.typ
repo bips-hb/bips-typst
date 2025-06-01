@@ -165,7 +165,7 @@
             fill: font-color-page-number, 
             weight: font-weight-page-number
           )[
-            #str(here().page())
+            #str(here().page() - 1)
           ]
         )
       }
@@ -262,9 +262,21 @@
   occasion: none,
 ) = {
   slide(setting: body => {
-    set page(background: none) // No logo/page number on title slide
+    set page(
+      background: {
+        // Logo placement (no page number on title slide)
+        place(
+          top + right,
+          dx: -1cm,
+          dy: 1cm,
+          image("bips-logo.png", width: 3cm)
+        )
+      }
+    )
     
     set align(center)
+    
+    // Title slide doesn't affect page numbering - content slides will start at 1
     
     v(2cm)
     
