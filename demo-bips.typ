@@ -4,7 +4,7 @@
 
 // Title slide
 #title-slide(
-  title: [The BIPS Typst Theme],
+  title: [Bypst: The BIPS Typst Theme],
   subtitle: [Modern Presentations with Typst and Touying],
   author: [Jane Doe & John Smith],
   institute: [Leibniz Institute for Prevention Research & Epidemiology -- BIPS],
@@ -18,13 +18,14 @@
   == Modern slide design with Typst
 
   - The BIPS Typst theme brings the institutional design to modern presentation tools
-  - Built on top of the powerful *Touying* package for Typst
+  - Built on top of the powerful _Touying_ package for Typst
   - Maintains consistency with BIPS branding and visual identity
   - Key advantages:
     + Fast compilation (milliseconds vs. seconds with LaTeX)
     + Clean, modern syntax
     + Powerful mathematical typesetting
     + Easy customization and theming
+    + Professional BIPS styling with configurable typography
 ]
 
 #slide[
@@ -32,16 +33,40 @@
 
   The BIPS Typst theme includes:
 
-  1. *Color Scheme*: Official BIPS colors (blue, orange, green)
-  2. *Layouts*: Title slides, content slides, section slides, thanks slides
+  1. *Color Scheme*: Official BIPS colors (#blue[blue], #orange[orange], #green[green])
+  2. *Layouts*: Title slides, content slides, section slides, thanks slides  
   3. *Branding*: BIPS logo positioning and institutional information
-  4. *Flexibility*: Easy customization and content formatting
+  4. *Typography*: Configurable font sizes, colors, and weights
+  5. *Color Utilities*: Easy-to-use color functions
 
   Mathematical equations work seamlessly:
-  
   $ sum_(i=1)^n x_i = bar(x) dot n $
   
   The math font remains serif while text uses sans-serif, following academic conventions.
+]
+
+// Section slide
+#section-slide[Theme Features & Usage]
+
+#slide[
+  = Color Utilities & Formatting
+  == Easy-to-use color functions
+
+  The theme provides convenient color utilities:
+
+  - #blue[`#blue[text]`] - Apply BIPS blue color
+  - #orange[`#orange[text]`] - Apply BIPS orange color  
+  - #green[`#green[text]`] - Apply BIPS green color
+  - #gray[`#gray[text]`] - Apply gray color
+
+  Text formatting options:
+  - *Bold text* appears in blue (customizable)
+  - _Emphasized text_ appears in blue (customizable)
+  - Regular text uses the base color
+
+  #v(1fr)
+
+  #gray[All colors and typography are configurable via variables at the top of the theme file.]
 ]
 
 // Section slide
@@ -201,18 +226,20 @@
 #slide[
   = Customization Options
 
-  Theme customization includes:
+  Theme customization through global variables:
 
-  - *Language*: English ("en") or German ("de") support
-  - *Fonts*: Helvetica (default) or Fira Sans family
-  - *Aspect Ratio*: 16:9 (recommended) or 4:3
-  - *Colors*: Built-in BIPS color palette
-  
-  Advanced users can modify:
-  - Slide layouts and spacing
-  - Color definitions
-  - Typography settings
-  - Logo placement and sizing
+  *Typography Configuration:*
+  - Font sizes for all elements (titles, subtitles, body text)
+  - Font colors for all text types
+  - Font weights (bold, regular, etc.)
+  - List and enumeration spacing
+
+  *Easy Customization:*
+  - All variables organized at the top of `bips-theme.typ`
+  - Color utility functions: `#blue[]`, `#orange[]`, `#green[]`, `#gray[]`
+  - Configurable emphasis and strong text styling  
+  - Page numbering starts at 1 for content slides
+  - Separate scaling for `inline code` (0.95) and code blocks (0.8)
 ]
 
 // Final slide

@@ -6,6 +6,25 @@
 #let bips-orange = rgb(250, 133, 55)
 #let bips-green = rgb(49, 210, 57)
 
+// BIPS Color Utility Functions
+// ============================
+
+/// Apply BIPS blue color to text
+/// Example: #blue[This text is blue]
+#let blue(content) = text(fill: bips-blue)[#content]
+
+/// Apply BIPS orange color to text  
+/// Example: #orange[This text is orange]
+#let orange(content) = text(fill: bips-orange)[#content]
+
+/// Apply BIPS green color to text
+/// Example: #green[This text is green]  
+#let green(content) = text(fill: bips-green)[#content]
+
+/// Apply gray color to text
+/// Example: #gray[This text is gray]
+#let gray(content) = text(fill: bips-text-gray)[#content]
+
 // BIPS Typography Configuration
 // =================================
 
@@ -88,8 +107,13 @@
 #let font-color-page-number = bips-text-gray
 #let font-weight-page-number = "regular"
 
-// Code block styling
-#let font-scale-code = 0.8
+// Code styling
+#let font-scale-code-inline = 1
+#let font-scale-code-block = 0.8
+
+// List and enumeration spacing
+#let list-spacing = 0.8em
+#let enum-spacing = 0.8em
 
 // Emphasis and strong text styling
 #let font-color-emphasis = bips-blue
@@ -108,19 +132,21 @@
     fill: font-color-base
   )
   
-  // Emphasis in BIPS blue
-  show emph: set text(fill: font-color-emphasis)
+  // Emphasis (_text_) in BIPS blue (color only, no italic)
+  show emph: it => text(fill: font-color-emphasis, style: "italic", weight: "regular")[#it.body]
   
-  // Strong text in BIPS blue
-  show strong: set text(fill: font-color-strong)
+  // Strong text (*text*) in BIPS blue (color only, no bold)
+  show strong: it => text(fill: font-color-strong, weight: "bold")[#it.body]
   
-  // List styling
+  // List styling with configurable spacing
+  show list: set list(spacing: list-spacing)
   show list: set text(fill: font-color-base)
+  show enum: set enum(spacing: enum-spacing)
   show enum: set text(fill: font-color-base)
   
-  // Code block styling - scaled down from base font size
-  show raw.where(block: true): set text(size: font-scale-code * 1em)
-  show raw.where(block: false): set text(size: font-scale-code * 1em)
+  // Code styling - separate scaling for inline vs block code
+  show raw.where(block: true): set text(size: font-scale-code-block * 1em)
+  show raw.where(block: false): set text(size: font-scale-code-inline * 1em)
   
   // Heading styles
   show heading.where(level: 1): set text(
@@ -145,29 +171,34 @@
   touying-slides(
     config-page(
       paper: "presentation-" + aspect-ratio,
-      margin: (top: 1.5cm, bottom: 1.5cm, left: 1cm, right: 1cm),
-      background: {
-        // Logo placement (appears on all slides)
-        place(
-          top + right,
-          dx: -1cm,
-          dy: 1cm,
-          image("bips-logo.png", width: 3cm)
-        )
+      margin: (top: 1.55cm, bottom: 1.55cm, left: 1.55cm, right: 1.75cm),
+      background: context {
+        let current-page = here().page()
         
-        // Page number - centered underneath the logo
-        place(
-          top + right,
-          dx: -2.25cm,
-          dy: 4.25cm,
-          context text(
-            size: font-size-page-number, 
-            fill: font-color-page-number, 
-            weight: font-weight-page-number
-          )[
-            #str(here().page() - 1)
-          ]
-        )
+        // Skip background on page 1 (title slide)
+        if current-page > 1 {
+          // Logo placement
+          place(
+            top + right,
+            dx: -1cm,
+            dy: 1cm,
+            image("bips-logo.png", width: 3cm)
+          )
+          
+          // Page number - centered underneath the logo
+          place(
+            top + right,
+            dx: -2.25cm,
+            dy: 4.25cm,
+            text(
+              size: font-size-page-number, 
+              fill: font-color-page-number, 
+              weight: font-weight-page-number
+            )[
+              #str(here().page() - 1)
+            ]
+          )
+        }
       }
     ),
     config-common(
@@ -227,10 +258,9 @@
         show heading.where(level: 2): it => {
           block(
             width: 100%,
-            spacing: 0.25em,
+            spacing: 0.75em,
             {
               // Subtitle
-              v(0.2cm)
               block(
                 text(
                   size: font-size-slide-subtitle, 
