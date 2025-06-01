@@ -6,6 +6,95 @@
 #let bips-orange = rgb(250, 133, 55)
 #let bips-green = rgb(49, 210, 57)
 
+// BIPS Typography Configuration
+// =================================
+
+// Main content styling
+#let font-size-base = 18pt
+#let font-color-base = bips-text-gray
+#let font-weight-base = "regular"
+
+#let font-size-small = 14pt
+#let font-color-small = bips-text-gray
+#let font-weight-small = "regular"
+
+#let font-size-tiny = 13pt
+#let font-color-tiny = bips-text-gray
+#let font-weight-tiny = "regular"
+
+// Regular heading styling
+#let font-size-heading-1 = 20pt
+#let font-color-heading-1 = bips-blue
+#let font-weight-heading-1 = "bold"
+
+#let font-size-heading-2 = 18pt
+#let font-color-heading-2 = bips-blue
+#let font-weight-heading-2 = "bold"
+
+#let font-size-heading-3 = 16pt
+#let font-color-heading-3 = bips-blue
+#let font-weight-heading-3 = "bold"
+
+// Slide title and subtitle styling
+#let font-size-slide-title = 24pt
+#let font-color-slide-title = bips-blue
+#let font-weight-slide-title = 600
+
+#let font-size-slide-subtitle = 18pt
+#let font-color-slide-subtitle = bips-blue
+#let font-weight-slide-subtitle = "bold"
+
+// Title slide styling
+#let font-size-title-slide-main = 26pt
+#let font-color-title-slide-main = bips-blue
+#let font-weight-title-slide-main = "bold"
+
+#let font-size-title-slide-subtitle = 20pt
+#let font-color-title-slide-subtitle = bips-blue
+#let font-weight-title-slide-subtitle = "bold"
+
+#let font-size-title-slide-author = 20pt
+#let font-color-title-slide-author = bips-blue
+#let font-weight-title-slide-author = "bold"
+
+#let font-size-title-slide-institute = 18pt
+#let font-color-title-slide-institute = bips-text-gray
+#let font-weight-title-slide-institute = "regular"
+
+#let font-size-title-slide-date = 16pt
+#let font-color-title-slide-date = bips-text-gray
+#let font-weight-title-slide-date = "regular"
+
+// Section slide styling
+#let font-size-section-slide = 32pt
+#let font-color-section-slide = bips-blue
+#let font-weight-section-slide = "bold"
+
+// Thanks slide styling
+#let font-size-thanks-slide-main = 24pt
+#let font-color-thanks-slide-main = bips-blue
+#let font-weight-thanks-slide-main = "bold"
+
+#let font-size-thanks-slide-website = 16pt
+#let font-color-thanks-slide-website = bips-blue
+#let font-weight-thanks-slide-website = "regular"
+
+#let font-size-thanks-slide-contact = 14pt
+#let font-color-thanks-slide-contact = bips-text-gray
+#let font-weight-thanks-slide-contact = "regular"
+
+// Page number styling
+#let font-size-page-number = 13pt
+#let font-color-page-number = bips-text-gray
+#let font-weight-page-number = "regular"
+
+// Code block styling
+#let font-scale-code = 0.8
+
+// Emphasis and strong text styling
+#let font-color-emphasis = bips-blue
+#let font-color-strong = bips-blue
+
 // BIPS theme that leverages Touying's infrastructure
 #let bips-theme(
   aspect-ratio: "16-9",
@@ -15,41 +104,41 @@
   // Global text and styling configuration
   show: set text(
     font: ("Fira Sans", "Arial"),
-    size: 18pt,
-    fill: bips-text-gray
+    size: font-size-base,
+    fill: font-color-base
   )
   
   // Emphasis in BIPS blue
-  show emph: set text(fill: bips-blue)
+  show emph: set text(fill: font-color-emphasis)
   
   // Strong text in BIPS blue
-  show strong: set text(fill: bips-blue)
+  show strong: set text(fill: font-color-strong)
   
   // List styling
-  show list: set text(fill: bips-text-gray)
-  show enum: set text(fill: bips-text-gray)
+  show list: set text(fill: font-color-base)
+  show enum: set text(fill: font-color-base)
   
-  // Code block styling - 80% of regular text size
-  show raw.where(block: true): set text(size: 0.8em)
-  show raw.where(block: false): set text(size: 0.8em)
+  // Code block styling - scaled down from base font size
+  show raw.where(block: true): set text(size: font-scale-code * 1em)
+  show raw.where(block: false): set text(size: font-scale-code * 1em)
   
   // Heading styles
   show heading.where(level: 1): set text(
-    size: 20pt,
-    weight: "bold",
-    fill: bips-blue
+    size: font-size-heading-1,
+    weight: font-weight-heading-1,
+    fill: font-color-heading-1
   )
   
   show heading.where(level: 2): set text(
-    size: 18pt,
-    weight: "bold", 
-    fill: bips-blue
+    size: font-size-heading-2,
+    weight: font-weight-heading-2, 
+    fill: font-color-heading-2
   )
   
   show heading.where(level: 3): set text(
-    size: 16pt,
-    weight: "bold", 
-    fill: bips-blue
+    size: font-size-heading-3,
+    weight: font-weight-heading-3, 
+    fill: font-color-heading-3
   )
 
   // Use Touying's infrastructure with BIPS customizations
@@ -71,7 +160,11 @@
           top + right,
           dx: -2.25cm,
           dy: 4.25cm,
-          context text(size: 13pt, fill: bips-text-gray)[
+          context text(
+            size: font-size-page-number, 
+            fill: font-color-page-number, 
+            weight: font-weight-page-number
+          )[
             #str(here().page())
           ]
         )
@@ -86,32 +179,51 @@
       init: (self: none, body) => {
         // Helper function to create gradient line
         let gradient-line = {
-          v(0.1cm)
           rect(
-            width: 80%,
+            width: 85%,
             height: 1pt,
             fill: gradient.linear(
               bips-text-gray,
               bips-text-gray.transparentize(50%),
-              bips-text-gray.transparentize(99%),
+              bips-text-gray.transparentize(95%),
               angle: 0deg
             )
           )
           v(0.5cm)
         }
         
-        // Track if we've seen a level 1 heading without a gradient line
-        let pending-gradient = state("pending-gradient", false)
-        
         // Custom slide title formatting
         show heading.where(level: 1): it => {
-          pending-gradient.update(true)
-          block(
-            text(size: 24pt, weight: 600, fill: bips-blue)[#it.body]
-          )
+          context {
+            // Check if there's a level 2 heading on the same page after this title
+            let current-page = here().page()
+            let h2-headings = query(heading.where(level: 2))
+            let has-subtitle = h2-headings.any(h => h.location().page() == current-page)
+            
+            block(
+              width: 100%,
+              spacing: 0.25em,
+              {
+                // Title
+                block(
+                  text(
+                    size: font-size-slide-title, 
+                    weight: font-weight-slide-title, 
+                    fill: font-color-slide-title
+                  )[#it.body]
+                )
+                
+                // Only add gradient line if no subtitle follows
+                if not has-subtitle {
+                  v(0.1cm)
+                  gradient-line
+                }
+              }
+            )
+          }
         }
         
-        // Custom subtitle formatting
+        // Custom subtitle formatting with gradient line
         show heading.where(level: 2): it => {
           block(
             width: 100%,
@@ -120,25 +232,18 @@
               // Subtitle
               v(0.2cm)
               block(
-                text(size: 18pt, weight: "bold", fill: bips-blue)[#it.body]
+                text(
+                  size: font-size-slide-subtitle, 
+                  weight: font-weight-slide-subtitle, 
+                  fill: font-color-slide-subtitle
+                )[#it.body]
               )
               
               // Gradient line after subtitle
+              v(0.1cm)
               gradient-line
             }
           )
-          pending-gradient.update(false)
-        }
-        
-        // Add gradient line after any other content if we have a pending title
-        show: rest => {
-          context {
-            if pending-gradient.get() {
-              gradient-line
-              pending-gradient.update(false)
-            }
-          }
-          rest
         }
         body
       },
@@ -166,7 +271,11 @@
     // Title
     if title != none {
       block(
-        text(size: 26pt, weight: "bold", fill: bips-blue)[
+        text(
+          size: font-size-title-slide-main, 
+          weight: font-weight-title-slide-main, 
+          fill: font-color-title-slide-main
+        )[
           #title
         ]
       )
@@ -177,7 +286,11 @@
     // Subtitle
     if subtitle != none {
       block(
-        text(size: 20pt, weight: "bold", fill: bips-blue)[
+        text(
+          size: font-size-title-slide-subtitle, 
+          weight: font-weight-title-slide-subtitle, 
+          fill: font-color-title-slide-subtitle
+        )[
           #subtitle
         ]
       )
@@ -188,7 +301,11 @@
     // Author
     if author != none {
       block(
-        text(size: 20pt, weight: "bold", fill: bips-blue)[
+        text(
+          size: font-size-title-slide-author, 
+          weight: font-weight-title-slide-author, 
+          fill: font-color-title-slide-author
+        )[
           #author
         ]
       )
@@ -199,7 +316,11 @@
     // Institute
     if institute != none {
       block(
-        text(size: 18pt, fill: bips-text-gray)[
+        text(
+          size: font-size-title-slide-institute, 
+          weight: font-weight-title-slide-institute, 
+          fill: font-color-title-slide-institute
+        )[
           #institute
         ]
       )
@@ -210,7 +331,11 @@
     // Date
     if date != none {
       block(
-        text(size: 16pt, fill: bips-text-gray)[
+        text(
+          size: font-size-title-slide-date, 
+          weight: font-weight-title-slide-date, 
+          fill: font-color-title-slide-date
+        )[
           #date
         ]
       )
@@ -220,7 +345,11 @@
     if occasion != none {
       v(0.3cm)
       block(
-        text(size: 16pt, fill: bips-text-gray)[
+        text(
+          size: font-size-title-slide-date, 
+          weight: font-weight-title-slide-date, 
+          fill: font-color-title-slide-date
+        )[
           #occasion
         ]
       )
@@ -234,7 +363,11 @@
     set page(background: none) // Clean background for section slides
     set align(center + horizon)
   })[
-    #text(size: 32pt, weight: "bold", fill: bips-blue)[
+    #text(
+      size: font-size-section-slide, 
+      weight: font-weight-section-slide, 
+      fill: font-color-section-slide
+    )[
       #section-title
     ]
   ]
@@ -253,14 +386,22 @@
     #v(1cm)
     
     // Thanks message
-    #text(size: 24pt, weight: "bold", fill: bips-blue)[
+    #text(
+      size: font-size-thanks-slide-main, 
+      weight: font-weight-thanks-slide-main, 
+      fill: font-color-thanks-slide-main
+    )[
       #thanks-text
     ]
     
     #v(1cm)
     
     // Website
-    #text(size: 16pt, fill: bips-blue)[
+    #text(
+      size: font-size-thanks-slide-website, 
+      weight: font-weight-thanks-slide-website, 
+      fill: font-color-thanks-slide-website
+    )[
       www.leibniz-bips.de/en
     ]
     
@@ -276,10 +417,14 @@
         gutter: 2em,
         [
           #align(right)[
-            #text(size: 14pt, fill: bips-text-gray)[
+            #text(
+              size: font-size-thanks-slide-contact, 
+              weight: font-weight-thanks-slide-contact, 
+              fill: font-color-thanks-slide-contact
+            )[
               *Contact*
               
-              #text(fill: bips-blue)[#contact-author]\
+              #text(fill: font-color-thanks-slide-website)[#contact-author]\
               Leibniz Institute for Prevention Research\ 
               and Epidemiology -- BIPS\
               Achterstraße 30\
@@ -287,7 +432,7 @@
               Germany
               
               #if email != "" [
-                #text(fill: bips-blue)[#email.replace("@", "(at)")]
+                #text(fill: font-color-thanks-slide-website)[#email.replace("@", "(at)")]
               ]
             ]
           ]
