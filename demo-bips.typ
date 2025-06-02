@@ -13,10 +13,10 @@
 )
 
 // Regular content slides
-#slide[
-  = Introduction to BIPS Typst Theme
-  == Modern slide design with Typst
-
+#bips-slide(
+  title: [Introduction to BIPS Typst Theme],
+  subtitle: [Modern slide design with Typst]
+)[
   - The BIPS Typst theme brings the institutional design to modern presentation tools
   - Built on top of the powerful _Touying_ package for Typst
   - Maintains consistency with BIPS branding and visual identity
@@ -28,9 +28,9 @@
     + Professional BIPS styling with configurable typography
 ]
 
-#slide[
-  = Key Features
-
+#bips-slide(
+  title: [Key Features]
+)[
   The BIPS Typst theme includes:
 
   1. *Color Scheme*: Official BIPS colors (#blue[blue], #orange[orange], #green[green])
@@ -48,10 +48,10 @@
 // Section slide
 #section-slide[Theme Features & Usage]
 
-#slide[
-  = Color Utilities & Formatting
-  == Easy-to-use color functions
-
+#bips-slide(
+  title: [Color Utilities & Formatting],
+  subtitle: [Easy-to-use color functions]
+)[
   The theme provides convenient color utilities:
 
   - #blue[`#blue[text]`] - Apply BIPS blue color
@@ -72,10 +72,10 @@
 // Section slide
 #section-slide[Research Applications]
 
-#slide[
-  = Research Use Cases
-  == Where this theme excels
-
+#bips-slide(
+  title: [Research Use Cases],
+  subtitle: [Where this theme excels]
+)[
   Perfect for:
 
   - *Academic Presentations*: Conference talks, seminars, thesis defenses
@@ -86,9 +86,9 @@
   #emph[Emphasis] uses BIPS blue color for highlighting important concepts.
 ]
 
-#slide[
-  = Technical Advantages
-
+#bips-slide(
+  title: [Technical Advantages]
+)[
   Compared to traditional presentation tools:
 
   === PowerPoint vs. Typst
@@ -120,10 +120,10 @@
 // Animation examples section
 #section-slide[Animation Examples]
 
-#slide[
-  = Manual Incremental Reveals
-  == Using \#pause for step-by-step presentation
-
+#bips-slide(
+  title: [Manual Incremental Reveals],
+  subtitle: [Using \#pause for step-by-step presentation]
+)[
   Here are some key points:
   
   - First point appears immediately
@@ -145,10 +145,10 @@
   *This text should appear last and be in BIPS blue!*
 ]
 
-#slide[
-  = Two-Column Animation
-  == Using \#meanwhile for synchronized reveals
-
+#bips-slide(
+  title: [Two-Column Animation],
+  subtitle: [Using \#meanwhile for synchronized reveals]
+)[
   #grid(columns: (1fr, 1fr), gutter: 1em)[
     Left column starts:
     - First item here
@@ -165,10 +165,10 @@
   ]
 ]
 
-#slide[
-  = Math Step-by-Step
-  == Revealing equation steps
-
+#bips-slide(
+  title: [Math Step-by-Step],
+  subtitle: [Revealing equation steps]
+)[
   Let's solve this equation step by step:
   
   $ f(x) &= x^2 + 4x + 4 \
@@ -184,10 +184,10 @@
 // Another section
 #section-slide[Getting Started]
 
-#slide[
-  = Using the BIPS Theme
-  == Quick start guide
-
+#bips-slide(
+  title: [Using the BIPS Theme],
+  subtitle: [Quick start guide]
+)[
   #grid(
     columns: (1fr, 1fr),
     gutter: 1em,
@@ -223,9 +223,9 @@
   )
 ]
 
-#slide[
-  = Customization Options
-
+#bips-slide(
+  title: [Customization Options]
+)[
   Theme customization through global variables:
 
   *Typography Configuration:*

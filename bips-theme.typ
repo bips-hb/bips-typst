@@ -148,17 +148,17 @@
   show raw.where(block: true): set text(size: font-scale-code-block * 1em)
   show raw.where(block: false): set text(size: font-scale-code-inline * 1em)
   
-  // Heading styles
+  // Basic heading styles
   show heading.where(level: 1): set text(
-    size: font-size-heading-1,
-    weight: font-weight-heading-1,
-    fill: font-color-heading-1
+    size: font-size-slide-title,
+    weight: font-weight-slide-title,
+    fill: font-color-slide-title
   )
   
   show heading.where(level: 2): set text(
-    size: font-size-heading-2,
-    weight: font-weight-heading-2, 
-    fill: font-color-heading-2
+    size: font-size-slide-subtitle,
+    weight: font-weight-slide-subtitle,
+    fill: font-color-slide-subtitle
   )
   
   show heading.where(level: 3): set text(
@@ -166,6 +166,7 @@
     weight: font-weight-heading-3, 
     fill: font-color-heading-3
   )
+  
 
   // Use Touying's infrastructure with BIPS customizations
   touying-slides(
@@ -195,22 +196,51 @@
               fill: font-color-page-number, 
               weight: font-weight-page-number
             )[
+              // Ensure we start on slide 1 
               #str(here().page() - 1)
             ]
           )
+          
         }
       }
     ),
-    config-common(
-      // Use Touying's default slide function to preserve animations
-      slide-fn: slide,
-    ),
-    // Apply BIPS slide title styling 
-    config-methods(
-      init: (self: none, body) => {
-        // Helper function to create gradient line
-        let gradient-line = {
-          rect(
+    body
+  )
+}
+
+// Custom slide function with grid layout for title/content separation
+#let bips-slide(
+  title: none,
+  subtitle: none,
+  ..args,
+  body
+) = {
+  slide(..args)[
+    #if title != none or subtitle != none {
+      // Use grid layout: top 10% for title/subtitle, bottom 90% for content
+      grid(
+        rows: (15%, 85%),
+        // Top section: Title and subtitle area
+        [
+          #if title != none {
+            text(
+              size: font-size-slide-title,
+              weight: font-weight-slide-title,
+              fill: font-color-slide-title
+            )[#title]
+          }
+          
+          #if subtitle != none {
+            // v(0.1em)
+            text(
+              size: font-size-slide-subtitle,
+              weight: font-weight-slide-subtitle,
+              fill: font-color-slide-subtitle
+            )[#subtitle]
+          }
+          
+          // Gradient line at bottom of title section
+          #rect(
             width: 85%,
             height: 1pt,
             fill: gradient.linear(
@@ -220,66 +250,18 @@
               angle: 0deg
             )
           )
-          v(0.5cm)
-        }
-        
-        // Custom slide title formatting
-        show heading.where(level: 1): it => {
-          context {
-            // Check if there's a level 2 heading on the same page after this title
-            let current-page = here().page()
-            let h2-headings = query(heading.where(level: 2))
-            let has-subtitle = h2-headings.any(h => h.location().page() == current-page)
-            
-            block(
-              width: 100%,
-              spacing: 0.25em,
-              {
-                // Title
-                block(
-                  text(
-                    size: font-size-slide-title, 
-                    weight: font-weight-slide-title, 
-                    fill: font-color-slide-title
-                  )[#it.body]
-                )
-                
-                // Only add gradient line if no subtitle follows
-                if not has-subtitle {
-                  v(0.1cm)
-                  gradient-line
-                }
-              }
-            )
-          }
-        }
-        
-        // Custom subtitle formatting with gradient line
-        show heading.where(level: 2): it => {
-          block(
-            width: 100%,
-            spacing: 0.75em,
-            {
-              // Subtitle
-              block(
-                text(
-                  size: font-size-slide-subtitle, 
-                  weight: font-weight-slide-subtitle, 
-                  fill: font-color-slide-subtitle
-                )[#it.body]
-              )
-              
-              // Gradient line after subtitle
-              v(0.1cm)
-              gradient-line
-            }
-          )
-        }
-        body
-      },
-    ),
-    body
-  )
+        ],
+        // Bottom section: Content area
+        [
+          #v(1.5cm)
+          #body
+        ]
+      )
+    } else {
+      // If no title/subtitle, just show content
+      body
+    }
+  ]
 }
 
 // Title slide function using Touying's infrastructure
