@@ -4,18 +4,18 @@
 
 // Title slide
 #title-slide(
-  title: [Bypst: The BIPS Typst Theme],
-  subtitle: [Modern Presentations with Typst and Touying],
-  author: [Jane Doe & John Smith],
-  institute: [Leibniz Institute for Prevention Research & Epidemiology -- BIPS],
+  title: "Bypst: The BIPS Typst Theme",
+  subtitle: "Modern Presentations with Typst and Touying",
+  author: "Jane Doe & John Smith",
+  institute: "Leibniz Institute for Prevention Research & Epidemiology -- BIPS",
   date: datetime.today().display(),
-  occasion: [The 27th Conference on Typst Presentations],
+  occasion: "The 27th Conference on Typst Presentations",
 )
 
 // Regular content slides
 #bips-slide(
-  title: [Introduction to BIPS Typst Theme],
-  subtitle: [Modern slide design with Typst]
+  title: "Introduction to BIPS Typst Theme",
+  subtitle: "Modern slide design with Typst"
 )[
   - The BIPS Typst theme brings the institutional design to modern presentation tools
   - Built on top of the powerful _Touying_ package for Typst
@@ -29,7 +29,7 @@
 ]
 
 #bips-slide(
-  title: [Key Features]
+  title: "Key Features"
 )[
   The BIPS Typst theme includes:
 
@@ -49,8 +49,8 @@
 #section-slide[Theme Features & Usage]
 
 #bips-slide(
-  title: [Color Utilities & Formatting],
-  subtitle: [Easy-to-use color functions]
+  title: "Color Utilities & Formatting",
+  subtitle: "Easy-to-use color functions"
 )[
   The theme provides convenient color utilities:
 
@@ -73,8 +73,8 @@
 #section-slide[Research Applications]
 
 #bips-slide(
-  title: [Research Use Cases],
-  subtitle: [Where this theme excels]
+  title: "Research Use Cases",
+  subtitle: "Where this theme excels"
 )[
   Perfect for:
 
@@ -87,7 +87,7 @@
 ]
 
 #bips-slide(
-  title: [Technical Advantages]
+  title: "Technical Advantages"
 )[
   Compared to traditional presentation tools:
 
@@ -121,8 +121,8 @@
 #section-slide[Animation Examples]
 
 #bips-slide(
-  title: [Manual Incremental Reveals],
-  subtitle: [Using \#pause for step-by-step presentation]
+  title: "Manual Incremental Reveals",
+  subtitle: "Using \#pause for step-by-step presentation"
 )[
   Here are some key points:
   
@@ -146,8 +146,8 @@
 ]
 
 #bips-slide(
-  title: [Two-Column Animation],
-  subtitle: [Using \#meanwhile for synchronized reveals]
+  title: "Two-Column Animation",
+  subtitle: "Using \#meanwhile for synchronized reveals"
 )[
   #grid(columns: (1fr, 1fr), gutter: 1em)[
     Left column starts:
@@ -166,8 +166,8 @@
 ]
 
 #bips-slide(
-  title: [Math Step-by-Step],
-  subtitle: [Revealing equation steps]
+  title: "Math Step-by-Step",
+  subtitle: "Revealing equation steps"
 )[
   Let's solve this equation step by step:
   
@@ -185,8 +185,8 @@
 #section-slide[Getting Started]
 
 #bips-slide(
-  title: [Using the BIPS Theme],
-  subtitle: [Quick start guide]
+  title: "Using the BIPS Theme",
+  subtitle: "Quick start guide"
 )[
   #grid(
     columns: (1fr, 1fr),
@@ -224,7 +224,7 @@
 ]
 
 #bips-slide(
-  title: [Customization Options]
+  title: "Customization Options"
 )[
   Theme customization through global variables:
 

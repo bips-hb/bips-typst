@@ -1,5 +1,9 @@
 #import "@preview/touying:0.6.1": *
 
+// Useful shorthand
+#let bips_en = [Leibniz Institute for Prevention Research and Epidemiology --- BIPS]
+#let bips_de = [Leibniz-Institut für Präventionsforschung und Epidemiologie --- BIPS]
+
 // BIPS Color Definitions
 #let bips-blue = rgb(23, 99, 170)
 #let bips-text-gray = rgb(66, 66, 66)
@@ -243,7 +247,7 @@
           // Gradient line at bottom of title section
           #rect(
             width: 85%,
-            height: 1pt,
+            height: .05em,
             fill: gradient.linear(
               bips-text-gray,
               bips-text-gray.transparentize(50%),

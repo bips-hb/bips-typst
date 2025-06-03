@@ -7,10 +7,11 @@ A modern presentation template for BIPS using [Typst](https://typst.app/) and th
 - **Fast compilation**: Milliseconds instead of seconds compared to LaTeX Beamer
 - **BIPS branding**: Official colors, logo placement, and institutional styling
 - **Multiple slide types**: Title slides, content slides, section slides, and thanks slides
+- **Grid-based layout**: Automatic title/content separation with gradient line positioning
 - **Configurable typography**: All font sizes, colors, and weights easily customizable
 - **Color utilities**: Convenient functions for BIPS colors (`#blue[]`, `#orange[]`, `#green[]`, `#gray[]`)
 - **Smart page numbering**: Title slide shows logo only, content slides start at page 1
-- **Professional animations**: Incremental reveals with `#pause` and `#meanwhile`
+- **Professional animations**: Incremental reveals with `#pause` and `#meanwhile` without spurious blank pages
 - **Version control friendly**: Text-based format that works well with Git
 
 ## Requirements
@@ -29,19 +30,19 @@ A modern presentation template for BIPS using [Typst](https://typst.app/) and th
 
 // Create title slide
 #title-slide(
-  title: [Your Presentation Title],
-  subtitle: [Your Subtitle],
-  author: [Your Name],
-  institute: [Leibniz Institute for Prevention Research & Epidemiology -- BIPS],
+  title: "Your Presentation Title",
+  subtitle: "Your Subtitle",
+  author: "Your Name",
+  institute: "Leibniz Institute for Prevention Research & Epidemiology -- BIPS",
   date: datetime.today().display(),
-  occasion: [Conference or Meeting Name],
+  occasion: "Conference or Meeting Name",
 )
 
 // Regular content slides
-#slide[
-  = Slide Title
-  == Optional Subtitle
-  
+#bips-slide(
+  title: "Slide Title",
+  subtitle: "Optional Subtitle"  // Can be omitted
+)[
   Your content goes here:
   
   - Bullet points work great
@@ -79,10 +80,10 @@ Or use the free online [typst editor](https://typst.app/) (imagine Overleaf, but
 ### Content Slides
 
 ```typst
-#slide[
-  = Slide Title
-  == Optional Subtitle  // Can be omitted
-  
+#bips-slide(
+  title: "Slide Title",
+  subtitle: "Optional Subtitle"  // Can be omitted
+)[
   Your slide content
   
   #pause  // For incremental reveals
@@ -91,16 +92,18 @@ Or use the free online [typst editor](https://typst.app/) (imagine Overleaf, but
 ]
 ```
 
+**Note**: The `bips-slide` function uses a grid layout with 15% reserved for title/subtitle area and 85% for content. The gradient line is automatically positioned between these sections.
+
 ### Title Slide
 
 ```typst
 #title-slide(
-  title: [Presentation Title],
-  subtitle: [Subtitle],
-  author: [Author Names],
-  institute: [Institution],
-  date: [Date],
-  occasion: [Event/Conference],  // Optional
+  title: "Presentation Title",
+  subtitle: "Subtitle",
+  author: "Author Names",
+  institute: "Institution",
+  date: "Date",
+  occasion: "Event/Conference",  // Optional
 )
 ```
 
@@ -177,13 +180,6 @@ All typography settings are configurable through variables at the top of `bips-t
 - `*text*` - Bold text (appears in blue by default, customizable)
 - `_text_` - Emphasized text (appears in blue by default, customizable)  
 - Both preserve their semantic meaning while adding BIPS styling
-
-### Layout Features
-
-- **Smart page numbering**: Title slide shows logo only, content slides start at 1
-- **Automatic gradient lines**: Appear after titles/subtitles on all content slides
-- **Flexible spacing**: Use `#v(1fr)` for flexible vertical spacing (like LaTeX's `\vfill`)
-- **Professional animations**: Use `#pause` for incremental reveals
 
 ## File Structure
 
