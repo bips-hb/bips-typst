@@ -165,6 +165,24 @@
   // Links in BIPS blue with thin underline to distinguish from emphasis
   show link: it => underline(text(fill: bips-blue)[#it])
 
+
+  // Table styling - set elegant defaults
+  set table(
+    stroke: none,
+    fill: (_, y) => if y == 0 { bips-blue.lighten(85%) } else { none },
+    inset: (x: 0.7em, y: 0.6em),
+  )
+
+  // Add subtle borders around tables
+  show table: it => block(
+    stroke: (
+      top: 1pt + bips-blue.lighten(50%),
+      bottom: 1pt + bips-blue.lighten(50%),
+    ),
+    inset: 0pt,
+    it,
+  )
+
   // List styling with configurable spacing
   show list: set list(spacing: list-spacing)
   show list: set text(fill: font-color-base)
