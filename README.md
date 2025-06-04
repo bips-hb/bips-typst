@@ -8,6 +8,7 @@ A modern presentation template for BIPS using [Typst](https://typst.app/) and th
 - **BIPS branding**: Colors, logo placement, and institutional styling
 - **Multiple slide types**: Title slides, content slides, section slides, and thanks slides
 - **Grid-based layout**: Automatic title/content separation with gradient line positioning
+- **Elegant table styling**: Minimal borders with subtle header highlighting
 - **Configurable typography**: All font sizes, colors, and weights easily customizable
 - **Color utilities**: Convenient functions for BIPS colors (`#blue[]`, `#orange[]`, `#green[]`, `#gray[]`)
 - **Smart page numbering**: Title slide shows logo only, content slides start at page 1
@@ -305,6 +306,7 @@ The font size system follows this hierarchy (later overrides earlier):
   - `multi-author.typ` - Multiple authors with affiliations
   - `qr-code.typ` - QR code integration example
   - `animations.typ` - Animation and reveal features
+  - `content-elements.typ` - Images, tables, footnotes, and references
   - `font-customization.typ` - Font size customization
   - `aspect-ratio.typ` - 4:3 aspect ratio presentation
   - `justfile` - Build automation for all demos

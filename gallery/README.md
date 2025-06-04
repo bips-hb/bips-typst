@@ -11,6 +11,7 @@ This directory contains various demonstration files showcasing different feature
 | `multi-author.typ` | Multiple authors with institutional affiliations |
 | `qr-code.typ` | QR code integration for presentation sharing |
 | `animations.typ` | Animation and incremental reveal features |
+| `content-elements.typ` | Images, tables, footnotes, and references |
 | `font-customization.typ` | Font size customization examples |
 | `aspect-ratio.typ` | 4:3 aspect ratio presentation |
 
