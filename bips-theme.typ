@@ -218,34 +218,28 @@
     config-page(
       paper: "presentation-" + aspect-ratio,
       margin: (top: 1.55cm, bottom: 1.55cm, left: 1.55cm, right: 1.75cm),
-      background: context {
-        let current-page = here().page()
-
-        // Skip background on page 1 (title slide)
-        if current-page > 1 {
-          // Logo placement
-          place(
-            top + right,
-            dx: -1cm,
-            dy: 1cm,
-            image("bips-logo.png", width: 3cm),
-          )
-
-          // Page number - centered underneath the logo
-          place(
-            top + right,
-            dx: -2.25cm,
-            dy: 4.25cm,
-            text(
-              size: font-size-page-number,
-              fill: font-color-page-number,
-              weight: font-weight-page-number,
-            )[
-              // Ensure we start on slide 1
-              #str(current-page - 1)
-            ],
-          )
-        }
+      background: {
+        // Logo placement (no context queries)
+        place(
+          top + right,
+          dx: -1cm,
+          dy: 1cm,
+          image("bips-logo.png", width: 3cm),
+        )
+        
+        // Page number (simple counter, no here().page() queries)
+        place(
+          top + right,
+          dx: -2.25cm,
+          dy: 4.25cm,
+          text(
+            size: font-size-page-number,
+            fill: font-color-page-number,
+            weight: font-weight-page-number,
+          )[
+            #context counter(page).display()
+          ],
+        )
       },
     ),
     body,
@@ -265,52 +259,63 @@
 ) = {
   slide(..args)[
     #if title != none or subtitle != none {
-      // Use grid layout: top 10% for title/subtitle, bottom 90% for content
-      grid(
-        rows: (20%, 80%),
-        // Top section: Title and subtitle area
-        [
-          #if title != none {
-            block(above: 1em, below: 0.75em)[
-              #text(
-                size: if title-size != none { title-size } else { font-size-slide-title },
-                weight: font-weight-slide-title,
-                fill: font-color-slide-title,
-              )[#title]
-            ]
-          }
+      // Title and subtitle section - smart spacing without grid
+      v(.1em)
+      
+      // Combine title and subtitle in natural flow
+      if title != none and subtitle != none {
+        // Both title and subtitle - natural line break between them
+        text(
+          size: if title-size != none { title-size } else { font-size-slide-title },
+          weight: font-weight-slide-title,
+          fill: font-color-slide-title,
+        )[#title]
+        linebreak()
+        // v(.05pt)
+        text(
+          size: if subtitle-size != none { subtitle-size } else { font-size-slide-subtitle },
+          weight: font-weight-slide-subtitle,
+          fill: font-color-slide-subtitle,
+        )[#subtitle]
+      } else if title != none {
+        // Title only
+        text(
+          size: if title-size != none { title-size } else { font-size-slide-title },
+          weight: font-weight-slide-title,
+          fill: font-color-slide-title,
+        )[#title]
+      } else if subtitle != none {
+        // Subtitle only
+        text(
+          size: if subtitle-size != none { subtitle-size } else { font-size-slide-subtitle },
+          weight: font-weight-slide-subtitle,
+          fill: font-color-slide-subtitle,
+        )[#subtitle]
+      }
 
-          #if subtitle != none {
-            block(below: 1em)[
-              #text(
-                size: if subtitle-size != none { subtitle-size } else { font-size-slide-subtitle },
-                weight: font-weight-slide-subtitle,
-                fill: font-color-slide-subtitle,
-              )[#subtitle]
-            ]
-          }
+      // Space before gradient line
+      // v(0.5em)
 
-          // Gradient line at bottom of title section
-          #rect(
-            width: 85%,
-            height: .05em,
-            fill: gradient.linear(
-              bips-text-gray,
-              bips-text-gray.transparentize(50%),
-              bips-text-gray.transparentize(95%),
-              angle: 0deg,
-            ),
-          )
-        ],
-        // Bottom section: Content area
-        [
-          #if text-size != none {
-            text(size: text-size)[#body]
-          } else {
-            body
-          }
-        ]
+      // Gradient line after title/subtitle
+      rect(
+        width: 85%,
+        height: .05em,
+        fill: gradient.linear(
+          bips-text-gray,
+          bips-text-gray.transparentize(50%),
+          bips-text-gray.transparentize(95%),
+          angle: 0deg,
+        ),
       )
+      
+      v(1em)
+      
+      // Content area - natural flow allows footnotes to work
+      if text-size != none {
+        text(size: text-size)[#body]
+      } else {
+        body
+      }
     } else {
       // If no title/subtitle, just show content
       if text-size != none {
