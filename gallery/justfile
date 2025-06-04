@@ -1,0 +1,9 @@
+# Gallery demos
+
+# Compile all demo files
+all:
+    @find . -name "*.typ" -exec typst compile {} \;
+
+# Clean all generated PDFs  
+clean:
+    rm -f *.pdf

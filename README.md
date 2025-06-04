@@ -5,13 +5,13 @@ A modern presentation template for BIPS using [Typst](https://typst.app/) and th
 ## Features
 
 - **Fast compilation**: Milliseconds instead of seconds compared to LaTeX Beamer
-- **BIPS branding**: Official colors, logo placement, and institutional styling
+- **BIPS branding**: Colors, logo placement, and institutional styling
 - **Multiple slide types**: Title slides, content slides, section slides, and thanks slides
 - **Grid-based layout**: Automatic title/content separation with gradient line positioning
 - **Configurable typography**: All font sizes, colors, and weights easily customizable
 - **Color utilities**: Convenient functions for BIPS colors (`#blue[]`, `#orange[]`, `#green[]`, `#gray[]`)
 - **Smart page numbering**: Title slide shows logo only, content slides start at page 1
-- **Professional animations**: Incremental reveals with `#pause` and `#meanwhile` without spurious blank pages
+- **Professional animations**: Incremental reveals with `#pause` and `#meanwhile` (see [Touying docs](https://touying-typ.github.io/docs/dynamic/simple))
 - **QR code generation**: Automatic QR codes on thanks slides for easy presentation sharing
 - **Multi-author support**: LaTeX Beamer-style author-affiliation mapping with superscript numbers
 - **Hierarchical customization**: Theme defaults → global overrides → individual slide overrides
@@ -24,7 +24,7 @@ A modern presentation template for BIPS using [Typst](https://typst.app/) and th
 
 ## Quick Start
 
-1. Import the BIPS theme and apply it to your document:
+1. Import the BIPS theme and apply it to your document by downloading the theme file and logo:
 
 ```typst
 #import "bips-theme.typ": *
@@ -83,6 +83,26 @@ typst compile your-presentation.typ
 ```
 
 Or use the free online [typst editor](https://typst.app/) (imagine Overleaf, but fast).
+
+## Exploring Examples
+
+The `gallery/` directory contains focused examples showcasing different features:
+
+```bash
+# Compile all gallery demos  
+just all
+
+# Try individual examples
+typst compile gallery/basic.typ
+typst compile gallery/qr-code.typ  
+typst compile gallery/animations.typ
+
+# Development workflow
+typst watch gallery/basic.typ  # Auto-recompile on changes
+just clean                          # Remove generated PDFs
+```
+
+Each demo is self-contained and demonstrates specific theme capabilities.
 
 ## Available Slide Types
 
@@ -278,9 +298,16 @@ The font size system follows this hierarchy (later overrides earlier):
 ## File Structure
 
 - `bips-theme.typ` - Main theme file
-- `bips-logo.png` - BIPS institutional logo
-- `demo-bips.typ` - Example presentation
-- `demo-bips.pdf` - Compiled example
+- `bips-logo.png` - BIPS institutional logo  
+- `gallery/` - Demo presentations showcasing different features
+  - `basic.typ` - Simple introduction example
+  - `complete.typ` - Comprehensive feature showcase
+  - `multi-author.typ` - Multiple authors with affiliations
+  - `qr-code.typ` - QR code integration example
+  - `animations.typ` - Animation and reveal features
+  - `font-customization.typ` - Font size customization
+  - `aspect-ratio.typ` - 4:3 aspect ratio presentation
+  - `justfile` - Build automation for all demos
 
 ## Links
 
