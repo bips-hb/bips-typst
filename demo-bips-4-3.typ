@@ -25,6 +25,6 @@
 
   You can just enter "March 7, 2026" or whatever. It's fine.\
   However, #link("https://en.wikipedia.org/wiki/ISO_8601", "ISO 8601") would have an opionion
-  about the formatting, and `datetetime().display()` automatically formats the date _correctly_
-]
+  about the formatting, and `datetetime().display()` automatically formats the date _correctly_.
 
+]

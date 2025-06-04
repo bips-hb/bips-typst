@@ -1,4 +1,5 @@
 #import "@preview/touying:0.6.1": *
+#import "@preview/codetastic:0.2.2": qrcode
 
 // Useful shorthand
 #let bips_en = [Leibniz Institute for Prevention Research and Epidemiology --- BIPS]
@@ -140,7 +141,9 @@
   // Calculate effective font sizes (use override if provided, otherwise theme default)
   let effective-font-size-base = if base-size != none { base-size } else { font-size-base }
   let effective-font-size-slide-title = if slide-title-size != none { slide-title-size } else { font-size-slide-title }
-  let effective-font-size-slide-subtitle = if slide-subtitle-size != none { slide-subtitle-size } else { font-size-slide-subtitle }
+  let effective-font-size-slide-subtitle = if slide-subtitle-size != none { slide-subtitle-size } else {
+    font-size-slide-subtitle
+  }
   let effective-font-size-heading-1 = if heading-1-size != none { heading-1-size } else { font-size-heading-1 }
   let effective-font-size-heading-2 = if heading-2-size != none { heading-2-size } else { font-size-heading-2 }
   let effective-font-size-heading-3 = if heading-3-size != none { heading-3-size } else { font-size-heading-3 }
@@ -492,71 +495,81 @@
   thanks-text: "Thank you for your attention!",
   contact-author: "",
   email: "",
+  qr-url: none, // Optional: URL to generate QR code for (replaces website URL)
 ) = {
   slide[
     #set page(background: none)
-    #set align(center)
 
-    #v(1cm)
-
-    // Thanks message
-    #text(
-      size: font-size-thanks-slide-main,
-      weight: font-weight-thanks-slide-main,
-      fill: font-color-thanks-slide-main,
-    )[
-      #thanks-text
-    ]
-
-    #v(1cm)
-
-    // Website
-    #text(
-      size: font-size-thanks-slide-website,
-      weight: font-weight-thanks-slide-website,
-      fill: font-color-thanks-slide-website,
-    )[
-      www.leibniz-bips.de/en
-    ]
-
-    #v(1cm)
-
-    // Contact information and logo - positioned at bottom
-    #place(
-      bottom,
-      dy: -0.5cm,
-      grid(
-        columns: (1fr, 1fr),
-        align: (right, left),
-        gutter: 2em,
-        [
-          #align(right)[
+    // 3-row grid layout: thanks text, QR/website, contact+logo
+    #grid(
+      rows: (1fr, auto, auto),
+      row-gutter: 2em,
+      [
+        // Row 1: Thanks message (centered, taking up available space)
+        #align(center + horizon)[
+          #text(
+            size: font-size-thanks-slide-main,
+            weight: font-weight-thanks-slide-main,
+            fill: font-color-thanks-slide-main,
+          )[
+            #thanks-text
+          ]
+        ]
+      ],
+      [
+        // Row 2: QR code or website (centered)
+        #align(center)[
+          #if qr-url != none [
+            // Show QR code when URL is provided
+            #qrcode(qr-url, width: 4cm, debug: false, quiet-zone: 0, colors: (white, bips-blue))
+          ] else [
+            // Show website URL as before
             #text(
-              size: font-size-thanks-slide-contact,
-              weight: font-weight-thanks-slide-contact,
-              fill: font-color-thanks-slide-contact,
+              size: font-size-thanks-slide-website,
+              weight: font-weight-thanks-slide-website,
+              fill: font-color-thanks-slide-website,
             )[
-              *Contact*
-
-              #text(fill: font-color-thanks-slide-website)[#contact-author]\
-              Leibniz Institute for Prevention Research\
-              and Epidemiology -- BIPS\
-              Achterstraße 30\
-              28359 Bremen\
-              Germany
-
-              #if email != "" [
-                #text(fill: font-color-thanks-slide-website)[#email]
-              ]
+              www.leibniz-bips.de
             ]
           ]
-        ],
-        [
-          #align(left)[
-            #image("bips-logo.png", width: 5cm)
-          ]
-        ],
-      ),
+        ]
+      ],
+      [
+        // Row 3: Contact information and logo
+        // #v(1fr)
+        #grid(
+          columns: (1fr, 1fr),
+          align: (right, left),
+          gutter: 2em,
+          [
+            #align(right)[
+              #text(
+                size: font-size-thanks-slide-contact,
+                weight: font-weight-thanks-slide-contact,
+                fill: font-color-thanks-slide-contact,
+              )[
+                *Contact*
+
+                #text(fill: font-color-thanks-slide-website)[#contact-author]\
+                Leibniz Institute for Prevention Research\
+                and Epidemiology -- BIPS\
+                Achterstraße 30\
+                28359 Bremen\
+                Germany
+
+                #if email != "" [
+                  #text(fill: font-color-thanks-slide-website)[#email]
+                ]
+              ]
+            ]
+          ],
+          [
+            #align(left)[
+              #image("bips-logo.png", width: 5.6cm)
+            ]
+          ],
+        )
+      ]
     )
   ]
 }

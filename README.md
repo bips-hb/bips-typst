@@ -12,6 +12,9 @@ A modern presentation template for BIPS using [Typst](https://typst.app/) and th
 - **Color utilities**: Convenient functions for BIPS colors (`#blue[]`, `#orange[]`, `#green[]`, `#gray[]`)
 - **Smart page numbering**: Title slide shows logo only, content slides start at page 1
 - **Professional animations**: Incremental reveals with `#pause` and `#meanwhile` without spurious blank pages
+- **QR code generation**: Automatic QR codes on thanks slides for easy presentation sharing
+- **Multi-author support**: LaTeX Beamer-style author-affiliation mapping with superscript numbers
+- **Hierarchical customization**: Theme defaults → global overrides → individual slide overrides
 - **Version control friendly**: Text-based format that works well with Git
 
 ## Requirements
@@ -165,8 +168,11 @@ You can override the default font sizes for title slide elements:
   thanks-text: "Custom thank you message",  // Optional
   contact-author: "Presenter Name",
   email: "email@leibniz-bips.de",
+  qr-url: "https://your-slides-url.com",   // Optional: generates QR code
 )
 ```
+
+**QR Code Feature**: When `qr-url` is provided, a QR code is automatically generated and replaces the website URL in the center of the thanks slide. The bottom layout (contact info + BIPS logo) remains unchanged. Perfect for sharing presentation links with the audience!
 
 ### Empty Slides (no logo/page number)
 

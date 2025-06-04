@@ -242,4 +242,5 @@
   thanks-text: "Thank you for your attention!",
   contact-author: "Dr. Jane Doe",
   email: "jane.doe@leibniz-bips.de",
+  qr-url: "https://codeberg.org/lksbrk/bips-typst",  // QR code linking to presentation URL
 )

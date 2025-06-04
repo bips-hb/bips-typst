@@ -50,9 +50,10 @@
   *Font size override*: This demo uses `institute-size: 14pt` to make the institution list smaller.
 ]
 
-// Final slide
+// Final slide with QR code
 #thanks-slide(
   thanks-text: "Thank you for your attention!",
   contact-author: "Dr. Jane Doe",
   email: "jane.doe@leibniz-bips.de",
+  qr-url: "https://lukasburk.de",
 )
