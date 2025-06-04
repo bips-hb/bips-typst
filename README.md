@@ -28,6 +28,12 @@ A modern presentation template for BIPS using [Typst](https://typst.app/) and th
 
 #show: bips-theme
 
+// Or with global font size customization:
+// #show: bips-theme.with(
+//   base-size: 16pt,
+//   slide-title-size: 22pt,
+// )
+
 // Create title slide
 #title-slide(
   title: "Your Presentation Title",
@@ -188,9 +194,43 @@ The theme provides convenient color functions using the official BIPS colors:
 
 ## Customization
 
-All typography settings are configurable through variables at the top of `bips-theme.typ`:
+The BIPS theme provides a hierarchical font customization system:
 
-### Typography Variables
+### 1. Global Font Size Overrides
+
+Set presentation-wide font size overrides using `bips-theme.with()`:
+
+```typst
+#show: bips-theme.with(
+  base-size: 16pt,           // Override base text size (default: 18pt)
+  slide-title-size: 22pt,    // Override slide titles (default: 24pt)
+  slide-subtitle-size: 16pt, // Override slide subtitles (default: 18pt)
+  heading-1-size: 18pt,      // Override heading level 1 (default: 20pt)
+  heading-2-size: 16pt,      // Override heading level 2 (default: 18pt)
+  heading-3-size: 14pt,      // Override heading level 3 (default: 16pt)
+  small-size: 12pt,          // Override small text (default: 14pt)
+  tiny-size: 11pt,           // Override tiny text (default: 13pt)
+)
+```
+
+### 2. Individual Slide Font Size Overrides
+
+Override font sizes for specific slides:
+
+```typst
+#bips-slide(
+  title: "Custom Sized Slide",
+  title-size: 26pt,    // Override just this slide's title
+  subtitle-size: 20pt, // Override just this slide's subtitle
+  text-size: 20pt,     // Override just this slide's content text
+)[
+  Content with custom sizing
+]
+```
+
+### 3. Theme Variable Customization
+
+For advanced customization, edit variables at the top of `bips-theme.typ`:
 
 ```typst
 // Font sizes
@@ -214,11 +254,20 @@ All typography settings are configurable through variables at the top of `bips-t
 #let enum-spacing = 0.8em
 ```
 
+### Customization Hierarchy
+
+The font size system follows this hierarchy (later overrides earlier):
+
+1. **Theme defaults** (defined in `bips-theme.typ`)
+2. **Global overrides** (via `bips-theme.with()`)
+3. **Individual slide overrides** (via slide function parameters)
+
 ### Text Formatting
 
 - `*text*` - Bold text (appears in blue by default, customizable)
-- `_text_` - Emphasized text (appears in blue by default, customizable)  
-- Both preserve their semantic meaning while adding BIPS styling
+- `_text_` - Emphasized text (appears in blue italic by default, customizable)
+- `#link("url")[text]` - Links (appear in blue with underline to distinguish from emphasis)
+- All preserve their semantic meaning while adding BIPS styling
 
 ## File Structure
 

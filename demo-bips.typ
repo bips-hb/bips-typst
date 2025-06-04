@@ -28,21 +28,17 @@
     + Professional BIPS styling with configurable typography
 ]
 
-#bips-slide(
-  title: "Key Features"
-)[
+#bips-slide(title: "Key Features")[
   The BIPS Typst theme includes:
 
   1. *Color Scheme*: Official BIPS colors (#blue[blue], #orange[orange], #green[green])
-  2. *Layouts*: Title slides, content slides, section slides, thanks slides  
+  2. *Layouts*: Title slides, content slides, section slides, thanks slides
   3. *Branding*: BIPS logo positioning and institutional information
   4. *Typography*: Configurable font sizes, colors, and weights
   5. *Color Utilities*: Easy-to-use color functions
 
   Mathematical equations work seamlessly:
-  $ sum_(i=1)^n x_i = bar(x) dot n $
-  
-  The math font remains serif while text uses sans-serif, following academic conventions.
+  $ sum_(i=1)^n x_i = macron(x) dot n $
 ]
 
 // Section slide
@@ -50,18 +46,19 @@
 
 #bips-slide(
   title: "Color Utilities & Formatting",
-  subtitle: "Easy-to-use color functions"
+  subtitle: "Easy-to-use color functions",
 )[
   The theme provides convenient color utilities:
 
   - #blue[`#blue[text]`] - Apply BIPS blue color
-  - #orange[`#orange[text]`] - Apply BIPS orange color  
+  - #orange[`#orange[text]`] - Apply BIPS orange color
   - #green[`#green[text]`] - Apply BIPS green color
   - #gray[`#gray[text]`] - Apply gray color
 
   Text formatting options:
   - *Bold text* appears in blue (customizable)
-  - _Emphasized text_ appears in blue (customizable)
+  - _Emphasized text_ appears in blue italic (customizable)
+  - #link("https://typst.app")[Link text] appears in blue with underline
   - Regular text uses the base color
 
   #v(1fr)
@@ -74,7 +71,7 @@
 
 #bips-slide(
   title: "Research Use Cases",
-  subtitle: "Where this theme excels"
+  subtitle: "Where this theme excels",
 )[
   Perfect for:
 
@@ -86,9 +83,7 @@
   #emph[Emphasis] uses BIPS blue color for highlighting important concepts.
 ]
 
-#bips-slide(
-  title: "Technical Advantages"
-)[
+#bips-slide(title: "Technical Advantages")[
   Compared to traditional presentation tools:
 
   === PowerPoint vs. Typst
@@ -108,9 +103,9 @@
 #empty-slide[
   #align(center + horizon)[
     This is an empty slide
-    
+
     (No logo, no page number)
-    
+
     #text(size: 14pt, style: "italic")[
       Useful for special content or transitions
     ]
@@ -122,32 +117,32 @@
 
 #bips-slide(
   title: "Manual Incremental Reveals",
-  subtitle: "Using \#pause for step-by-step presentation"
+  subtitle: "Using \#pause for step-by-step presentation",
 )[
   Here are some key points:
-  
+
   - First point appears immediately
   #pause
   - Second point appears on next click
   #pause
   - Final point completes the slide
-  
+
   #pause
   You can also reveal blocks of content:
   #pause
-  
+
   Mathematical equations work too:
   $ f(x) = x^2 + 2x + 1 $
   #pause
   $ f(x) = (x + 1)^2 $
-  
+
   #pause
   *This text should appear last and be in BIPS blue!*
 ]
 
 #bips-slide(
   title: "Two-Column Animation",
-  subtitle: "Using \#meanwhile for synchronized reveals"
+  subtitle: "Using \#meanwhile for synchronized reveals",
 )[
   #grid(columns: (1fr, 1fr), gutter: 1em)[
     Left column starts:
@@ -160,23 +155,25 @@
     #meanwhile
     Right column content appears when #meanwhile is triggered
     #pause
-    
+
     More right content on next click
   ]
 ]
 
 #bips-slide(
   title: "Math Step-by-Step",
-  subtitle: "Revealing equation steps"
+  subtitle: "Revealing equation steps",
 )[
   Let's solve this equation step by step:
-  
-  $ f(x) &= x^2 + 4x + 4 \
+
+  $
+    f(x) &= x^2 + 4x + 4 \
     #pause
     &= x^2 + 4x + 4 \
-    #pause  
-    &= (x + 2)^2 $
-    
+    #pause
+    &= (x + 2)^2
+  $
+
   #pause
   Therefore, the vertex is at $x = -2$.
 ]
@@ -186,46 +183,44 @@
 
 #bips-slide(
   title: "Using the BIPS Theme",
-  subtitle: "Quick start guide"
+  subtitle: "Quick start guide",
 )[
   #grid(
     columns: (1fr, 1fr),
     gutter: 1em,
     [
       To use this theme in your presentations:
-      
+
       1. Import the theme
       2. Apply the theme with `#show`
       3. Create title slide
       4. Add content slides
-      
+
       Then create slides with the various slide functions.
     ],
     [
       ```typst
       #import "bips-theme.typ": *
-      
+
       #show: bips-theme
-      
+
       #title-slide(
         title: [Your Title],
         subtitle: [Your Subtitle],
         author: [Your Name],
         // ... other parameters
       )
-      
+
       #slide[
         = Slide Title
         Your content here
       ]
       ```
-    ]
+    ],
   )
 ]
 
-#bips-slide(
-  title: "Customization Options"
-)[
+#bips-slide(title: "Customization Options")[
   Theme customization through global variables:
 
   *Typography Configuration:*
@@ -237,7 +232,7 @@
   *Easy Customization:*
   - All variables organized at the top of `bips-theme.typ`
   - Color utility functions: `#blue[]`, `#orange[]`, `#green[]`, `#gray[]`
-  - Configurable emphasis and strong text styling  
+  - Configurable emphasis and strong text styling
   - Page numbering starts at 1 for content slides
   - Separate scaling for `inline code` (0.95) and code blocks (0.8)
 ]

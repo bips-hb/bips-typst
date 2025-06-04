@@ -126,12 +126,30 @@
 // BIPS theme that leverages Touying's infrastructure
 #let bips-theme(
   aspect-ratio: "16-9",
+  // Global font size overrides (optional)
+  base-size: none,
+  slide-title-size: none,
+  slide-subtitle-size: none,
+  heading-1-size: none,
+  heading-2-size: none,
+  heading-3-size: none,
+  small-size: none,
+  tiny-size: none,
   body,
 ) = {
+  // Calculate effective font sizes (use override if provided, otherwise theme default)
+  let effective-font-size-base = if base-size != none { base-size } else { font-size-base }
+  let effective-font-size-slide-title = if slide-title-size != none { slide-title-size } else { font-size-slide-title }
+  let effective-font-size-slide-subtitle = if slide-subtitle-size != none { slide-subtitle-size } else { font-size-slide-subtitle }
+  let effective-font-size-heading-1 = if heading-1-size != none { heading-1-size } else { font-size-heading-1 }
+  let effective-font-size-heading-2 = if heading-2-size != none { heading-2-size } else { font-size-heading-2 }
+  let effective-font-size-heading-3 = if heading-3-size != none { heading-3-size } else { font-size-heading-3 }
+  let effective-font-size-small = if small-size != none { small-size } else { font-size-small }
+  let effective-font-size-tiny = if tiny-size != none { tiny-size } else { font-size-tiny }
   // Global text and styling configuration
   show: set text(
     font: ("Fira Sans", "Arial"),
-    size: font-size-base,
+    size: effective-font-size-base,
     fill: font-color-base,
   )
 
@@ -140,6 +158,9 @@
 
   // Strong text (*text*) in BIPS blue (color only, no bold)
   show strong: it => text(fill: font-color-strong, weight: "bold")[#it.body]
+
+  // Links in BIPS blue with thin underline to distinguish from emphasis
+  show link: it => underline(text(fill: bips-blue)[#it])
 
   // List styling with configurable spacing
   show list: set list(spacing: list-spacing)
@@ -153,19 +174,19 @@
 
   // Basic heading styles
   show heading.where(level: 1): set text(
-    size: font-size-slide-title,
+    size: effective-font-size-slide-title,
     weight: font-weight-slide-title,
     fill: font-color-slide-title,
   )
 
   show heading.where(level: 2): set text(
-    size: font-size-slide-subtitle,
+    size: effective-font-size-slide-subtitle,
     weight: font-weight-slide-subtitle,
     fill: font-color-slide-subtitle,
   )
 
   show heading.where(level: 3): set text(
-    size: font-size-heading-3,
+    size: effective-font-size-heading-3,
     weight: font-weight-heading-3,
     fill: font-color-heading-3,
   )
@@ -214,6 +235,10 @@
 #let bips-slide(
   title: none,
   subtitle: none,
+  // Optional font size overrides for this slide
+  title-size: none,
+  subtitle-size: none,
+  text-size: none,
   ..args,
   body,
 ) = {
@@ -227,7 +252,7 @@
           #if title != none {
             block(above: 1em, below: 0.75em)[
               #text(
-                size: font-size-slide-title,
+                size: if title-size != none { title-size } else { font-size-slide-title },
                 weight: font-weight-slide-title,
                 fill: font-color-slide-title,
               )[#title]
@@ -237,7 +262,7 @@
           #if subtitle != none {
             block(below: 1em)[
               #text(
-                size: font-size-slide-subtitle,
+                size: if subtitle-size != none { subtitle-size } else { font-size-slide-subtitle },
                 weight: font-weight-slide-subtitle,
                 fill: font-color-slide-subtitle,
               )[#subtitle]
@@ -258,12 +283,20 @@
         ],
         // Bottom section: Content area
         [
-          #body
+          #if text-size != none {
+            text(size: text-size)[#body]
+          } else {
+            body
+          }
         ]
       )
     } else {
       // If no title/subtitle, just show content
-      body
+      if text-size != none {
+        text(size: text-size)[#body]
+      } else {
+        body
+      }
     }
   ]
 }
