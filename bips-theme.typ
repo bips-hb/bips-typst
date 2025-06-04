@@ -200,7 +200,7 @@
               weight: font-weight-page-number,
             )[
               // Ensure we start on slide 1
-              #str(here().page() - 1)
+              #str(current-page - 1)
             ],
           )
         }
@@ -268,14 +268,33 @@
   ]
 }
 
+// Helper function to format author with superscript affiliations
+// Can take single number: inst(1) or multiple numbers: inst(1,4,5)
+#let inst(..numbers) = {
+  let nums = numbers.pos()
+  if nums.len() == 0 {
+    ""
+  } else {
+    super[#nums.map(str).join(",")]
+  }
+}
+
 // Title slide function using Touying's infrastructure
 #let title-slide(
   title: none,
   subtitle: none,
   author: none,
+  authors: none, // Alternative: array of authors for multi-affiliation support
   institute: none,
+  institutes: none, // Alternative: array of institutes for multi-affiliation support
   date: none,
   occasion: none,
+  // Optional font size overrides
+  title-size: none,
+  subtitle-size: none,
+  author-size: none,
+  institute-size: none,
+  date-size: none,
 ) = {
   slide(
     setting: body => {
@@ -295,13 +314,14 @@
 
       // Title slide doesn't affect page numbering - content slides will start at 1
 
-      v(2cm)
+      // v(2cm)
+      v(1fr)
 
       // Title
       if title != none {
         block(
           text(
-            size: font-size-title-slide-main,
+            size: if title-size != none { title-size } else { font-size-title-slide-main },
             weight: font-weight-title-slide-main,
             fill: font-color-title-slide-main,
           )[
@@ -310,13 +330,14 @@
         )
       }
 
-      v(0.5cm)
+      // v(0.5cm)
+      v(1fr)
 
       // Subtitle
       if subtitle != none {
         block(
           text(
-            size: font-size-title-slide-subtitle,
+            size: if subtitle-size != none { subtitle-size } else { font-size-title-slide-subtitle },
             weight: font-weight-title-slide-subtitle,
             fill: font-color-title-slide-subtitle,
           )[
@@ -325,13 +346,26 @@
         )
       }
 
-      v(1.5cm)
+      // v(1.5cm)
+      v(1fr)
 
-      // Author
-      if author != none {
+      // Author(s) - support both single and multiple authors
+      if authors != none {
+        // Multiple authors format
         block(
           text(
-            size: font-size-title-slide-author,
+            size: if author-size != none { author-size } else { font-size-title-slide-author },
+            weight: font-weight-title-slide-author,
+            fill: font-color-title-slide-author,
+          )[
+            #authors.join(", ")
+          ],
+        )
+      } else if author != none {
+        // Single author format (backward compatibility)
+        block(
+          text(
+            size: if author-size != none { author-size } else { font-size-title-slide-author },
             weight: font-weight-title-slide-author,
             fill: font-color-title-slide-author,
           )[
@@ -340,13 +374,29 @@
         )
       }
 
-      v(0.3cm)
+      // v(0.3cm)
+      v(1fr)
 
-      // Institute
-      if institute != none {
+      // Institute(s) - support both single and multiple institutes
+      if institutes != none {
+        // Multiple institutes format with numbering
         block(
           text(
-            size: font-size-title-slide-institute,
+            size: if institute-size != none { institute-size } else { font-size-title-slide-institute },
+            weight: font-weight-title-slide-institute,
+            fill: font-color-title-slide-institute,
+          )[
+            #for (i, inst) in institutes.enumerate() [
+              #super[#(i + 1)] #inst
+              #if i < institutes.len() - 1 [\ ]
+            ]
+          ],
+        )
+      } else if institute != none {
+        // Single institute format (backward compatibility)
+        block(
+          text(
+            size: if institute-size != none { institute-size } else { font-size-title-slide-institute },
             weight: font-weight-title-slide-institute,
             fill: font-color-title-slide-institute,
           )[
@@ -355,13 +405,13 @@
         )
       }
 
-      v(1cm)
-
+      // v(1cm)
+      v(1fr)
       // Date
       if date != none {
         block(
           text(
-            size: font-size-title-slide-date,
+            size: if date-size != none { date-size } else { font-size-title-slide-date },
             weight: font-weight-title-slide-date,
             fill: font-color-title-slide-date,
           )[
@@ -372,10 +422,9 @@
 
       // Occasion
       if occasion != none {
-        v(0.3cm)
         block(
           text(
-            size: font-size-title-slide-date,
+            size: if date-size != none { date-size } else { font-size-title-slide-date },
             weight: font-weight-title-slide-date,
             fill: font-color-title-slide-date,
           )[
@@ -460,11 +509,11 @@
               Leibniz Institute for Prevention Research\
               and Epidemiology -- BIPS\
               Achterstraße 30\
-              D-28359 Bremen\
+              28359 Bremen\
               Germany
 
               #if email != "" [
-                #text(fill: font-color-thanks-slide-website)[#email.replace("@", "(at)")]
+                #text(fill: font-color-thanks-slide-website)[#email]
               ]
             ]
           ]

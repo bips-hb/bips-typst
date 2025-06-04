@@ -7,7 +7,7 @@
   title: "Bypst: The BIPS Typst Theme",
   subtitle: "Modern Presentations with Typst and Touying",
   author: "Jane Doe & John Smith",
-  institute: "Leibniz Institute for Prevention Research & Epidemiology -- BIPS",
+  institute: bips_en,
   date: datetime.today().display(),
   occasion: "The 27th Conference on Typst Presentations",
 )

@@ -96,14 +96,53 @@ Or use the free online [typst editor](https://typst.app/) (imagine Overleaf, but
 
 ### Title Slide
 
+#### Single Author
 ```typst
 #title-slide(
   title: "Presentation Title",
   subtitle: "Subtitle",
-  author: "Author Names",
+  author: "Author Name",
   institute: "Institution",
   date: "Date",
   occasion: "Event/Conference",  // Optional
+)
+```
+
+#### Multiple Authors with Affiliations
+```typst
+#title-slide(
+  title: "Presentation Title", 
+  subtitle: "Subtitle",
+  authors: (
+    "Jane Doe" + inst(1) + inst(2),  // Author with multiple affiliations
+    "John Smith" + inst(1),          // Author with single affiliation
+    "Alice Johnson" + inst(3)        // Author with different affiliation
+  ),
+  institutes: (
+    "First Institution", 
+    "Second Institution",
+    "Third Institution"
+  ),
+  date: "Date",
+  occasion: "Event/Conference",  // Optional
+  institute-size: 14pt,  // Optional: smaller font for many institutions
+)
+```
+
+**Note**: Use `inst(number)` to add superscript affiliation numbers to author names, similar to LaTeX Beamer's `\inst{}` command. Authors can have multiple affiliations in two ways:
+- Multiple calls: `"Jane Doe" + inst(1) + inst(2)`  
+- Single call with multiple numbers: `"Jane Doe" + inst(1,2)`
+
+#### Font Size Customization
+You can override the default font sizes for title slide elements:
+```typst
+#title-slide(
+  // ... content parameters
+  title-size: 28pt,      // Override title font size
+  subtitle-size: 16pt,   // Override subtitle font size
+  author-size: 18pt,     // Override author font size
+  institute-size: 14pt,  // Override institute font size
+  date-size: 14pt,       // Override date/occasion font size
 )
 ```
 
