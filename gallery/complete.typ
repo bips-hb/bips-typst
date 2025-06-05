@@ -136,8 +136,6 @@
   #pause
   $ f(x) = (x + 1)^2 $
 
-  #pause
-  *This text should appear last and be in BIPS blue!*
 ]
 
 #bips-slide(

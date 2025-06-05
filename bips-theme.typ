@@ -226,7 +226,7 @@
           dy: 1cm,
           image("bips-logo.png", width: 3cm),
         )
-        
+
         // Page number (simple counter, no here().page() queries)
         place(
           top + right,
@@ -261,7 +261,7 @@
     #if title != none or subtitle != none {
       // Title and subtitle section - smart spacing without grid
       v(.1em)
-      
+
       // Combine title and subtitle in natural flow
       if title != none and subtitle != none {
         // Both title and subtitle - natural line break between them
@@ -307,9 +307,9 @@
           angle: 0deg,
         ),
       )
-      
+
       v(1em)
-      
+
       // Content area - natural flow allows footnotes to work
       if text-size != none {
         text(size: text-size)[#body]
