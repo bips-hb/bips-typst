@@ -75,6 +75,21 @@
   )
 ]
 
+// Test 8: Callout blocks (Expected: 1 page)
+#bips-slide(title: "Test 8: Callout Blocks")[
+  #callout(type: "note")[Note callout test]
+  #callout(type: "tip", title: "Custom Title")[Tip with title]
+  #callout(type: "warning", icon: "🚨")[Warning with custom icon]
+  #callout(type: "important")[Important callout]
+]
+
+// Test 9: Callouts with animation (Expected: 2 pages)
+#bips-slide(title: "Test 9: Callouts + Animation")[
+  #callout(type: "note")[Before pause]
+  #pause
+  #callout(type: "important")[After pause]
+]
+
 // Summary slide for manual verification
 #bips-slide(title: "Test Results Summary", text-size: 14pt)[
   *Expected Results:*
@@ -85,6 +100,8 @@
   - Test 5: 1 page, all elements render
   - Test 6: 1 page, no title overflow
   - Test 7: 2 pages, table after pause
+  - Test 8: 1 page, all callout types render
+  - Test 9: 2 pages, callouts with animation
 
   *Manual Checks:*
   - Logo appears on all content slides

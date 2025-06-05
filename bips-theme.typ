@@ -366,6 +366,61 @@
   }
 }
 
+// Callout blocks (similar to Quarto callouts)
+/// Create styled callout blocks with icons and colors
+/// 
+/// Available types: note, tip, warning, important
+/// 
+/// Example: #callout(type: "warning", title: "Data Limitation")[Content here]
+#let callout(
+  type: "note",
+  title: none,
+  icon: none,
+  body
+) = {
+  // Color schemes for different callout types
+  let colors = (
+    note: (border: bips-blue, bg: bips-blue.lighten(90%), icon: bips-blue),
+    tip: (border: bips-green, bg: bips-green.lighten(90%), icon: bips-green),
+    warning: (border: bips-orange, bg: bips-orange.lighten(90%), icon: bips-orange),
+    important: (border: red, bg: red.lighten(90%), icon: red),
+  )
+  
+  // Default icons for each type
+  let icons = (
+    note: "📝",
+    tip: "💡", 
+    warning: "⚠",
+    important: "❗",
+  )
+  
+  let color-scheme = colors.at(type, default: colors.note)
+  let default-icon = icons.at(type, default: icons.note)
+  let display-icon = if icon != none { icon } else { default-icon }
+  
+  block(
+    width: 100%,
+    stroke: (left: 4pt + color-scheme.border),
+    fill: color-scheme.bg,
+    inset: (left: 1em, right: 1em, top: 0.8em, bottom: 0.8em),
+    radius: (right: 4pt),
+    below: 1em,
+  )[
+    #if title != none or display-icon != none {
+      text(
+        size: 0.9em,
+        weight: "bold",
+        fill: color-scheme.icon,
+      )[
+        #if display-icon != none [#display-icon ] 
+        #if title != none [#title] else [#upper(type)]
+      ]
+      v(0.3em)
+    }
+    #body
+  ]
+}
+
 // Title slide function using Touying's infrastructure
 #let title-slide(
   title: none,
@@ -550,7 +605,7 @@
 
     // 3-row grid layout: thanks text, QR/website, contact+logo
     #grid(
-      rows: (1fr, auto, auto),
+      rows: (1fr, 0.5fr, auto),
       row-gutter: 2em,
       [
         // Row 1: Thanks message (centered, taking up available space)
@@ -581,6 +636,7 @@
             ]
           ]
         ]
+        #v(1em)
       ],
       [
         // Row 3: Contact information and logo
@@ -613,7 +669,7 @@
           ],
           [
             #align(left)[
-              #image("bips-logo.png", width: 5.6cm)
+              #image("bips-logo.png", width: 5.5cm)
             ]
           ],
         )
