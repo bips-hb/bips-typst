@@ -266,7 +266,8 @@
       if title != none and subtitle != none {
         // Both title and subtitle - natural line break between them
         block(
-          width: 90%,
+          width: 90%, 
+          // stroke: 1pt,
           [
             #text(
               size: if title-size != none { title-size } else { font-size-slide-title },
@@ -276,9 +277,10 @@
           ],
         )
         // #linebreak()
-        // #v(-10pt)
+        v(-0.5em)
         block(
-          width: 90%,
+          width: 90%, 
+          // stroke: 1pt,
           [
             #text(
               size: if subtitle-size != none { subtitle-size } else { font-size-slide-subtitle },

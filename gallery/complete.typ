@@ -15,7 +15,7 @@
 // Regular content slides
 #bips-slide(
   title: "Introduction to BIPS Typst Theme",
-  subtitle: "Modern slide design with Typst"
+  subtitle: "Modern slide design with Typst",
 )[
   - The BIPS Typst theme brings the institutional design to modern presentation tools
   - Built on top of the powerful _Touying_ package for Typst
@@ -60,10 +60,6 @@
   - _Emphasized text_ appears in blue italic (customizable)
   - #link("https://typst.app")[Link text] appears in blue with underline
   - Regular text uses the base color
-
-  #v(1fr)
-
-  #gray[All colors and typography are configurable via variables at the top of the theme file.]
 ]
 
 // Section slide
@@ -117,7 +113,7 @@
 
 #bips-slide(
   title: "Manual Incremental Reveals",
-  subtitle: "Using \#pause for step-by-step presentation",
+  subtitle: "Using #pause for step-by-step presentation",
 )[
   Here are some key points:
 
@@ -140,9 +136,9 @@
 
 #bips-slide(
   title: "Two-Column Animation",
-  subtitle: "Using \#meanwhile for synchronized reveals",
+  subtitle: "Using #meanwhile for synchronized reveals",
 )[
-  #grid(columns: (1fr, 1fr), gutter: 1em)[
+  #grid(columns: (1fr, 1fr))[
     Left column starts:
     - First item here
     #pause
@@ -151,10 +147,9 @@
     - Third item follows
   ][
     #meanwhile
-    Right column content appears when #meanwhile is triggered
-    #pause
+    - Right column content appears when #meanwhile is triggered
+    - Pretty neat.
 
-    More right content on next click
   ]
 ]
 
@@ -240,5 +235,5 @@
   thanks-text: "Thank you for your attention!",
   contact-author: "Dr. Jane Doe",
   email: "jane.doe@leibniz-bips.de",
-  qr-url: "https://codeberg.org/lksbrk/bips-typst",  // QR code linking to presentation URL
+  qr-url: "https://codeberg.org/lksbrk/bips-typst", // QR code linking to presentation URL
 )
