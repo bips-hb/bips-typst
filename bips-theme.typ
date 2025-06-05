@@ -136,6 +136,9 @@
   heading-3-size: none,
   small-size: none,
   tiny-size: none,
+  page-number-size: none,
+  code-block-scale: none,
+  code-inline-scale: none,
   body,
 ) = {
   // Calculate effective font sizes (use override if provided, otherwise theme default)
@@ -149,6 +152,9 @@
   let effective-font-size-heading-3 = if heading-3-size != none { heading-3-size } else { font-size-heading-3 }
   let effective-font-size-small = if small-size != none { small-size } else { font-size-small }
   let effective-font-size-tiny = if tiny-size != none { tiny-size } else { font-size-tiny }
+  let effective-font-size-page-number = if page-number-size != none { page-number-size } else { font-size-page-number }
+  let effective-code-block-scale = if code-block-scale != none { code-block-scale } else { font-scale-code-block }
+  let effective-code-inline-scale = if code-inline-scale != none { code-inline-scale } else { font-scale-code-inline }
   // Global text and styling configuration
   show: set text(
     font: ("Fira Sans", "Arial"),
@@ -190,8 +196,8 @@
   show enum: set text(fill: font-color-base)
 
   // Code styling - separate scaling for inline vs block code
-  show raw.where(block: true): set text(size: font-scale-code-block * 1em)
-  show raw.where(block: false): set text(size: font-scale-code-inline * 1em)
+  show raw.where(block: true): set text(size: effective-code-block-scale * 1em)
+  show raw.where(block: false): set text(size: effective-code-inline-scale * 1em)
 
   // Basic heading styles
   show heading.where(level: 1): set text(
@@ -233,7 +239,7 @@
           dx: -2.25cm,
           dy: 4.25cm,
           text(
-            size: font-size-page-number,
+            size: effective-font-size-page-number,
             fill: font-color-page-number,
             weight: font-weight-page-number,
           )[
@@ -254,10 +260,19 @@
   title-size: none,
   subtitle-size: none,
   text-size: none,
+  page-number-size: none,
+  code-block-scale: none,
+  code-inline-scale: none,
   ..args,
   body,
 ) = {
   slide(..args)[
+    // Apply slide-specific styling overrides
+    #if page-number-size != none or code-block-scale != none or code-inline-scale != none {
+      show raw.where(block: true): set text(size: if code-block-scale != none { code-block-scale * 1em } else { font-scale-code-block * 1em })
+      show raw.where(block: false): set text(size: if code-inline-scale != none { code-inline-scale * 1em } else { font-scale-code-inline * 1em })
+    }
+    
     #if title != none or subtitle != none {
       // Title and subtitle section - smart spacing without grid
       v(.1em)
