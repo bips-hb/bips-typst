@@ -42,7 +42,7 @@
 #let font-color-small = bips-text-gray
 #let font-weight-small = "regular"
 
-#let font-size-tiny = 13pt
+#let font-size-tiny = 12pt
 #let font-color-tiny = bips-text-gray
 #let font-weight-tiny = "regular"
 
@@ -60,11 +60,11 @@
 #let font-weight-heading-3 = "bold"
 
 // Slide title and subtitle styling
-#let font-size-slide-title = 24pt
+#let font-size-slide-title = 26pt
 #let font-color-slide-title = bips-blue
 #let font-weight-slide-title = 600
 
-#let font-size-slide-subtitle = 18pt
+#let font-size-slide-subtitle = 20pt
 #let font-color-slide-subtitle = bips-blue
 #let font-weight-slide-subtitle = "bold"
 
@@ -108,7 +108,7 @@
 #let font-weight-thanks-slide-contact = "regular"
 
 // Page number styling
-#let font-size-page-number = 13pt
+#let font-size-page-number = 18pt
 #let font-color-page-number = bips-text-gray
 #let font-weight-page-number = "regular"
 
@@ -265,18 +265,28 @@
       // Combine title and subtitle in natural flow
       if title != none and subtitle != none {
         // Both title and subtitle - natural line break between them
-        text(
-          size: if title-size != none { title-size } else { font-size-slide-title },
-          weight: font-weight-slide-title,
-          fill: font-color-slide-title,
-        )[#title]
-        linebreak()
-        // v(.05pt)
-        text(
-          size: if subtitle-size != none { subtitle-size } else { font-size-slide-subtitle },
-          weight: font-weight-slide-subtitle,
-          fill: font-color-slide-subtitle,
-        )[#subtitle]
+        block(
+          width: 90%,
+          [
+            #text(
+              size: if title-size != none { title-size } else { font-size-slide-title },
+              weight: font-weight-slide-title,
+              fill: font-color-slide-title,
+            )[#title]
+          ],
+        )
+        // #linebreak()
+        // #v(-10pt)
+        block(
+          width: 90%,
+          [
+            #text(
+              size: if subtitle-size != none { subtitle-size } else { font-size-slide-subtitle },
+              weight: font-weight-slide-subtitle,
+              fill: font-color-slide-subtitle,
+            )[#subtitle]
+          ],
+        )
       } else if title != none {
         // Title only
         text(
@@ -296,14 +306,15 @@
       // Space before gradient line
       // v(0.5em)
 
-      // Gradient line after title/subtitle
+      // Gradient line
+      // gradient.linear gray to white was more robust than .transparentize which did not show up
+      // properly on most PDF viewers I tried
       rect(
         width: 85%,
-        height: .05em,
+        height: 0.5pt,
         fill: gradient.linear(
           bips-text-gray,
-          bips-text-gray.transparentize(50%),
-          bips-text-gray.transparentize(95%),
+          white,
           angle: 0deg,
         ),
       )
@@ -433,7 +444,6 @@
         )
       }
 
-      // v(0.3cm)
       v(1fr)
 
       // Institute(s) - support both single and multiple institutes
@@ -463,8 +473,6 @@
           ],
         )
       }
-
-      // v(1cm)
       v(1fr)
       // Date
       if date != none {

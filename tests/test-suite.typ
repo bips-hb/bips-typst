@@ -56,9 +56,11 @@
 // Test 6: Edge case - Very long title/subtitle (Expected: 1 page, no overflow)
 #bips-slide(
   title: "Test 6: Very Long Title That Might Cause Layout Issues And Could Potentially Overflow",
-  subtitle: "Also a very long subtitle that tests the layout constraints and spacing",
+  subtitle: "Also a very long subtitle that tests the layout constraints and spacing and is also otherwise perfectly cromulant",
 )[
   Content after very long headers.
+
+  Long headers should be avoided but it's better to have a linebreak than to overflow into the logo.
 ]
 
 // Test 7: Animation with tables (Expected: 2 pages)
