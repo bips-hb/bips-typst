@@ -1,19 +1,15 @@
-# BIPS Typst Presentation Template
+# Bypst: BIPS Typst Presentation Template
 
-A modern, fast presentation template for BIPS using [Typst](https://typst.app/). Think PowerPoint meets LaTeX, but actually fast and simple.
+Fast, modern presentation template for BIPS using [Typst](https://typst.app/) and [Touying](https://touying-typ.github.io/).
 
-## Why Use This?
+## Features
 
-- **Lightning fast**: Compiles in milliseconds, not minutes like LaTeX Beamer
-- **BIPS branded**: Official colors, fonts, and logo placement
-- **Simple syntax**: Much easier than LaTeX, cleaner than PowerPoint
-- **Version control friendly**: Plain text format that works great with Git
-- **Animations included**: Incremental reveals with `#pause`
+- **Lightning fast** — Compiles in milliseconds, not minutes
+- **BIPS branded** — Colors, fonts, and logo placement based on [bips-beamer](http://github.com/bips-hb/bips-beamer)
+- **Git-friendly** — Plain text format for version control
+- **Full-featured** — Animations, multi-author support, callout boxes, and more
 
-## Getting Started
-
-1. **Download** the theme files (`bips-theme.typ` and `bips-logo.png`)
-2. **Create** your presentation file:
+## Quick Start
 
 ```typst
 #import "bips-theme.typ": *
@@ -22,174 +18,143 @@ A modern, fast presentation template for BIPS using [Typst](https://typst.app/).
 #title-slide(
   title: "Your Presentation Title",
   author: "Your Name",
-  institute: "BIPS",
-  date: "December 2024",
+  institute: bips_en, // or bips_de for the German title
+  date: "June 6, 2025",
 )
 
-#bips-slide(title: "Your First Slide")[
-  - Easy bullet points
-  - *Bold text* automatically appears in BIPS blue
-  - Mathematical equations: $ sum_(i=1)^n x_i $
+#bips-slide(title: "Introduction")[
+  - Bullet points work as expected
+  - *Bold* and _italic_ text in BIPS blue
+  - Math notation: $ s^2 = 1/(n-1) sum_(i=1)^n (x_i - overline(x))^2 $
   
-  #pause
+  #pause  // Click to reveal next content
   
-  - Use `#pause` for step-by-step reveals
-]
-
-#bips-slide(title: "Two Column Layout")[
-  #two-columns[
-    === Left Side
-    - Your content here
-    - Works great for comparisons
-  ][
-    === Right Side
-    - More content here
-    - Images, tables, whatever you need
-  ]
+  - Animations with `#pause`
 ]
 
 #thanks-slide(
   contact-author: "Your Name",
   email: "your.email@leibniz-bips.de",
+  qr-url: "https://link-to-slides.example.com" // Generates QR code for last slide
 )
 ```
 
-3. **Compile** your presentation:
-```bash
-typst compile my-presentation.typ
-```
+## Installation
 
-Or use the free [Typst web editor](https://typst.app/) (like Overleaf, but fast).
+1. Download `bips-theme.typ` and `bips-logo.png`
+2. Place in your project folder
+3. Compile: `typst compile presentation.typ`
 
-## Essential Features
+Or use the [Typst web editor](https://typst.app/).
+
+## Core Features
 
 ### Slide Types
 
-```typst
-// Regular content slide
-#bips-slide(title: "Slide Title")[
-  Your content here
-]
-
-// Title slide
-#title-slide(
-  title: "Presentation Title",
-  author: "Your Name",
-  institute: "BIPS",
-  date: "Date",
-)
-
-// Section divider
-#section-slide[New Section]
-
-// Thanks slide with contact info
-#thanks-slide(
-  contact-author: "Your Name",
-  email: "your.email@leibniz-bips.de",
-)
-```
+- `#title-slide()` — Opening slide with author/institution
+- `#bips-slide()` — Content slides with optional title/subtitle
+- `#section-slide()` — Section dividers (with optional logo/page number control)
+- `#thanks-slide()` — Closing slide with contact info
+- `#empty-slide[]` — Blank slide (no logo/numbering)
 
 ### Useful Helpers
 
 ```typst
-// Highlight boxes
-#callout(type: "note")[Important research finding]
-#callout(type: "warning")[Study limitations]
-#callout(type: "tip")[Future research directions]
-
-// Column layouts
+// Two-column layout
 #two-columns[Left content][Right content]
-#three-columns[Left][Center][Right]
 
-// BIPS colors
-#blue[Blue text] #orange[Orange text] #green[Green text]
+// Callout boxes
+#callout(type: "note")[Important information]
+#callout(type: "tip")[Helpful hint]
+#callout(type: "warning")[Caution needed]
+
+// Color helpers
+#blue[text] #orange[text] #green[text] #gray[text]
 ```
 
 ### Multiple Authors
 
 ```typst
 #title-slide(
-  title: "Multi-Author Study",
+  title: "Collaborative Research",
   authors: (
     "Jane Doe" + inst(1,2),
     "John Smith" + inst(1),
-    "Alice Johnson" + inst(3)
+    "Alice Johnson" + inst(3),
   ),
   institutes: (
     "BIPS",
-    "University of Bremen", 
-    "Another Institution"
+    "University of Bremen",
+    "Other Institution",
   ),
-  date: "December 2024",
 )
 ```
 
-### Animations
+### Section Slides
+
+Section slides support optional logo and page number control:
 
 ```typst
-#bips-slide(title: "Step by Step")[
-  First, we see this content.
-  
-  #pause
-  
-  Then this appears on click.
-  
-  #pause
-  
-  Finally, this shows up.
+// Default: shows logo, hides page number (department preference)
+#section-slide("Results")
+
+// Hide logo and page number (clean divider)
+#section-slide("Methods", show-logo: false, show-page-number: false)
+
+// Show both logo and page number (full branding)
+#section-slide("Discussion", show-logo: true, show-page-number: true)
+
+// Show page number but hide logo (minimal branding)
+#section-slide("Conclusions", show-logo: false, show-page-number: true)
+```
+
+### Customization
+
+Global settings:
+```typst
+#show: bips-theme.with(
+  base-size: 20pt,
+  slide-title-size: 28pt,
+  code-block-scale: 0.9,
+)
+```
+
+Per-slide overrides:
+```typst
+#bips-slide(
+  title: "Dense Content",
+  text-size: 16pt,
+)[
+  Smaller text for this slide only
 ]
 ```
 
 ## Examples
 
-Check out the `gallery/` folder for ready-to-use examples:
+See `gallery/` for complete examples:
+- `basic.typ` — Simple starter template
+- `animations.typ` — Step-by-step reveals
+- `multi-author.typ` — Collaboration examples
+- `customization.typ` — Font and styling options
 
-- `gallery/basic.typ` - Simple starter template
-- `gallery/complete.typ` - All features showcased
-- `gallery/multi-author.typ` - Multiple authors example
-- `gallery/animations.typ` - Animation examples
-
-Compile any example:
-```bash
-typst compile gallery/basic.typ
-```
-
-## Customization
-
-### Font Sizes
-
-Want different font sizes? Easy:
-
-```typst
-#show: bips-theme.with(
-  base-size: 20pt,        // Bigger base text
-  slide-title-size: 28pt, // Bigger slide titles
-)
-```
-
-### Individual Slides
-
-```typst
-#bips-slide(
-  title: "Small Text Slide",
-  text-size: 14pt,     // Just this slide
-)[
-  Lots of detailed content that needs smaller text
-]
-```
+Copy `demo-bips.typ` for a ready-to-use template.
 
 ## Tips
 
-- Use `*bold*` and `_italic_` text - they automatically use BIPS blue
-- Mathematical equations work just like LaTeX: `$ x = y + z $`
-- Images: `#image("path/to/image.png", width: 50%)`
-- Tables get automatic BIPS styling
-- Don't forget `#pause` for animations!
+- Use `typst watch file.typ` for live preview while editing
+- Tables automatically get BIPS styling
+- Images: `#image("figure.png", width: 50%)`
+- Check [Touying docs](https://touying-typ.github.io/) for advanced features
 
-## Need Help?
+## Requirements
 
-- [Typst Documentation](https://typst.app/docs/) - Learn the basics
-- [Touying Guide](https://touying-typ.github.io/) - Advanced presentation features
-- Check the `gallery/` examples for inspiration
+- Typst (latest version recommended)
+- No other dependencies — template includes everything needed
 
-Made with ❤️ for BIPS researchers who want beautiful presentations without the LaTeX headaches.
+## License
+
+CC BY-SA 4.0
+
+## Contributing
+
+Issues and PRs welcome.

@@ -87,7 +87,7 @@
 #let font-weight-title-slide-date = "regular"
 
 // Section slide styling
-#let font-size-section-slide = 32pt
+#let font-size-section-slide = 40pt
 #let font-color-section-slide = bips-blue
 #let font-weight-section-slide = "bold"
 
@@ -515,21 +515,55 @@
 // Section Slide
 // -------------------------------------------------------------------
 
-#let section-slide(section-title) = {
+#let section-slide(
+  section-title,
+  show-logo: true,     // Show BIPS logo by default (department requirement)
+  show-page-number: false,  // Hide page number by default (cleaner look)
+) = {
   slide(
     setting: body => {
-      set page(background: none) // Clean background for section slides
+      // Always set custom background for section slides to control logo/page number
+      set page(
+        background: {
+          if show-logo {
+            // Show logo
+            place(
+              top + right,
+              dx: -1cm,
+              dy: 1cm,
+              image("bips-logo.png", width: 3cm),
+            )
+          }
+          
+          if show-page-number {
+            // Show page number
+            place(
+              top + right,
+              dx: -2.25cm,
+              dy: 4.25cm,
+              text(
+                size: font-size-page-number,
+                fill: font-color-page-number,
+                weight: font-weight-page-number,
+              )[
+                #context counter(page).display()
+              ],
+            )
+          }
+        }
+      )
+      
       set align(center + horizon)
+      
+      text(
+        size: font-size-section-slide,
+        weight: font-weight-section-slide,
+        fill: font-color-section-slide,
+      )[
+        #section-title
+      ]
     },
-  )[
-    #text(
-      size: font-size-section-slide,
-      weight: font-weight-section-slide,
-      fill: font-color-section-slide,
-    )[
-      #section-title
-    ]
-  ]
+  )[]
 }
 
 // -------------------------------------------------------------------
@@ -644,10 +678,9 @@
   slide(
     setting: body => {
       set page(background: none)
+      content.pos().join()
     },
-  )[
-    #content.pos().join()
-  ]
+  )[]
 }
 
 // ===================================================================

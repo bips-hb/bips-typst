@@ -2,144 +2,130 @@
 
 #show: bips-theme
 
-// ============================================================================
-// BIPS PRESENTATION DEMO
-// ============================================================================
-//
-// This demo shows the essential features you'll need for most presentations.
-// Copy this file and customize it for your own talks!
+// Look, here's a demo presentation that shows the stuff you'll actually use.
+// Copy this file, change the content, and you're golden.
 
 #title-slide(
   title: "Your Research Project",
   subtitle: "Findings and Implications",
   author: "Your Name",
-  institute: "BIPS",
-  date: "December 2024",
-  occasion: "Department Meeting", // Optional - remove if not needed
+  institute: bips_en,
+  date: datetime.today().display(),
+  occasion: "Conference of Implied Applications", // Delete this line if you don't need it
 )
 
 #bips-slide(title: "Introduction")[
-  Welcome to your BIPS presentation! This template gives you:
+ What's in the tin:
 
-  - *Professional BIPS branding* - colors, fonts, logo
-  - *Fast compilation* - no more waiting for LaTeX
-  - *Simple syntax* - much easier than Beamer
-  - *Beautiful math* - $ E = m c^2 $ just works
+  - *BIPS branding* without the LaTeX headaches
+  - *Instant compilation* — seriously, it's faster than saying "Schnitzelbrot"
+  - *Git-friendly* plain text format (your future self will thank you)
+  - *Math that just works*: $ s^2 = 1/(n-1) sum_(i=1)^n (x_i - macron(x))^2  $
 
-  Perfect for conference talks, seminars, and research presentations.
+  #vfill
+
+  Perfect for when you need slides by tomorrow.
 ]
 
 #bips-slide(
   title: "Study Overview",
-  subtitle: "Research design and objectives"
+  subtitle: "What we actually did",
+  text-size: 15pt,
 )[
   === Objectives
   - Investigate relationship between X and Y
   - Assess impact of intervention Z
-  - Evaluate long-term outcomes
+  - Try to get significant results (kidding... mostly)
 
   === Methods
   - Randomized controlled trial
-  - n = 500 participants
-  - 12-month follow-up period
+  - n = 500 participants 
+  - 12-month follow-up
 
   #callout(type: "note")[
-    Ethics approval obtained from institutional review board
+    Ethics approval obtained. Yes, we did the paperwork.
   ]
 ]
 
-#section-slide[Results]
+#section-slide("Results") // Drama break
 
 #bips-slide(title: "Key Findings")[
   #two-columns[
     === Primary Outcome
-    - Significant effect found
-    - p < 0.001 (95% CI: 0.2-0.8)
+    - Significant effect found 🎉
+    - p < 0.001 (reviewer 2 can't complain)
     - Effect size: Cohen's d = 0.65
+    - Clinical relevance: Actually meaningful!
 
     === Secondary Outcomes
-    - Improved quality of life
-    - Reduced healthcare utilization
-    - High participant satisfaction
+    - Quality of life ↑
+    - Healthcare costs ↓
+    - Participants didn't hate it
   ][
-    === Statistical Analysis
-    We used standard regression models:
+    #pause
+    === The Math Part
+    We used a standard regression model:
 
     $ y_i = beta_0 + beta_1 x_i + epsilon_i $
 
     Where:
     - $y_i$ = outcome for participant $i$
-    - $x_i$ = treatment indicator
-    - $epsilon_i$ = random error term
+    - $x_i$ = treatment (1 = got it, 0 = didn't)
+    - $epsilon_i$ = random noise (always there)
 
-    #callout(type: "tip")[
-      All analyses performed in R with significance at α = 0.05
-    ]
   ]
 ]
 
-#bips-slide(title: "Step-by-Step Results")[
-  Let's walk through the main finding:
+#bips-slide(title: "Let's Walk Through This")[
+  Here's what happened over time:
 
-  First, we see a clear baseline difference:
-  - Control group: 45.2 ± 8.1
-  - Treatment group: 44.8 ± 7.9
+  At baseline, groups were pretty similar:
+  - Control: 45.2 ± 8.1
+  - Treatment: 44.8 ± 7.9
 
   #pause
 
-  After 6 months, we observe:
-  - Control group: 46.1 ± 8.3 (minimal change)
-  - Treatment group: 52.7 ± 6.2 (*significant improvement*)
+  After 6 months — things got interesting:
+  - Control: 46.1 ± 8.3 (barely moved)
+  - Treatment: 52.7 ± 6.2
 
   #pause
 
-  At 12 months, the effect persists:
-  - Control group: 45.8 ± 8.5
-  - Treatment group: 54.1 ± 5.8
+  At 12 months — effect still there:
+  - Control: 45.8 ± 8.5
+  - Treatment: 54.1 ± 5.8
 
-  #callout(type: "important")[
-    Sustained improvement demonstrates intervention effectiveness
-  ]
 ]
 
-#bips-slide(title: "Limitations")[
-  This study has several limitations:
+#bips-slide(title: "Limitations (Because Honesty)")[
+  Every study has them. Here are ours:
 
-  #callout(type: "warning", title: "Study Limitations")[
-    - Single-center design limits generalizability
-    - 15% dropout rate, though comparable across groups
-    - Follow-up limited to 12 months
-    - Self-reported outcomes may introduce bias
+  #callout(type: "warning", title: "The Not-So-Great Parts")[
+    - Single center = limited generalizability
+    - 15% dropped out (but equally across groups, so... yay?)
+    - Only followed for 12 months (grants, am I right?)
+    - Self-reported outcomes (people lie, we know)
   ]
 
-  === Future Research
-  - Multi-center replication study planned
-  - Extended follow-up (24-month) study approved
-  - Cost-effectiveness analysis in progress
 ]
 
-#section-slide[Conclusion]
+#section-slide("Conclusions")
 
 #bips-slide(title: "Take-Home Messages")[
   === What We Found
-  1. Intervention shows *strong, sustained effects*
-  2. Benefits persist at 12-month follow-up
-  3. Effect size is clinically meaningful
-  4. Implementation appears feasible in practice
+  1. The intervention *actually works* (still surprised)
+  2. Effects last at least 12 months
+  3. Effect size is clinically meaningful (not just p-hacking)
+  4. Implementation seems feasible (important for the real world)
 
-  === Clinical Implications
-  - #green[Ready for broader implementation]
-  - #blue[Training protocols developed]
-  - #orange[Cost-benefit analysis favorable]
-
-  === Next Steps
-  - Prepare results for publication
-  - Apply for implementation funding
-  - Develop practitioner guidelines
+  === So What?
+  - #green[Ready for prime time] — let's scale this up
+  - #blue[Training materials ready] — 2-day workshop developed
+  - #orange[Cost-effective] — neat
 ]
 
 #thanks-slide(
   contact-author: "Your Name",
   email: "your.email@leibniz-bips.de",
-  // qr-url: "https://your-presentation-url.com", // Uncomment to add QR code
+  // qr-url: "https://your-data-repository.com", // Uncomment for QR code magic
 )
