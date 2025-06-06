@@ -12,7 +12,7 @@
 
 #bips-slide(
   title: "Incremental Reveals",
-  subtitle: "Using \\#pause for step-by-step presentation"
+  subtitle: "Using #pause for step-by-step presentation"
 )[
   Content appears step by step:
   

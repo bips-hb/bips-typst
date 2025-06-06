@@ -172,7 +172,7 @@
             fill: font-color-page-number,
             weight: font-weight-page-number,
           )[
-            #context counter(page).display()
+            #context utils.slide-counter.display()
           ],
         )
       }
@@ -259,24 +259,8 @@
   show raw.where(block: true): set text(size: effective-code-block-scale * 1em)
   show raw.where(block: false): set text(size: effective-code-inline-scale * 1em)
 
-  // Basic heading styles
-  show heading.where(level: 1): set text(
-    size: effective-font-size-slide-title,
-    weight: font-weight-slide-title,
-    fill: font-color-slide-title,
-  )
-
-  show heading.where(level: 2): set text(
-    size: effective-font-size-slide-subtitle,
-    weight: font-weight-slide-subtitle,
-    fill: font-color-slide-subtitle,
-  )
-
-  show heading.where(level: 3): set text(
-    size: effective-font-size-heading-3,
-    weight: font-weight-heading-3,
-    fill: font-color-heading-3,
-  )
+  // Note: Heading styles are handled within slide functions to avoid
+  // interference with Touying's animation system (#pause)
 
   // Use Touying's infrastructure with BIPS customizations
   touying-slides(
@@ -315,15 +299,20 @@
   body,
 ) = {
   slide(..args)[
-    // Apply slide-specific styling overrides
-    #if page-number-size != none or code-block-scale != none or code-inline-scale != none {
-      show raw.where(block: true): set text(
-        size: pick-first(code-block-scale, font-scale-code-block) * 1em,
-      )
-      show raw.where(block: false): set text(
-        size: pick-first(code-inline-scale, font-scale-code-inline) * 1em,
-      )
-    }
+    // Apply slide-specific styling overrides including headings
+    #show raw.where(block: true): set text(
+      size: pick-first(code-block-scale, font-scale-code-block) * 1em,
+    )
+    #show raw.where(block: false): set text(
+      size: pick-first(code-inline-scale, font-scale-code-inline) * 1em,
+    )
+    
+    // Handle heading styling within slides to avoid animation interference
+    #show heading.where(level: 3): set text(
+      size: font-size-heading-3,
+      weight: font-weight-heading-3,
+      fill: font-color-heading-3,
+    )
 
     #if title != none or subtitle != none {
       // Title and subtitle section - smart spacing without grid

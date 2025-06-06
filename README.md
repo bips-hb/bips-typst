@@ -137,7 +137,7 @@ See `gallery/` for complete examples:
 - `multi-author.typ` — Collaboration examples
 - `customization.typ` — Font and styling options
 
-Copy `demo-bips.typ` for a ready-to-use template.
+Copy `gallery/basic.typ` for a ready-to-use template or `gallery/complete.typ` for a comprehensive example.
 
 ## Tips
 
