@@ -1,37 +1,34 @@
 #import "@preview/touying:0.6.1": *
 #import "@preview/codetastic:0.2.2": qrcode
 
-// Useful shorthand
+// ===================================================================
+// BIPS TYPST PRESENTATION THEME
+// ===================================================================
+// 
+// A modern presentation template for BIPS using Typst and Touying
+// https://github.com/bips-hb/bips-typst
+//
+// ===================================================================
+
+// ===================================================================
+// INSTITUTIONAL SHORTCUTS
+// ===================================================================
+
 #let bips_en = [Leibniz Institute for Prevention Research and Epidemiology --- BIPS]
 #let bips_de = [Leibniz-Institut für Präventionsforschung und Epidemiologie --- BIPS]
 
-// BIPS Color Definitions
+// ===================================================================
+// COLOR DEFINITIONS
+// ===================================================================
+
 #let bips-blue = rgb(23, 99, 170)
 #let bips-text-gray = rgb(66, 66, 66)
 #let bips-orange = rgb(250, 133, 55)
 #let bips-green = rgb(49, 210, 57)
 
-// BIPS Color Utility Functions
-// ============================
-
-/// Apply BIPS blue color to text
-/// Example: #blue[This text is blue]
-#let blue(content) = text(fill: bips-blue)[#content]
-
-/// Apply BIPS orange color to text
-/// Example: #orange[This text is orange]
-#let orange(content) = text(fill: bips-orange)[#content]
-
-/// Apply BIPS green color to text
-/// Example: #green[This text is green]
-#let green(content) = text(fill: bips-green)[#content]
-
-/// Apply gray color to text
-/// Example: #gray[This text is gray]
-#let gray(content) = text(fill: bips-text-gray)[#content]
-
-// BIPS Typography Configuration
-// =================================
+// ===================================================================
+// TYPOGRAPHY CONFIGURATION
+// ===================================================================
 
 // Main content styling
 #let font-size-base = 18pt
@@ -99,7 +96,7 @@
 #let font-color-thanks-slide-main = bips-blue
 #let font-weight-thanks-slide-main = "bold"
 
-#let font-size-thanks-slide-website = 16pt
+#let font-size-thanks-slide-website = 20pt
 #let font-color-thanks-slide-website = bips-blue
 #let font-weight-thanks-slide-website = "regular"
 
@@ -124,7 +121,10 @@
 #let font-color-emphasis = bips-blue
 #let font-color-strong = bips-blue
 
-// BIPS theme that leverages Touying's infrastructure
+// ===================================================================
+// MAIN THEME FUNCTION
+// ===================================================================
+
 #let bips-theme(
   aspect-ratio: "16-9",
   // Global font size overrides (optional)
@@ -155,6 +155,7 @@
   let effective-font-size-page-number = if page-number-size != none { page-number-size } else { font-size-page-number }
   let effective-code-block-scale = if code-block-scale != none { code-block-scale } else { font-scale-code-block }
   let effective-code-inline-scale = if code-inline-scale != none { code-inline-scale } else { font-scale-code-inline }
+
   // Global text and styling configuration
   show: set text(
     font: ("Fira Sans", "Arial"),
@@ -170,7 +171,6 @@
 
   // Links in BIPS blue with thin underline to distinguish from emphasis
   show link: it => underline(text(fill: bips-blue)[#it])
-
 
   // Table styling - set elegant defaults
   set table(
@@ -218,7 +218,6 @@
     fill: font-color-heading-3,
   )
 
-
   // Use Touying's infrastructure with BIPS customizations
   touying-slides(
     config-page(
@@ -252,7 +251,14 @@
   )
 }
 
-// Custom slide function with grid layout for title/content separation
+// ===================================================================
+// SLIDE TYPE DEFINITIONS
+// ===================================================================
+
+// -------------------------------------------------------------------
+// Content Slides
+// -------------------------------------------------------------------
+
 #let bips-slide(
   title: none,
   subtitle: none,
@@ -286,7 +292,6 @@
         // Both title and subtitle - natural line break between them
         block(
           width: 90%,
-          // stroke: 1pt,
           [
             #text(
               size: if title-size != none { title-size } else { font-size-slide-title },
@@ -295,11 +300,9 @@
             )[#title]
           ],
         )
-        // #linebreak()
         v(-0.5em)
         block(
           width: 90%,
-          // stroke: 1pt,
           [
             #text(
               size: if subtitle-size != none { subtitle-size } else { font-size-slide-subtitle },
@@ -324,12 +327,7 @@
         )[#subtitle]
       }
 
-      // Space before gradient line
-      // v(0.5em)
-
-      // Gradient line
-      // gradient.linear gray to white was more robust than .transparentize which did not show up
-      // properly on most PDF viewers I tried
+      // Gradient line after title/subtitle
       rect(
         width: 85%,
         height: 0.5pt,
@@ -359,116 +357,10 @@
   ]
 }
 
-// Helper function to format author with superscript affiliations
-// Can take single number: inst(1) or multiple numbers: inst(1,4,5)
-#let inst(..numbers) = {
-  let nums = numbers.pos()
-  if nums.len() == 0 {
-    ""
-  } else {
-    super[#nums.map(str).join(",")]
-  }
-}
+// -------------------------------------------------------------------
+// Title Slide
+// -------------------------------------------------------------------
 
-// Multi-column layout helpers
-/// Two-column layout with equal columns by default
-///
-/// Example: #two-columns[Left content][Right content]
-/// With options: #two-columns(gutter: 2em)[Left][Right]
-#let two-columns(
-  gutter: 1em,
-  columns: (1fr, 1fr),
-  ..args,
-  left,
-  right,
-) = {
-  grid(
-    columns: columns,
-    gutter: gutter,
-    ..args,
-    left,
-    right,
-  )
-}
-
-/// Three-column layout with equal columns by default
-///
-/// Example: #three-columns[Left][Center][Right]
-/// With options: #three-columns(gutter: 1.5em, columns: (1fr, 2fr, 1fr))[L][C][R]
-#let three-columns(
-  gutter: 1em,
-  columns: (1fr, 1fr, 1fr),
-  ..args,
-  left,
-  center,
-  right,
-) = {
-  grid(
-    columns: columns,
-    gutter: gutter,
-    ..args,
-    left,
-    center,
-    right,
-  )
-}
-
-// Callout blocks (similar to Quarto callouts)
-/// Create styled callout blocks with icons and colors
-///
-/// Available types: note, tip, warning, important
-///
-/// Example: #callout(type: "warning", title: "Data Limitation")[Content here]
-#let callout(
-  type: "note",
-  title: none,
-  icon: none,
-  body,
-) = {
-  // Color schemes for different callout types
-  let colors = (
-    note: (border: bips-blue, bg: bips-blue.lighten(90%), icon: bips-blue),
-    tip: (border: bips-green, bg: bips-green.lighten(90%), icon: bips-green),
-    warning: (border: bips-orange, bg: bips-orange.lighten(90%), icon: bips-orange),
-    important: (border: red, bg: red.lighten(90%), icon: red),
-  )
-
-  // Default icons for each type
-  let icons = (
-    note: "📝",
-    tip: "💡",
-    warning: "⚠",
-    important: "❗",
-  )
-
-  let color-scheme = colors.at(type, default: colors.note)
-  let default-icon = icons.at(type, default: icons.note)
-  let display-icon = if icon != none { icon } else { default-icon }
-
-  block(
-    width: 100%,
-    stroke: (left: 4pt + color-scheme.border),
-    fill: color-scheme.bg,
-    inset: (left: 1em, right: 1em, top: 0.8em, bottom: 0.8em),
-    radius: (right: 4pt),
-    below: 1em,
-  )[
-    #if title != none or display-icon != none {
-      text(
-        size: 0.9em,
-        weight: "bold",
-        fill: color-scheme.icon,
-      )[
-        #if display-icon != none [#display-icon ]
-        #if title != none [#title] else [#upper(type)]
-      ]
-      v(0.3em)
-    }
-    #body
-  ]
-}
-
-// Title slide function using Touying's infrastructure
 #let title-slide(
   title: none,
   subtitle: none,
@@ -501,9 +393,6 @@
 
       set align(center)
 
-      // Title slide doesn't affect page numbering - content slides will start at 1
-
-      // v(2cm)
       v(1fr)
 
       // Title
@@ -519,7 +408,6 @@
         )
       }
 
-      // v(0.5cm)
       v(1fr)
 
       // Subtitle
@@ -535,7 +423,6 @@
         )
       }
 
-      // v(1.5cm)
       v(1fr)
 
       // Author(s) - support both single and multiple authors
@@ -592,7 +479,9 @@
           ],
         )
       }
+
       v(1fr)
+
       // Date
       if date != none {
         block(
@@ -622,7 +511,10 @@
   )[]
 }
 
-// Section slide function using Touying's infrastructure
+// -------------------------------------------------------------------
+// Section Slide
+// -------------------------------------------------------------------
+
 #let section-slide(section-title) = {
   slide(
     setting: body => {
@@ -640,7 +532,27 @@
   ]
 }
 
-// Thanks slide function using Touying's infrastructure
+// -------------------------------------------------------------------
+// Bibliography Slide
+// -------------------------------------------------------------------
+
+#let bibliography-slide(
+  file: "references.bib",
+  style: "apa",
+  title: "References",
+  full: true,
+) = {
+  bips-slide(title: title)[
+    #align(horizon)[
+      #bibliography(file, style: style, title: none, full: full)
+    ]
+  ]
+}
+
+// -------------------------------------------------------------------
+// Thanks Slide
+// -------------------------------------------------------------------
+
 #let thanks-slide(
   thanks-text: "Thank you for your attention!",
   contact-author: "",
@@ -687,7 +599,6 @@
       ],
       [
         // Row 3: Contact information and logo
-        // #v(1fr)
         #grid(
           columns: (1fr, 1fr),
           align: (right, left),
@@ -725,7 +636,10 @@
   ]
 }
 
-// Empty slide function using Touying's infrastructure
+// -------------------------------------------------------------------
+// Empty Slide
+// -------------------------------------------------------------------
+
 #let empty-slide(..content) = {
   slide(
     setting: body => {
@@ -736,22 +650,152 @@
   ]
 }
 
-// Bibliography slide function
-/// Create a bibliography slide with proper formatting
+// ===================================================================
+// UTILITY FUNCTIONS
+// ===================================================================
+
+// -------------------------------------------------------------------
+// Color Utility Functions
+// -------------------------------------------------------------------
+
+/// Apply BIPS blue color to text
+/// Example: #blue[This text is blue]
+#let blue(content) = text(fill: bips-blue)[#content]
+
+/// Apply BIPS orange color to text
+/// Example: #orange[This text is orange]
+#let orange(content) = text(fill: bips-orange)[#content]
+
+/// Apply BIPS green color to text
+/// Example: #green[This text is green]
+#let green(content) = text(fill: bips-green)[#content]
+
+/// Apply gray color to text
+/// Example: #gray[This text is gray]
+#let gray(content) = text(fill: bips-text-gray)[#content]
+
+// -------------------------------------------------------------------
+// Author Affiliation Helper
+// -------------------------------------------------------------------
+
+/// Helper function to format author with superscript affiliations
+/// Can take single number: inst(1) or multiple numbers: inst(1,4,5)
+#let inst(..numbers) = {
+  let nums = numbers.pos()
+  if nums.len() == 0 {
+    ""
+  } else {
+    super[#nums.map(str).join(",")]
+  }
+}
+
+// -------------------------------------------------------------------
+// Multi-Column Layout Helpers
+// -------------------------------------------------------------------
+
+/// Two-column layout with equal columns by default
 ///
-/// Example: #bibliography-slide() // Uses defaults
-/// Example: #bibliography-slide(file: "refs.bib", style: "ieee")
-#let bibliography-slide(
-  file: "references.bib",
-  style: "apa",
-  title: "References",
-  full: true,
+/// Example: #two-columns[Left content][Right content]
+/// With options: #two-columns(gutter: 2em)[Left][Right]
+#let two-columns(
+  gutter: 1em,
+  columns: (1fr, 1fr),
+  ..args,
+  left,
+  right,
 ) = {
-  bips-slide(title: title)[
-    #align(horizon)[
-      #bibliography(file, style: style, title: none, full: full)
-    ]
+  grid(
+    columns: columns,
+    gutter: gutter,
+    ..args,
+    left,
+    right,
+  )
+}
+
+/// Three-column layout with equal columns by default
+///
+/// Example: #three-columns[Left][Center][Right]
+/// With options: #three-columns(gutter: 1.5em, columns: (1fr, 2fr, 1fr))[L][C][R]
+#let three-columns(
+  gutter: 1em,
+  columns: (1fr, 1fr, 1fr),
+  ..args,
+  left,
+  center,
+  right,
+) = {
+  grid(
+    columns: columns,
+    gutter: gutter,
+    ..args,
+    left,
+    center,
+    right,
+  )
+}
+
+// -------------------------------------------------------------------
+// Callout Blocks
+// -------------------------------------------------------------------
+
+/// Create styled callout blocks with icons and colors
+///
+/// Available types: note, tip, warning, important
+///
+/// Example: #callout(type: "warning", title: "Data Limitation")[Content here]
+#let callout(
+  type: "note",
+  title: none,
+  icon: none,
+  body,
+) = {
+  // Color schemes for different callout types
+  let colors = (
+    note: (border: bips-blue, bg: bips-blue.lighten(90%), icon: bips-blue),
+    tip: (border: bips-green, bg: bips-green.lighten(90%), icon: bips-green),
+    warning: (border: bips-orange, bg: bips-orange.lighten(90%), icon: bips-orange),
+    important: (border: red, bg: red.lighten(90%), icon: red),
+  )
+
+  // Default icons for each type
+  let icons = (
+    note: "📝",
+    tip: "💡",
+    warning: "⚠",
+    important: "❗",
+  )
+
+  let color-scheme = colors.at(type, default: colors.note)
+  let default-icon = icons.at(type, default: icons.note)
+  let display-icon = if icon != none { icon } else { default-icon }
+
+  block(
+    width: 100%,
+    stroke: (left: 4pt + color-scheme.border),
+    fill: color-scheme.bg,
+    inset: (left: 1em, right: 1em, top: 0.8em, bottom: 0.8em),
+    radius: (right: 4pt),
+    below: 1em,
+  )[
+    #if title != none or display-icon != none {
+      text(
+        size: 0.9em,
+        weight: "bold",
+        fill: color-scheme.icon,
+      )[
+        #if display-icon != none [#display-icon ]
+        #if title != none [#title] else [#upper(type)]
+      ]
+      v(0.3em)
+    }
+    #body
   ]
 }
 
+// -------------------------------------------------------------------
+// Miscellaneous Helpers
+// -------------------------------------------------------------------
+
+/// Convenience function for vertical fill
 #let vfill = v(1fr)
