@@ -1,68 +1,67 @@
 # BIPS Theme Gallery
 
-This directory contains various demonstration files showcasing different features and use cases of the BIPS Typst theme.
+Ready-to-use examples showcasing different features of the BIPS Typst theme. Perfect for getting started or learning specific techniques!
 
-## Demo Files
+## Essential Examples
 
-| File | Description |
-|------|-------------|
-| `basic.typ` | Simple introduction to the BIPS theme |
-| `complete.typ` | Comprehensive showcase of all theme features |
-| `multi-author.typ` | Multiple authors with institutional affiliations |
-| `qr-code.typ` | QR code integration for presentation sharing |
-| `animations.typ` | Animation and incremental reveal features |
-| `content-elements.typ` | Images, tables, footnotes, and references |
-| `font-customization.typ` | Font size customization examples |
-| `aspect-ratio.typ` | 4:3 aspect ratio presentation |
+| File | What It Shows | When To Use |
+|------|--------------|-------------|
+| `basic.typ` | Simple starter template | Your first presentation |
+| `multi-author.typ` | Multiple authors with affiliations | Academic collaborations |
+| `animations.typ` | Step-by-step reveals with `#pause` | Interactive presentations |
+| `callouts.typ` | Highlight boxes for notes/warnings | Academic content |
+| `columns.typ` | Side-by-side layouts | Comparisons, before/after |
+
+## Advanced Examples
+
+| File | What It Shows | When To Use |
+|------|--------------|-------------|
+| `complete.typ` | All features in one presentation | Learning everything available |
+| `customization.typ` | Font sizes and styling options | Non-standard formatting needs |
+| `qr-code.typ` | QR codes for presentation sharing | Conference presentations |
 
 ## Quick Start
 
-### Using Just (recommended)
-
+### Compile Examples
 ```bash
-# Compile all demos
+# Individual files
+typst compile basic.typ
+typst compile multi-author.typ
+
+# Watch for changes while editing
+typst watch basic.typ
+```
+
+### Using Just (if available)
+```bash
+# Compile all examples
 just all
 
-# Compile individual demo
+# Compile specific example
 just basic
-just qr-code
-
-# Watch for changes and recompile
-just watch basic-demo
 
 # Clean generated PDFs
 just clean
-
-# List available commands
-just list
 ```
 
-### Using Typst directly
+## Getting Started
 
-```bash
-# Compile individual files
-typst compile basic.typ
-typst compile qr-code.typ
+1. **Start with `basic.typ`** - Copy and modify for your first presentation
+2. **Need multiple authors?** Check `multi-author.typ`
+3. **Want animations?** See `animations.typ` 
+4. **Adding callouts or columns?** Look at `callouts.typ` and `columns.typ`
+5. **Custom fonts/colors?** Use `customization.typ` as reference
 
-# Watch for changes
-typst watch complete.typ
-```
+## Creating Your Own
 
-## File Structure
-
-- **Symlinks**: `bips-theme.typ` and `bips-logo.png` are symlinked from the parent directory
-- **Import compatibility**: All demos use `#import "bips-theme.typ": *` (same as examples in documentation)
-- **Self-contained**: Each demo is a complete, focused example of specific features
-
-## Creating New Demos
-
-1. Create a new `.typ` file in this directory
+1. Copy `basic.typ` as your starting point
 2. Import the theme: `#import "bips-theme.typ": *`
-3. Add your demo to the `justfile` for easy compilation
-4. Update this README with a description
+3. Customize as needed using examples from other files
+4. Compile and present!
 
-## Notes
+## Tips
 
-- All demos use the same import path for consistency with documentation
-- Symlinks ensure theme changes are automatically reflected in all demos
-- Use `just` for convenient batch operations and development workflow
+- All examples use the same import syntax as the main documentation
+- Mix and match features from different examples
+- The `complete.typ` file shows everything together
+- For questions, check the main README or Typst/Touying documentation
