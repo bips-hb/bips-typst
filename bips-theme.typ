@@ -617,7 +617,7 @@
 
     // 3-row grid layout: thanks text, QR/website, contact+logo
     #grid(
-      rows: (1fr, 0.5fr, auto),
+      rows: (1fr, 1fr, auto),
       row-gutter: 2em,
       [
         // Row 1: Thanks message (centered, taking up available space)
@@ -633,7 +633,7 @@
       ],
       [
         // Row 2: QR code or website (centered)
-        #align(center)[
+        #align(center + horizon)[
           #if qr-url != none [
             // Show QR code when URL is provided
             #qrcode(qr-url, width: 4cm, debug: false, quiet-zone: 0, colors: (white, bips-blue))
