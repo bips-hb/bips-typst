@@ -218,7 +218,7 @@
 
   // Global text and styling configuration
   show: set text(
-    font: ("Fira Sans", "Arial"),
+    font: "Fira Sans",
     size: effective-font-size-base,
     fill: font-color-base,
   )
@@ -372,7 +372,7 @@
       // Gradient line after title/subtitle
       rect(
         width: 85%,
-        height: 0.5pt,
+        height: 1pt,
         fill: gradient.linear(
           bips-text-gray,
           white,
@@ -797,11 +797,12 @@
 // Callout Blocks
 // -------------------------------------------------------------------
 
-/// Create styled callout blocks with icons and colors
+/// Create compact styled callout blocks with inline icons
 ///
 /// Available types: note, tip, warning, important
+/// Displays icon inline with content for space efficiency
 ///
-/// Example: #callout(type: "warning", title: "Data Limitation")[Content here]
+/// Example: #callout(type: "warning")[Content here]
 #let callout(
   type: "note",
   title: none,
@@ -832,22 +833,14 @@
     width: 100%,
     stroke: (left: 4pt + color-scheme.border),
     fill: color-scheme.bg,
-    inset: (left: 1em, right: 1em, top: 0.8em, bottom: 0.8em),
+    inset: (left: 0.8em, right: 0.8em, top: 0.5em, bottom: 0.5em),
     radius: (right: 4pt),
-    below: 1em,
+    below: 0.8em,
   )[
-    #if title != none or display-icon != none {
-      text(
-        size: 0.9em,
-        weight: "bold",
-        fill: color-scheme.icon,
-      )[
-        #if display-icon != none [#display-icon ]
-        #if title != none [#title] else [#upper(type)]
-      ]
-      v(0.3em)
-    }
-    #body
+    // Icon inline with content, no title
+    #if display-icon != none [
+      #text(fill: color-scheme.icon, size: 0.9em)[#display-icon] #h(0.5em)
+    ]#body
   ]
 }
 
