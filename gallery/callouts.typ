@@ -17,20 +17,20 @@
     columns: (1fr, 1fr),
     [
       #callout(type: "note")[
-        **Note callouts** use BIPS blue and memo icon. Perfect for additional information or research notes.
+        *Note callouts* use BIPS blue and memo icon. Perfect for additional information or research notes.
       ]
 
       #callout(type: "tip")[
-        **Tip callouts** use BIPS green and lightbulb icon. Great for best practices or helpful suggestions.
+        *Tip callouts* use BIPS green and lightbulb icon. Great for best practices or helpful suggestions.
       ]
 
 
     ],
     [
       #callout(type: "warning")[
-        **Warning callouts** use BIPS orange and warning icon. Use for limitations, cautions, or important considerations.]
+        *Warning callouts* use BIPS orange and warning icon. Use for limitations, cautions, or important considerations.]
       #callout(type: "important")[
-        **Important callouts** use red and exclamation icon. For critical findings or key takeaways.
+        *Important callouts* use red and exclamation icon. For critical findings or key takeaways.
       ]],
   )
 

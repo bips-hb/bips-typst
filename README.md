@@ -6,16 +6,17 @@ A modern presentation template for BIPS using [Typst](https://typst.app/) and th
 
 - **Fast compilation**: Milliseconds instead of seconds compared to LaTeX Beamer
 - **BIPS branding**: Colors, logo placement, and institutional styling
-- **Multiple slide types**: Title slides, content slides, section slides, and thanks slides
+- **Multiple slide types**: Title slides, content slides, section slides, bibliography slides, and thanks slides
 - **Grid-based layout**: Automatic title/content separation with gradient line positioning
 - **Elegant table styling**: Minimal borders with subtle header highlighting
 - **Configurable typography**: All font sizes, colors, and weights easily customizable
 - **Color utilities**: Convenient functions for BIPS colors (`#blue[]`, `#orange[]`, `#green[]`, `#gray[]`)
-- **Smart page numbering**: Title slide shows logo only, content slides start at page 1
-- **Professional animations**: Incremental reveals with `#pause` and `#meanwhile` (see [Touying docs](https://touying-typ.github.io/docs/dynamic/simple))
+- **Animations**: Incremental reveals with `#pause` and `#meanwhile` (see [Touying docs](https://touying-typ.github.io/docs/dynamic/simple))
 - **QR code generation**: Automatic QR codes on thanks slides for easy presentation sharing
 - **Multi-author support**: LaTeX Beamer-style author-affiliation mapping with superscript numbers
 - **Hierarchical customization**: Theme defaults → global overrides → individual slide overrides
+- **Callout blocks**: Quarto-style callouts (note, tip, warning, important) with icons and colors
+- **Column helpers**: Simplified `#two-columns[][]` and `#three-columns[][][]` for multi-column layouts
 - **Version control friendly**: Text-based format that works well with Git
 
 ## Requirements
@@ -64,6 +65,27 @@ A modern presentation template for BIPS using [Typst](https://typst.app/) and th
   #pause
   
   - Incremental reveals with #pause
+]
+
+// Using convenience helpers
+#bips-slide(title: "Research Results")[
+  #two-columns[
+    === Methods
+    - Sample size: n=500
+    - Duration: 12 months
+    
+    #callout(type: "warning")[
+      Dropout rate: 15%
+    ]
+  ][
+    === Key Findings
+    - Primary outcome: p<0.001
+    - Effect size: d=0.85
+    
+    #callout(type: "important")[
+      Clinically significant
+    ]
+  ]
 ]
 
 // Section slides
@@ -182,6 +204,25 @@ You can override the default font sizes for title slide elements:
 #section-slide[Section Name]
 ```
 
+### Bibliography Slide
+
+Dedicated slide for displaying references with proper formatting:
+
+```typst
+// Basic usage (uses references.bib with APA style)
+#bibliography-slide()
+
+// Custom options
+#bibliography-slide(
+  file: "my-references.bib",  // Custom .bib file
+  style: "ieee",              // Citation style (apa, ieee, chicago-author-date, etc.)
+  title: "Literature",        // Custom title (default: "References")
+  full: false,                // Show only cited references (default: true)
+)
+```
+
+The bibliography is automatically centered with proper vertical spacing. Combine with citations in your slides using `@key` syntax.
+
 ### Thanks Slide
 
 ```typst
@@ -296,6 +337,74 @@ The font size system follows this hierarchy (later overrides earlier):
 - `#link("url")[text]` - Links (appear in blue with underline to distinguish from emphasis)
 - All preserve their semantic meaning while adding BIPS styling
 
+## Convenience Helpers
+
+### Callout Blocks
+
+The theme includes Quarto-style callout blocks for highlighting important information:
+
+```typst
+// Basic usage
+#callout(type: "note")[
+  Additional information or research notes
+]
+
+// Available types with their default styling:
+#callout(type: "note")[...]     // 📝 Blue border/background
+#callout(type: "tip")[...]      // 💡 Green border/background  
+#callout(type: "warning")[...]  // ⚠ Orange border/background
+#callout(type: "important")[...] // ❗ Red border/background
+
+// Custom title
+#callout(type: "warning", title: "Data Limitation")[
+  Sample size limited to n=50
+]
+
+// Custom icon
+#callout(type: "tip", icon: "🔬")[
+  Laboratory protocols available
+]
+```
+
+### Multi-Column Layouts
+
+Simple helpers for common column layouts:
+
+```typst
+// Two equal columns
+#two-columns[
+  Left column content
+][
+  Right column content
+]
+
+// Custom column widths
+#two-columns(
+  columns: (2fr, 1fr),  // 2:1 ratio
+  gutter: 2em,          // spacing between
+)[
+  Wide left column
+][
+  Narrow right column
+]
+
+// Three columns
+#three-columns[
+  Left
+][
+  Center  
+][
+  Right
+]
+
+// Custom three columns
+#three-columns(
+  columns: (1fr, 2fr, 1fr),  // narrow-wide-narrow
+)[Left][Center][Right]
+```
+
+These helpers are cleaner than using raw `grid()` and provide sensible defaults while remaining fully customizable.
+
 ## File Structure
 
 - `bips-theme.typ` - Main theme file
@@ -308,8 +417,15 @@ The font size system follows this hierarchy (later overrides earlier):
   - `animations.typ` - Animation and reveal features
   - `content-elements.typ` - Images, tables, footnotes, and references
   - `font-customization.typ` - Font size customization
+  - `customization.typ` - Theme customization options
+  - `callouts.typ` - Callout blocks demonstration
+  - `columns.typ` - Multi-column layout helpers
+  - `bibliography.typ` - Bibliography slide examples
   - `aspect-ratio.typ` - 4:3 aspect ratio presentation
   - `justfile` - Build automation for all demos
+- `tests/` - Test suite for theme functionality
+  - `test-suite.typ` - Comprehensive test cases
+- `justfile` - Project automation (compile all, test, clean)
 
 ## Links
 

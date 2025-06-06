@@ -78,16 +78,6 @@
 
   === Multiple Footnotes
   Text with first note#footnote[First footnote content.] and text with second note#footnote[Second footnote with more details.].
-
-  === Recommended for Presentations
-  While footnotes now work, for presentations consider:
-
-  - Use parenthetical notes _(like this clarification)_
-  - Include brief explanations inline: "Term definition here"
-  - Reference external sources with author-year format
-  - Save detailed citations for a dedicated references slide
-
-  This approach ensures consistent layout and better readability during presentations.
 ]
 
 #bips-slide(title: "Bibliographic References")[
@@ -100,11 +90,8 @@
   References can be managed using Typst's bibliography system with standard academic formats.
 ]
 
-#bips-slide(title: "References")[
-  #v(1fr)
-  #bibliography("references.bib", style: "apa", title: none)
-  #v(1fr)
-]
+// Using the bibliography slide helper for cleaner code
+#bibliography-slide()
 
 
 #bips-slide(title: "Content Best Practices")[

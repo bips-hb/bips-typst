@@ -90,6 +90,21 @@
   #callout(type: "important")[After pause]
 ]
 
+// Test 10: Column layouts (Expected: 1 page)
+#bips-slide(title: "Test 10: Column Layouts")[
+  #two-columns[
+    Two column test - left
+  ][
+    Two column test - right
+  ]
+  
+  #three-columns[Left][Center][Right]
+]
+
+// Test 11: Bibliography slide (Expected: 1 page)
+// Note: Only if references.bib exists
+// #bibliography-slide()
+
 // Summary slide for manual verification
 #bips-slide(title: "Test Results Summary", text-size: 14pt)[
   *Expected Results:*
@@ -102,6 +117,7 @@
   - Test 7: 2 pages, table after pause
   - Test 8: 1 page, all callout types render
   - Test 9: 2 pages, callouts with animation
+  - Test 10: 1 page, column layouts work
 
   *Manual Checks:*
   - Logo appears on all content slides

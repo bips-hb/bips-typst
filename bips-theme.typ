@@ -269,10 +269,14 @@
   slide(..args)[
     // Apply slide-specific styling overrides
     #if page-number-size != none or code-block-scale != none or code-inline-scale != none {
-      show raw.where(block: true): set text(size: if code-block-scale != none { code-block-scale * 1em } else { font-scale-code-block * 1em })
-      show raw.where(block: false): set text(size: if code-inline-scale != none { code-inline-scale * 1em } else { font-scale-code-inline * 1em })
+      show raw.where(block: true): set text(
+        size: if code-block-scale != none { code-block-scale * 1em } else { font-scale-code-block * 1em },
+      )
+      show raw.where(block: false): set text(
+        size: if code-inline-scale != none { code-inline-scale * 1em } else { font-scale-code-inline * 1em },
+      )
     }
-    
+
     #if title != none or subtitle != none {
       // Title and subtitle section - smart spacing without grid
       v(.1em)
@@ -281,7 +285,7 @@
       if title != none and subtitle != none {
         // Both title and subtitle - natural line break between them
         block(
-          width: 90%, 
+          width: 90%,
           // stroke: 1pt,
           [
             #text(
@@ -294,7 +298,7 @@
         // #linebreak()
         v(-0.5em)
         block(
-          width: 90%, 
+          width: 90%,
           // stroke: 1pt,
           [
             #text(
@@ -366,17 +370,60 @@
   }
 }
 
+// Multi-column layout helpers
+/// Two-column layout with equal columns by default
+///
+/// Example: #two-columns[Left content][Right content]
+/// With options: #two-columns(gutter: 2em)[Left][Right]
+#let two-columns(
+  gutter: 1em,
+  columns: (1fr, 1fr),
+  ..args,
+  left,
+  right,
+) = {
+  grid(
+    columns: columns,
+    gutter: gutter,
+    ..args,
+    left,
+    right,
+  )
+}
+
+/// Three-column layout with equal columns by default
+///
+/// Example: #three-columns[Left][Center][Right]
+/// With options: #three-columns(gutter: 1.5em, columns: (1fr, 2fr, 1fr))[L][C][R]
+#let three-columns(
+  gutter: 1em,
+  columns: (1fr, 1fr, 1fr),
+  ..args,
+  left,
+  center,
+  right,
+) = {
+  grid(
+    columns: columns,
+    gutter: gutter,
+    ..args,
+    left,
+    center,
+    right,
+  )
+}
+
 // Callout blocks (similar to Quarto callouts)
 /// Create styled callout blocks with icons and colors
-/// 
+///
 /// Available types: note, tip, warning, important
-/// 
+///
 /// Example: #callout(type: "warning", title: "Data Limitation")[Content here]
 #let callout(
   type: "note",
   title: none,
   icon: none,
-  body
+  body,
 ) = {
   // Color schemes for different callout types
   let colors = (
@@ -385,19 +432,19 @@
     warning: (border: bips-orange, bg: bips-orange.lighten(90%), icon: bips-orange),
     important: (border: red, bg: red.lighten(90%), icon: red),
   )
-  
+
   // Default icons for each type
   let icons = (
     note: "📝",
-    tip: "💡", 
+    tip: "💡",
     warning: "⚠",
     important: "❗",
   )
-  
+
   let color-scheme = colors.at(type, default: colors.note)
   let default-icon = icons.at(type, default: icons.note)
   let display-icon = if icon != none { icon } else { default-icon }
-  
+
   block(
     width: 100%,
     stroke: (left: 4pt + color-scheme.border),
@@ -412,7 +459,7 @@
         weight: "bold",
         fill: color-scheme.icon,
       )[
-        #if display-icon != none [#display-icon ] 
+        #if display-icon != none [#display-icon ]
         #if title != none [#title] else [#upper(type)]
       ]
       v(0.3em)
@@ -688,3 +735,23 @@
     #content.pos().join()
   ]
 }
+
+// Bibliography slide function
+/// Create a bibliography slide with proper formatting
+///
+/// Example: #bibliography-slide() // Uses defaults
+/// Example: #bibliography-slide(file: "refs.bib", style: "ieee")
+#let bibliography-slide(
+  file: "references.bib",
+  style: "apa",
+  title: "References",
+  full: true,
+) = {
+  bips-slide(title: title)[
+    #align(horizon)[
+      #bibliography(file, style: style, title: none, full: full)
+    ]
+  ]
+}
+
+#let vfill = v(1fr)
