@@ -22,6 +22,7 @@
 // ===================================================================
 
 #let bips-blue = rgb(23, 99, 170)
+#let bips-logo-blue = rgb(65,125,177)
 #let bips-text-gray = rgb(66, 66, 66)
 #let bips-orange = rgb(250, 133, 55)
 #let bips-green = rgb(49, 210, 57)
@@ -120,6 +121,51 @@
 // Emphasis and strong text styling
 #let font-color-emphasis = bips-blue
 #let font-color-strong = bips-blue
+
+// ===================================================================
+// BACKGROUND UTILITY FUNCTIONS
+// ===================================================================
+
+/// Create background with BIPS logo and/or page number
+/// This centralizes the positioning logic for consistent placement across slide types
+#let bips-background(
+  show-logo: true, 
+  show-page-number: true,
+  page-number-size: font-size-page-number,  // Allow override for theme customization
+) = {
+  if show-logo or show-page-number {
+    {
+      if show-logo {
+        // BIPS logo placement
+        place(
+          top + right,
+          dx: -1cm,
+          dy: 1cm,
+          image("bips-logo.png", width: 3cm),
+        )
+      }
+      
+      if show-page-number {
+        // Page number placement
+        place(
+          top + right,
+          dx: -2.25cm,
+          dy: 4.25cm,
+          text(
+            size: page-number-size,
+            fill: font-color-page-number,
+            weight: font-weight-page-number,
+          )[
+            #context counter(page).display()
+          ],
+        )
+      }
+    }
+  } else {
+    // Return empty background when both are disabled
+    none
+  }
+}
 
 // ===================================================================
 // MAIN THEME FUNCTION
@@ -223,29 +269,11 @@
     config-page(
       paper: "presentation-" + aspect-ratio,
       margin: (top: 1.55cm, bottom: 1.55cm, left: 1.55cm, right: 1.75cm),
-      background: {
-        // Logo placement (no context queries)
-        place(
-          top + right,
-          dx: -1cm,
-          dy: 1cm,
-          image("bips-logo.png", width: 3cm),
-        )
-
-        // Page number (simple counter, no here().page() queries)
-        place(
-          top + right,
-          dx: -2.25cm,
-          dy: 4.25cm,
-          text(
-            size: effective-font-size-page-number,
-            fill: font-color-page-number,
-            weight: font-weight-page-number,
-          )[
-            #context counter(page).display()
-          ],
-        )
-      },
+      background: bips-background(
+        show-logo: true, 
+        show-page-number: true,
+        page-number-size: effective-font-size-page-number,
+      ),
     ),
     body,
   )
@@ -380,15 +408,10 @@
   slide(
     setting: body => {
       set page(
-        background: {
-          // Logo placement (no page number on title slide)
-          place(
-            top + right,
-            dx: -1cm,
-            dy: 1cm,
-            image("bips-logo.png", width: 3cm),
-          )
-        },
+        background: bips-background(
+          show-logo: true,
+          show-page-number: false,  // No page number on title slide
+        ),
       )
 
       set align(center)
@@ -522,35 +545,12 @@
 ) = {
   slide(
     setting: body => {
-      // Always set custom background for section slides to control logo/page number
+      // Use utility function for consistent logo/page number placement
       set page(
-        background: {
-          if show-logo {
-            // Show logo
-            place(
-              top + right,
-              dx: -1cm,
-              dy: 1cm,
-              image("bips-logo.png", width: 3cm),
-            )
-          }
-          
-          if show-page-number {
-            // Show page number
-            place(
-              top + right,
-              dx: -2.25cm,
-              dy: 4.25cm,
-              text(
-                size: font-size-page-number,
-                fill: font-color-page-number,
-                weight: font-weight-page-number,
-              )[
-                #context counter(page).display()
-              ],
-            )
-          }
-        }
+        background: bips-background(
+          show-logo: show-logo,
+          show-page-number: show-page-number,
+        )
       )
       
       set align(center + horizon)
@@ -677,7 +677,12 @@
 #let empty-slide(..content) = {
   slide(
     setting: body => {
-      set page(background: none)
+      set page(
+        background: bips-background(
+          show-logo: false,
+          show-page-number: false,
+        )
+      )
       content.pos().join()
     },
   )[]
@@ -694,6 +699,10 @@
 /// Apply BIPS blue color to text
 /// Example: #blue[This text is blue]
 #let blue(content) = text(fill: bips-blue)[#content]
+
+/// Apply BIPS logo blue color to text
+/// Example: #logo-blue[This text is the same shade of blue as the BIPS logo]
+#let logo-blue(content) = text(fill: bips-blue)[#content]
 
 /// Apply BIPS orange color to text
 /// Example: #orange[This text is orange]
