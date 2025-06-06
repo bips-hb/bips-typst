@@ -123,6 +123,22 @@
 #let font-color-strong = bips-blue
 
 // ===================================================================
+// UTILITY FUNCTIONS
+// ===================================================================
+
+/// Choose first non-none value from list of options
+/// This simplifies the common pattern: if override != none { override } else { default }
+/// Usage: #pick-first(user-override, theme-default)
+#let pick-first(..options) = {
+  for option in options.pos() {
+    if option != none {
+      return option
+    }
+  }
+  return none
+}
+
+// ===================================================================
 // BACKGROUND UTILITY FUNCTIONS
 // ===================================================================
 
@@ -188,19 +204,17 @@
   body,
 ) = {
   // Calculate effective font sizes (use override if provided, otherwise theme default)
-  let effective-font-size-base = if base-size != none { base-size } else { font-size-base }
-  let effective-font-size-slide-title = if slide-title-size != none { slide-title-size } else { font-size-slide-title }
-  let effective-font-size-slide-subtitle = if slide-subtitle-size != none { slide-subtitle-size } else {
-    font-size-slide-subtitle
-  }
-  let effective-font-size-heading-1 = if heading-1-size != none { heading-1-size } else { font-size-heading-1 }
-  let effective-font-size-heading-2 = if heading-2-size != none { heading-2-size } else { font-size-heading-2 }
-  let effective-font-size-heading-3 = if heading-3-size != none { heading-3-size } else { font-size-heading-3 }
-  let effective-font-size-small = if small-size != none { small-size } else { font-size-small }
-  let effective-font-size-tiny = if tiny-size != none { tiny-size } else { font-size-tiny }
-  let effective-font-size-page-number = if page-number-size != none { page-number-size } else { font-size-page-number }
-  let effective-code-block-scale = if code-block-scale != none { code-block-scale } else { font-scale-code-block }
-  let effective-code-inline-scale = if code-inline-scale != none { code-inline-scale } else { font-scale-code-inline }
+  let effective-font-size-base = pick-first(base-size, font-size-base)
+  let effective-font-size-slide-title = pick-first(slide-title-size, font-size-slide-title)
+  let effective-font-size-slide-subtitle = pick-first(slide-subtitle-size, font-size-slide-subtitle)
+  let effective-font-size-heading-1 = pick-first(heading-1-size, font-size-heading-1)
+  let effective-font-size-heading-2 = pick-first(heading-2-size, font-size-heading-2)
+  let effective-font-size-heading-3 = pick-first(heading-3-size, font-size-heading-3)
+  let effective-font-size-small = pick-first(small-size, font-size-small)
+  let effective-font-size-tiny = pick-first(tiny-size, font-size-tiny)
+  let effective-font-size-page-number = pick-first(page-number-size, font-size-page-number)
+  let effective-code-block-scale = pick-first(code-block-scale, font-scale-code-block)
+  let effective-code-inline-scale = pick-first(code-inline-scale, font-scale-code-inline)
 
   // Global text and styling configuration
   show: set text(
@@ -304,10 +318,10 @@
     // Apply slide-specific styling overrides
     #if page-number-size != none or code-block-scale != none or code-inline-scale != none {
       show raw.where(block: true): set text(
-        size: if code-block-scale != none { code-block-scale * 1em } else { font-scale-code-block * 1em },
+        size: pick-first(code-block-scale, font-scale-code-block) * 1em,
       )
       show raw.where(block: false): set text(
-        size: if code-inline-scale != none { code-inline-scale * 1em } else { font-scale-code-inline * 1em },
+        size: pick-first(code-inline-scale, font-scale-code-inline) * 1em,
       )
     }
 
@@ -322,7 +336,7 @@
           width: 90%,
           [
             #text(
-              size: if title-size != none { title-size } else { font-size-slide-title },
+              size: pick-first(title-size, font-size-slide-title),
               weight: font-weight-slide-title,
               fill: font-color-slide-title,
             )[#title]
@@ -333,7 +347,7 @@
           width: 90%,
           [
             #text(
-              size: if subtitle-size != none { subtitle-size } else { font-size-slide-subtitle },
+              size: pick-first(subtitle-size, font-size-slide-subtitle),
               weight: font-weight-slide-subtitle,
               fill: font-color-slide-subtitle,
             )[#subtitle]
@@ -342,14 +356,14 @@
       } else if title != none {
         // Title only
         text(
-          size: if title-size != none { title-size } else { font-size-slide-title },
+          size: pick-first(title-size, font-size-slide-title),
           weight: font-weight-slide-title,
           fill: font-color-slide-title,
         )[#title]
       } else if subtitle != none {
         // Subtitle only
         text(
-          size: if subtitle-size != none { subtitle-size } else { font-size-slide-subtitle },
+          size: pick-first(subtitle-size, font-size-slide-subtitle),
           weight: font-weight-slide-subtitle,
           fill: font-color-slide-subtitle,
         )[#subtitle]
@@ -369,15 +383,17 @@
       v(1em)
 
       // Content area - natural flow allows footnotes to work
-      if text-size != none {
-        text(size: text-size)[#body]
+      let content-size = pick-first(text-size, none)
+      if content-size != none {
+        text(size: content-size)[#body]
       } else {
         body
       }
     } else {
       // If no title/subtitle, just show content
-      if text-size != none {
-        text(size: text-size)[#body]
+      let content-size = pick-first(text-size, none)
+      if content-size != none {
+        text(size: content-size)[#body]
       } else {
         body
       }
@@ -422,7 +438,7 @@
       if title != none {
         block(
           text(
-            size: if title-size != none { title-size } else { font-size-title-slide-main },
+            size: pick-first(title-size, font-size-title-slide-main),
             weight: font-weight-title-slide-main,
             fill: font-color-title-slide-main,
           )[
@@ -437,7 +453,7 @@
       if subtitle != none {
         block(
           text(
-            size: if subtitle-size != none { subtitle-size } else { font-size-title-slide-subtitle },
+            size: pick-first(subtitle-size, font-size-title-slide-subtitle),
             weight: font-weight-title-slide-subtitle,
             fill: font-color-title-slide-subtitle,
           )[
@@ -453,7 +469,7 @@
         // Multiple authors format
         block(
           text(
-            size: if author-size != none { author-size } else { font-size-title-slide-author },
+            size: pick-first(author-size, font-size-title-slide-author),
             weight: font-weight-title-slide-author,
             fill: font-color-title-slide-author,
           )[
@@ -464,7 +480,7 @@
         // Single author format (backward compatibility)
         block(
           text(
-            size: if author-size != none { author-size } else { font-size-title-slide-author },
+            size: pick-first(author-size, font-size-title-slide-author),
             weight: font-weight-title-slide-author,
             fill: font-color-title-slide-author,
           )[
@@ -480,7 +496,7 @@
         // Multiple institutes format with numbering
         block(
           text(
-            size: if institute-size != none { institute-size } else { font-size-title-slide-institute },
+            size: pick-first(institute-size, font-size-title-slide-institute),
             weight: font-weight-title-slide-institute,
             fill: font-color-title-slide-institute,
           )[
@@ -494,7 +510,7 @@
         // Single institute format (backward compatibility)
         block(
           text(
-            size: if institute-size != none { institute-size } else { font-size-title-slide-institute },
+            size: pick-first(institute-size, font-size-title-slide-institute),
             weight: font-weight-title-slide-institute,
             fill: font-color-title-slide-institute,
           )[
@@ -509,7 +525,7 @@
       if date != none {
         block(
           text(
-            size: if date-size != none { date-size } else { font-size-title-slide-date },
+            size: pick-first(date-size, font-size-title-slide-date),
             weight: font-weight-title-slide-date,
             fill: font-color-title-slide-date,
           )[
@@ -522,7 +538,7 @@
       if occasion != none {
         block(
           text(
-            size: if date-size != none { date-size } else { font-size-title-slide-date },
+            size: pick-first(date-size, font-size-title-slide-date),
             weight: font-weight-title-slide-date,
             fill: font-color-title-slide-date,
           )[
@@ -810,7 +826,7 @@
 
   let color-scheme = colors.at(type, default: colors.note)
   let default-icon = icons.at(type, default: icons.note)
-  let display-icon = if icon != none { icon } else { default-icon }
+  let display-icon = pick-first(icon, default-icon)
 
   block(
     width: 100%,
