@@ -569,6 +569,9 @@
         )
       )
       
+      // Add invisible heading for PDF outline/bookmarks
+      place(hide[#heading(level: 1, outlined: true)[#section-title]])
+      
       set align(center + horizon)
       
       text(
@@ -837,10 +840,25 @@
     radius: (right: 4pt),
     below: 0.8em,
   )[
-    // Icon inline with content, no title
-    #if display-icon != none [
-      #text(fill: color-scheme.icon, size: 0.9em)[#display-icon] #h(0.5em)
-    ]#body
+    #if title != none {
+      // When title is provided, show icon + title on separate line as before
+      text(
+        size: 0.9em,
+        weight: "bold",
+        fill: color-scheme.icon,
+      )[
+        #if display-icon != none [#display-icon ]
+        #title
+      ]
+      v(0.3em)
+      body
+    } else {
+      // Default: icon inline with content, no title
+      if display-icon != none [
+        #text(fill: color-scheme.icon, size: 0.9em)[#display-icon] #h(0.5em)
+      ]
+      body
+    }
   ]
 }
 

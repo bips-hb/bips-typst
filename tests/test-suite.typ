@@ -97,7 +97,7 @@
   ][
     Two column test - right
   ]
-  
+
   #three-columns[Left][Center][Right]
 ]
 
@@ -107,21 +107,27 @@
 
 // Summary slide for manual verification
 #bips-slide(title: "Test Results Summary", text-size: 14pt)[
-  *Expected Results:*
-  - Test 1: 3 pages (animation states)
-  - Test 2: Check for spurious blanks
-  - Test 3: 1 page, footnotes at bottom
-  - Test 4: 2 pages, footnotes with correct content
-  - Test 5: 1 page, all elements render
-  - Test 6: 1 page, no title overflow
-  - Test 7: 2 pages, table after pause
-  - Test 8: 1 page, all callout types render
-  - Test 9: 2 pages, callouts with animation
-  - Test 10: 1 page, column layouts work
+  #two-columns(
+    [
+      *Expected Results:*
+      - Test 1: 3 pages (animation states)
+      - Test 2: Check for spurious blanks
+      - Test 3: 1 page, footnotes at bottom
+      - Test 4: 2 pages, footnotes with correct content
+      - Test 5: 1 page, all elements render
+      - Test 6: 1 page, no title overflow
+      - Test 7: 2 pages, table after pause
+      - Test 8: 1 page, all callout types render
+      - Test 9: 2 pages, callouts with animation
+      - Test 10: 1 page, column layouts work
+    ],
+    [
+      *Manual Checks:*
+      - Logo appears on all content slides
+      - Page numbers increment correctly
+      - No spurious blank pages
+      - Footnotes don't bleed between slides
+    ]
+  )
 
-  *Manual Checks:*
-  - Logo appears on all content slides
-  - Page numbers increment correctly
-  - No spurious blank pages
-  - Footnotes don't bleed between slides
 ]
