@@ -637,7 +637,6 @@
             ]
           ]
         ]
-        #v(1em)
       ],
       [
         // Row 3: Contact information and logo
