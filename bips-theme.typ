@@ -106,6 +106,9 @@
 #let font-weight-thanks-slide-contact = "regular"
 
 // Page number styling
+// Note: Page numbers cannot be customized per-slide due to Touying's architecture.
+// The footer (containing page numbers) is rendered at the page level, not slide level,
+// making per-slide size customization impossible without significant refactoring.
 #let font-size-page-number = 18pt
 #let font-color-page-number = bips-text-gray
 #let font-weight-page-number = "regular"
@@ -292,7 +295,6 @@
   title-size: none,
   subtitle-size: none,
   text-size: none,
-  page-number-size: none,
   code-block-scale: none,
   code-inline-scale: none,
   ..args,

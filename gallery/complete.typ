@@ -122,6 +122,7 @@
   - Second point appears on next click
   #pause
   - Final point completes the slide
+  - Note that slide numebrs with pauses are still buggy somehow
 
   #pause
   You can also reveal blocks of content:
