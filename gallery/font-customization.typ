@@ -1,4 +1,4 @@
-#import "bips-theme.typ": *
+#import "@local/bips-typst:0.1.0": *
 
 // Test global font size overrides
 #show: bips-theme.with(

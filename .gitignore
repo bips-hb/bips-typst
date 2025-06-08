@@ -2,4 +2,11 @@ README.html
 demo-bips-results
 debug
 TODO.md
+CLAUDE.local.md
+
+# Typst build artifacts
+*.pdf
+
+# OS files
+.DS_Store
 CLAUDE.md

@@ -41,11 +41,27 @@ Fast, modern presentation template for BIPS using [Typst](https://typst.app/) an
 
 ## Installation
 
+### Option 1: Local Package (Recommended for Development)
+
+1. Clone this repository
+2. Install locally: `just install`
+3. Use in any project:
+   ```typst
+   #import "@local/bips-typst:0.1.0": *
+   ```
+
+### Option 2: Direct Download
+
 1. Download `bips-theme.typ` and `bips-logo.png`
 2. Place in your project folder
-3. Compile: `typst compile presentation.typ`
+3. Import: `#import "bips-theme.typ": *`
 
-Or use the [Typst web editor](https://typst.app/).
+### Option 3: Published Package (Future)
+
+When published to Typst Universe:
+```typst
+#import "@preview/bips-typst:0.1.0": *
+```
 
 ## Core Features
 
@@ -70,6 +86,25 @@ Or use the [Typst web editor](https://typst.app/).
 
 // Color helpers
 #blue[text] #orange[text] #green[text] #gray[text]
+```
+
+### Animation Functions
+
+The theme re-exports Touying's animation utilities:
+
+```typst
+#pause  // Click to reveal next content
+
+#uncover(2)[Content on 2nd click]  // Show on specific subslide
+#only(1)[Content on 1st click only]  // Only on specific subslide
+
+#alternatives[
+  First version
+][
+  Second version
+][
+  Third version
+]
 ```
 
 ### Multiple Authors
@@ -138,6 +173,39 @@ See `gallery/` for complete examples:
 - `customization.typ` — Font and styling options
 
 Copy `gallery/basic.typ` for a ready-to-use template or `gallery/complete.typ` for a comprehensive example.
+
+## Development
+
+### Contributing
+
+1. Clone the repository: `git clone https://github.com/bips-hb/bips-typst.git`
+2. Install locally: `just install`
+3. Make changes to files in `lib/`
+4. Test: `just all` or `just test`
+5. Reinstall after changes: `just uninstall && just install`
+
+### Commands
+
+- `just install` - Install package locally for development
+- `just uninstall` - Remove local package installation  
+- `just all` - Compile all gallery demos
+- `just test` - Run test suite with validation
+- `just clean` - Remove generated PDFs
+
+### Package Structure
+
+```
+lib/                    # Package source
+├── bips-typst.typ     # Main entry point
+├── theme.typ          # Theme implementation
+├── bips-logo.png      # Required asset
+└── references.bib     # Bibliography file
+
+template/              # Example templates
+gallery/              # Demo presentations  
+tests/                # Test suite
+debug/                # Development debugging files (git-ignored)
+```
 
 ## Tips
 

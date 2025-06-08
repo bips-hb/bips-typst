@@ -61,8 +61,8 @@ test:
     echo "📄 Total pages generated: $PAGES"
     
     # Expected range (rough estimate)
-    MIN_EXPECTED=11
-    MAX_EXPECTED=13
+    MIN_EXPECTED=16
+    MAX_EXPECTED=17
     
     if [ $PAGES -ge $MIN_EXPECTED ] && [ $PAGES -le $MAX_EXPECTED ]; then
         echo "✅ Page count within expected range ($MIN_EXPECTED-$MAX_EXPECTED)"
@@ -88,6 +88,95 @@ test:
     echo "   - Footnote placement (bottom of correct slides)"
     echo "   - No blank pages between animation states"
     echo "📁 Test output: tests/test-suite.pdf"
+
+# Install package locally for development
+install:
+    #!/bin/bash
+    # Extract version from typst.toml
+    VERSION=$(grep '^version' typst.toml | sed 's/version = "\(.*\)"/\1/')
+    PACKAGE_NAME="bips-typst"
+    
+    # Determine local package directory based on OS
+    case "$(uname -s)" in
+        Darwin)
+            PACKAGE_DIR="$HOME/Library/Application Support/typst/packages"
+            ;;
+        Linux)
+            if [ -n "$XDG_DATA_HOME" ]; then
+                PACKAGE_DIR="$XDG_DATA_HOME/typst/packages"
+            else
+                PACKAGE_DIR="$HOME/.local/share/typst/packages"
+            fi
+            ;;
+        CYGWIN*|MINGW*|MSYS*)
+            PACKAGE_DIR="$APPDATA/typst/packages"
+            ;;
+        *)
+            echo "Unsupported operating system"
+            exit 1
+            ;;
+    esac
+    
+    TARGET_DIR="$PACKAGE_DIR/local/$PACKAGE_NAME/$VERSION"
+    
+    echo "📦 Installing $PACKAGE_NAME:$VERSION locally..."
+    echo "   Target: $TARGET_DIR"
+    
+    # Create target directory
+    mkdir -p "$TARGET_DIR"
+    
+    # Copy only the files needed for the package
+    cp typst.toml "$TARGET_DIR/"
+    cp README.md "$TARGET_DIR/"
+    cp CHANGELOG.md "$TARGET_DIR/"
+    cp bips-logo.png "$TARGET_DIR/"
+    
+    # Copy lib directory (maintaining structure for entrypoint)
+    mkdir -p "$TARGET_DIR/lib"
+    cp lib/* "$TARGET_DIR/lib/"
+    
+    # Copy template directory
+    mkdir -p "$TARGET_DIR/template"
+    cp template/* "$TARGET_DIR/template/"
+    
+    echo "✅ Package installed successfully!"
+    echo "   Import with: #import \"@local/bips-typst:$VERSION\": *"
+
+# Uninstall local package
+uninstall:
+    #!/bin/bash
+    VERSION=$(grep '^version' typst.toml | sed 's/version = "\(.*\)"/\1/')
+    PACKAGE_NAME="bips-typst"
+    
+    case "$(uname -s)" in
+        Darwin)
+            PACKAGE_DIR="$HOME/Library/Application Support/typst/packages"
+            ;;
+        Linux)
+            if [ -n "$XDG_DATA_HOME" ]; then
+                PACKAGE_DIR="$XDG_DATA_HOME/typst/packages"
+            else
+                PACKAGE_DIR="$HOME/.local/share/typst/packages"
+            fi
+            ;;
+        CYGWIN*|MINGW*|MSYS*)
+            PACKAGE_DIR="$APPDATA/typst/packages"
+            ;;
+        *)
+            echo "Unsupported operating system"
+            exit 1
+            ;;
+    esac
+    
+    TARGET_DIR="$PACKAGE_DIR/local/$PACKAGE_NAME/$VERSION"
+    
+    if [ -d "$TARGET_DIR" ]; then
+        echo "🗑️  Uninstalling $PACKAGE_NAME:$VERSION..."
+        rm -rf "$TARGET_DIR"
+        echo "✅ Package uninstalled successfully!"
+    else
+        echo "❌ Package not found at $TARGET_DIR"
+    fi
 
 # Clean all generated PDFs
 clean:

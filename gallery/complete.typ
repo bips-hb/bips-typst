@@ -1,4 +1,4 @@
-#import "bips-theme.typ": *
+#import "@local/bips-typst:0.1.0": *
 
 #show: bips-theme
 
@@ -194,7 +194,7 @@
     ],
     [
       ```typst
-      #import "bips-theme.typ": *
+      #import "@local/bips-typst:0.1.0": *
 
       #show: bips-theme
 
