@@ -175,7 +175,20 @@
             fill: font-color-page-number,
             weight: font-weight-page-number,
           )[
-            #context utils.slide-counter.display()
+            #context {
+              let slide-num = utils.slide-counter.get().first()
+              // Use a simple state counter to track if title slide exists
+              let title-slide-marker = query(<bips-title-slide-marker>)
+              let has-title-slide = title-slide-marker.len() > 0
+              
+              if has-title-slide {
+                // With title slide: first content slide (slide-num=1) should show "1"
+                str(slide-num)
+              } else {
+                // Without title slide: first slide (slide-num=0) should show "1"  
+                str(slide-num + 1)
+              }
+            }
           ],
         )
       }
@@ -420,6 +433,9 @@
           show-page-number: false,  // No page number on title slide
         ),
       )
+
+      // Mark that a title slide exists for slide numbering logic
+      place(hide[#metadata("title-slide") <bips-title-slide-marker>])
 
       set align(center)
 
