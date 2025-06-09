@@ -125,19 +125,22 @@ install:
     # Create target directory
     mkdir -p "$TARGET_DIR"
     
-    # Copy only the files needed for the package
+    # Copy all package files (excluding what's in the exclude list)
     cp typst.toml "$TARGET_DIR/"
     cp README.md "$TARGET_DIR/"
     cp CHANGELOG.md "$TARGET_DIR/"
     cp bips-logo.png "$TARGET_DIR/"
-    
-    # Copy lib directory (maintaining structure for entrypoint)
-    mkdir -p "$TARGET_DIR/lib"
-    cp lib/* "$TARGET_DIR/lib/"
+    cp bips-typst.typ "$TARGET_DIR/"
+    cp theme.typ "$TARGET_DIR/"
     
     # Copy template directory
     mkdir -p "$TARGET_DIR/template"
     cp template/* "$TARGET_DIR/template/"
+    
+    # Copy thumbnail if it exists
+    if [ -f "thumbnail.png" ]; then
+        cp thumbnail.png "$TARGET_DIR/"
+    fi
     
     echo "✅ Package installed successfully!"
     echo "   Import with: #import \"@local/bips-typst:$VERSION\": *"

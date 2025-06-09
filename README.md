@@ -12,7 +12,7 @@ Fast, modern presentation template for BIPS using [Typst](https://typst.app/) an
 ## Quick Start
 
 ```typst
-#import "bips-theme.typ": *
+#import "@local/bips-typst:0.1.0": *
 #show: bips-theme
 
 #title-slide(
@@ -55,6 +55,8 @@ Fast, modern presentation template for BIPS using [Typst](https://typst.app/) an
 1. Download `bips-theme.typ` and `bips-logo.png`
 2. Place in your project folder
 3. Import: `#import "bips-theme.typ": *`
+
+**Note**: All examples use the local package import (`@local/bips-typst:0.1.0`). For direct download, replace with the file-based import shown above.
 
 ### Option 3: Published Package (Future)
 

@@ -1,17 +1,17 @@
 [package]
 name = "bips-typst"
 version = "0.1.0"
-entrypoint = "lib/bips-typst.typ"
+entrypoint = "bips-typst.typ"
 authors = ["Lukas Burk <burk@leibniz-bips.de>"]
-license = "CC-BY-SA-4.0"
+license = "MIT"
 description = "BIPS presentation template for Typst with Touying"
 homepage = "https://github.com/bips-hb/bips-typst"
 repository = "https://github.com/bips-hb/bips-typst"
 keywords = ["presentation", "slides", "academic", "beamer"]
 categories = ["presentation"]
-exclude = ["gallery/", "tests/", "debug/", "*.pdf", ".git*", "justfile", "TODO.md", "CLAUDE*.md"]
+exclude = ["gallery/", "tests/", "debug/", "*.pdf", ".git*", "justfile", "CLAUDE.md", "CLAUDE.local.md", ".DS_Store"]
 
 [template]
 path = "template"
 entrypoint = "basic.typ"
-description = "BIPS presentation templates"
+thumbnail = "thumbnail.png"

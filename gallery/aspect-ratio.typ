@@ -19,7 +19,7 @@
 // Regular content slides
 #bips-slide(title: "You can change layouts")[
   - ... and it won't even cost you an afternoon to fix alignment issues afterwards.
-  - The `datetime()` thing in the title is purely convenience by the ways
+  - The `datetime()` thing in the title is purely convenience by the way
 
   #v(1em)
 
