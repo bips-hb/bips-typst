@@ -9,7 +9,7 @@ homepage = "https://github.com/bips-hb/bips-typst"
 repository = "https://github.com/bips-hb/bips-typst"
 keywords = ["presentation", "slides", "academic", "beamer"]
 categories = ["presentation"]
-exclude = ["gallery/", "tests/", "debug/", "*.pdf", ".git*", "justfile", "CLAUDE.md", "CLAUDE.local.md", ".DS_Store"]
+exclude = ["gallery/", "tests/", "debug/", "*.pdf", "justfile"]
 
 [template]
 path = "template"
