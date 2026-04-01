@@ -1,4 +1,4 @@
-#import "@local/bips-typst:0.1.0": *
+#import "@local/bips-typst:0.1.1": *
 
 #show: bips-theme
 

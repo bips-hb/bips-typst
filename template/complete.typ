@@ -1,7 +1,7 @@
 // Local package (after running `just install` in the bips-typst repo):
-#import "@local/bips-typst:0.1.0": *
+#import "@local/bips-typst:0.1.1": *
 // When published to Typst Universe, change to:
-// #import "@preview/bips-typst:0.1.0": *
+// #import "@preview/bips-typst:0.1.1": *
 
 #show: bips-theme.with(
   base-size: 18pt,

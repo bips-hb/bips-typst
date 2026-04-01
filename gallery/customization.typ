@@ -1,4 +1,4 @@
-#import "@local/bips-typst:0.1.0": *
+#import "@local/bips-typst:0.1.1": *
 
 // Example of theme customization options
 #show: bips-theme.with(

@@ -441,9 +441,10 @@
 
       v(1fr)
 
-      // Title
+      // Title (width constrained to prevent overlap with logo in top-right)
       if title != none {
         block(
+          width: 85%,
           text(
             size: pick-first(title-size, font-size-title-slide-main),
             weight: font-weight-title-slide-main,
@@ -459,6 +460,7 @@
       // Subtitle
       if subtitle != none {
         block(
+          width: 85%,
           text(
             size: pick-first(subtitle-size, font-size-title-slide-subtitle),
             weight: font-weight-title-slide-subtitle,

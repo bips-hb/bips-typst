@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-04-01
+
+### Changed
+- Restructured project layout: moved theme files from `lib/` to project root
+- Improved slide number logic to correctly handle presentations with or without title slide
+- Expanded and consolidated test suite into single `test-suite.typ`
+- Cleaned up redundant debug and test files
+
+### Fixed
+- Slide counter now properly adjusts numbering based on title slide presence
+
 ## [0.1.0] - 2025-01-06
 
 ### Added
