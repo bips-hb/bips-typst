@@ -6,7 +6,7 @@
 echo "🧪 Running BIPS Theme Test Suite..."
 
 # Compile test suite
-typst compile test/test-suite.typ testtest-suite.pdf
+typst compile tests/test-suite.typ tests/test-suite.pdf
 
 if [ $? -ne 0 ]; then
     echo "❌ Test suite compilation failed!"
@@ -14,12 +14,12 @@ if [ $? -ne 0 ]; then
 fi
 
 # Get page count
-PAGES=$(pdfinfo test/test-suite.pdf | grep Pages | awk '{print $2}')
+PAGES=$(pdfinfo tests/test-suite.pdf | grep Pages | awk '{print $2}')
 echo "📄 Total pages generated: $PAGES"
 
 # Expected range (rough estimate)
-MIN_EXPECTED=11
-MAX_EXPECTED=13
+MIN_EXPECTED=22
+MAX_EXPECTED=26
 
 if [ $PAGES -ge $MIN_EXPECTED ] && [ $PAGES -le $MAX_EXPECTED ]; then
     echo "✅ Page count within expected range ($MIN_EXPECTED-$MAX_EXPECTED)"
@@ -32,13 +32,13 @@ fi
 echo "🔍 Checking for potential issues..."
 
 # Extract text and count near-empty pages (pages with just logo/page number)
-pdftotext -layout test/test-suite.pdf - | grep -E "Test [1-7]:" | wc -l > /tmp/test_sections
+pdftotext -layout tests/test-suite.pdf - | grep -E "Test [1-9]" | wc -l > /tmp/test_sections
 
 TEST_SECTIONS=$(cat /tmp/test_sections)
 echo "📝 Found $TEST_SECTIONS test sections"
 
 # Check footnote behavior
-FOOTNOTE_MENTIONS=$(pdftotext test/test-suite.pdf - | grep -c "footnote")
+FOOTNOTE_MENTIONS=$(pdftotext tests/test-suite.pdf - | grep -c "footnote")
 echo "📋 Footnote references found: $FOOTNOTE_MENTIONS"
 
 echo "🏁 Test suite complete. Manual review recommended for:"

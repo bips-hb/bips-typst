@@ -91,7 +91,9 @@
 ]
 
 // Using the bibliography slide helper for cleaner code
-#bibliography-slide()
+#bibliography-slide[
+  #bibliography("references.bib", style: "apa", full: true)
+]
 
 
 #bips-slide(title: "Content Best Practices")[

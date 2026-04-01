@@ -61,8 +61,8 @@ test:
     echo "📄 Total pages generated: $PAGES"
     
     # Expected range (rough estimate)
-    MIN_EXPECTED=16
-    MAX_EXPECTED=17
+    MIN_EXPECTED=22
+    MAX_EXPECTED=26
     
     if [ $PAGES -ge $MIN_EXPECTED ] && [ $PAGES -le $MAX_EXPECTED ]; then
         echo "✅ Page count within expected range ($MIN_EXPECTED-$MAX_EXPECTED)"
@@ -75,7 +75,7 @@ test:
     echo "🔍 Checking for potential issues..."
     
     # Extract text and count test sections
-    TEST_SECTIONS=$(pdftotext -layout tests/test-suite.pdf - | grep -E "Test [1-7]:" | wc -l)
+    TEST_SECTIONS=$(pdftotext -layout tests/test-suite.pdf - | grep -E "Test [1-9]" | wc -l)
     echo "📝 Found $TEST_SECTIONS test sections"
     
     # Check footnote behavior
@@ -183,4 +183,4 @@ uninstall:
 
 # Clean all generated PDFs
 clean:
-    rm -f *.pdf gallery/*.pdf test/*.pdf
+    rm -f *.pdf gallery/*.pdf tests/*.pdf

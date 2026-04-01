@@ -1,10 +1,43 @@
 #import "@local/bips-typst:0.1.0": *
 
 // Test Suite for BIPS Theme
-// Run: typst compile test/test-suite.typ test/test-suite.pdf
+// Run: typst compile tests/test-suite.typ tests/test-suite.pdf
 // Expected: Specific number of pages without spurious blanks
 
 #show: bips-theme
+
+// ===================================================================
+// SLIDE TYPE TESTS
+// ===================================================================
+
+// Test: Title slide - single author (Expected: 1 page, no page number)
+#title-slide(
+  title: "Test: Title Slide",
+  subtitle: "Single author variant",
+  author: "Test Author",
+  institute: bips_en,
+  date: "2025-01-01",
+)
+
+// Test: Title slide - multi-author (Expected: 1 page, no page number)
+#title-slide(
+  title: "Test: Multi-Author Title",
+  subtitle: "Multiple affiliations",
+  authors: ([Author A#inst(1)], [Author B#inst(2)], [Author C#inst(1,2)]),
+  institutes: ("Institute Alpha", "Institute Beta"),
+  date: "2025-01-01",
+  occasion: "Test Conference",
+)
+
+// Test: Section slide (Expected: 1 page, logo visible, no page number)
+#section-slide("Test: Section Slide")
+
+// Test: Section slide without logo (Expected: 1 page, no logo, no page number)
+#section-slide("Test: Section No Logo", show-logo: false)
+
+// ===================================================================
+// CONTENT SLIDE TESTS
+// ===================================================================
 
 // Test 1: Basic animations (Expected: 3 pages)
 #bips-slide(title: "Test 1: Basic Animation")[
@@ -102,32 +135,64 @@
 ]
 
 // Test 11: Bibliography slide (Expected: 1 page)
-// Note: Only if references.bib exists
-// #bibliography-slide()
+// Note: Only if references.bib exists in the test directory
+// #bibliography-slide[
+//   #bibliography("references.bib", style: "apa", full: true)
+// ]
+
+// ===================================================================
+// SPECIAL SLIDE TESTS
+// ===================================================================
+
+// Test: Empty slide (Expected: 1 page, no logo, no page number)
+#empty-slide[
+  This slide has no branding elements.
+]
+
+// Test: Thanks slide without QR (Expected: 1 page)
+#thanks-slide(
+  contact-author: "Test Author",
+  email: "test@leibniz-bips.de",
+)
+
+// Test: Thanks slide with QR code (Expected: 1 page)
+#thanks-slide(
+  thanks-text: "Questions?",
+  contact-author: "Test Author",
+  email: "test@leibniz-bips.de",
+  qr-url: "https://github.com/bips-hb/bips-typst",
+)
+
+// ===================================================================
+// SUMMARY
+// ===================================================================
 
 // Summary slide for manual verification
 #bips-slide(title: "Test Results Summary", text-size: 14pt)[
   #two-columns(
     [
-      *Expected Results:*
-      - Test 1: 3 pages (animation states)
-      - Test 2: Check for spurious blanks
-      - Test 3: 1 page, footnotes at bottom
-      - Test 4: 2 pages, footnotes with correct content
-      - Test 5: 1 page, all elements render
-      - Test 6: 1 page, no title overflow
-      - Test 7: 2 pages, table after pause
-      - Test 8: 1 page, all callout types render
-      - Test 9: 2 pages, callouts with animation
-      - Test 10: 1 page, column layouts work
+      *Slide Type Tests:*
+      - Title slide (single author): 1 page
+      - Title slide (multi-author): 1 page
+      - Section slide: 1 page each
+      - Empty slide: 1 page
+      - Thanks slide (no QR): 1 page
+      - Thanks slide (with QR): 1 page
+
+      *Content Tests (1--10):*
+      - Test 1: 3 pages (animations)
+      - Test 2: Content overflow
+      - Tests 3--10: Various features
     ],
     [
       *Manual Checks:*
+      - Title slides have no page number
+      - Section slides have logo, no page number
+      - Empty slide has no branding
+      - Thanks slides render correctly
       - Logo appears on all content slides
       - Page numbers increment correctly
       - No spurious blank pages
-      - Footnotes don't bleed between slides
     ]
   )
-
 ]

@@ -596,15 +596,24 @@
 // Bibliography Slide
 // -------------------------------------------------------------------
 
+/// Display a bibliography slide with references
+///
+/// Due to Typst's path resolution, `bibliography()` must be called from
+/// the user's document (not inside this package). Pass the result as content.
+///
+/// Example:
+/// ```
+/// #bibliography-slide[
+///   #bibliography("references.bib", style: "apa", full: true)
+/// ]
+/// ```
 #let bibliography-slide(
-  file: "references.bib",
-  style: "apa",
   title: "References",
-  full: true,
+  body,
 ) = {
   bips-slide(title: title)[
     #align(horizon)[
-      #bibliography(file, style: style, title: none, full: full)
+      #body
     ]
   ]
 }
@@ -727,7 +736,7 @@
 
 /// Apply BIPS logo blue color to text
 /// Example: #logo-blue[This text is the same shade of blue as the BIPS logo]
-#let logo-blue(content) = text(fill: bips-blue)[#content]
+#let logo-blue(content) = text(fill: bips-logo-blue)[#content]
 
 /// Apply BIPS orange color to text
 /// Example: #orange[This text is orange]

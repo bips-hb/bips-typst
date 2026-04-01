@@ -9,6 +9,7 @@ homepage = "https://github.com/bips-hb/bips-typst"
 repository = "https://github.com/bips-hb/bips-typst"
 keywords = ["presentation", "slides", "academic", "beamer"]
 categories = ["presentation"]
+compiler = "0.12.0"
 exclude = ["gallery/", "tests/", "debug/", "*.pdf", "justfile"]
 
 [template]

@@ -24,22 +24,24 @@
   The `bibliography-slide()` function provides several options:
   
   ```typst
-  // Default usage (APA style, references.bib)
-  #bibliography-slide()
-  
-  // Custom bibliography file
-  #bibliography-slide(file: "my-refs.bib")
-  
+  // Default usage (APA style)
+  #bibliography-slide[
+    #bibliography("references.bib", style: "apa", full: true)
+  ]
+
   // Different citation style
-  #bibliography-slide(style: "ieee")
-  
+  #bibliography-slide[
+    #bibliography("refs.bib", style: "ieee")
+  ]
+
   // Custom title
-  #bibliography-slide(title: "Literature")
-  
-  // Show only cited references
-  #bibliography-slide(full: false)
+  #bibliography-slide(title: "Literature")[
+    #bibliography("refs.bib", style: "apa", full: true)
+  ]
   ```
 ]
 
-// Bibliography slide with default settings
-#bibliography-slide()
+// Bibliography slide — call bibliography() in your document so paths resolve correctly
+#bibliography-slide[
+  #bibliography("references.bib", style: "apa", full: true)
+]
