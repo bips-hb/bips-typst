@@ -118,8 +118,8 @@
 #let font-scale-code-block = 0.8
 
 // List and enumeration spacing
-#let list-spacing = 0.8em
-#let enum-spacing = 0.8em
+#let list-spacing = 0.6em
+#let enum-spacing = 0.6em
 
 // Emphasis and strong text styling
 #let font-color-emphasis = bips-blue
@@ -266,14 +266,33 @@
   )
 
   // List styling with configurable spacing
-  show list: set list(spacing: list-spacing)
-  show list: set text(fill: font-color-base)
-  show enum: set enum(spacing: enum-spacing)
-  show enum: set text(fill: font-color-base)
+  // Spacing uses `set` (not `show`) so users can override with local `#set list(spacing: ...)`
+  set list(spacing: list-spacing)
+  set enum(spacing: enum-spacing)
+  // top-edge/bottom-edge ensure consistent line metrics so bullet markers
+  // stay aligned with text even when emojis or other tall glyphs are present.
+  // Tighter par leading compensates for the taller ascender line height on line breaks within items.
+  show list: set text(fill: font-color-base, top-edge: "ascender", bottom-edge: "descender")
+  show list: set par(leading: 0.4em)
+  // Nested lists get tighter spacing
+  show list: it => {
+    show list: set list(spacing: 0.4em)
+    it
+  }
+  show enum: set text(fill: font-color-base, top-edge: "ascender", bottom-edge: "descender")
+  show enum: set par(leading: 0.4em)
+  // Nested enums get tighter spacing
+  show enum: it => {
+    show enum: set enum(spacing: 0.4em)
+    it
+  }
 
   // Code styling - separate scaling for inline vs block code
   show raw.where(block: true): set text(size: effective-code-block-scale * 1em)
   show raw.where(block: false): set text(size: effective-code-inline-scale * 1em)
+  // Constrain inline code height to match surrounding text, preventing
+  // bullet misalignment in lists (same issue as emojis)
+  show raw.where(block: false): it => box(baseline: 0.12em)[#it]
 
   // Note: Heading styles are handled within slide functions to avoid
   // interference with Touying's animation system (#pause)
@@ -304,6 +323,8 @@
 #let bips-slide(
   title: none,
   subtitle: none,
+  // Content alignment (e.g. center, center + horizon, horizon)
+  content-align: none,
   // Optional font size overrides for this slide
   title-size: none,
   subtitle-size: none,
@@ -321,13 +342,28 @@
     #show raw.where(block: false): set text(
       size: pick-first(code-inline-scale, font-scale-code-inline) * 1em,
     )
-    
+
     // Handle heading styling within slides to avoid animation interference
     #show heading.where(level: 3): set text(
       size: font-size-heading-3,
       weight: font-weight-heading-3,
       fill: font-color-heading-3,
     )
+
+    // Helper to wrap body with optional alignment and text size
+    #let render-body(body) = {
+      let content-size = pick-first(text-size, none)
+      let styled = if content-size != none { text(size: content-size)[#body] } else { body }
+      if content-align != none {
+        // Only add vertical fills when alignment has a vertical component
+        let has-vertical = content-align == horizon or content-align == bottom or content-align in (center + horizon, center + bottom, left + horizon, left + bottom, right + horizon, right + bottom)
+        if has-vertical { v(1fr) }
+        align(content-align)[#styled]
+        if has-vertical { v(1fr) }
+      } else {
+        styled
+      }
+    }
 
     #if title != none or subtitle != none {
       // Title and subtitle section - smart spacing without grid
@@ -386,21 +422,9 @@
 
       v(1em)
 
-      // Content area - natural flow allows footnotes to work
-      let content-size = pick-first(text-size, none)
-      if content-size != none {
-        text(size: content-size)[#body]
-      } else {
-        body
-      }
+      render-body(body)
     } else {
-      // If no title/subtitle, just show content
-      let content-size = pick-first(text-size, none)
-      if content-size != none {
-        text(size: content-size)[#body]
-      } else {
-        body
-      }
+      render-body(body)
     }
   ]
 }
@@ -885,3 +909,15 @@
 
 /// Convenience function for vertical fill
 #let vfill = v(1fr)
+
+/// Compact list/enum spacing for tight layouts (e.g. multi-column slides)
+///
+/// Example: #compact[- Item A \ - Item B \ - Item C]
+#let compact(spacing: 0.4em, leading: 0.4em, body) = {
+  set list(spacing: spacing)
+  set enum(spacing: spacing)
+  set par(leading: leading)
+  show list: set text(top-edge: "cap-height", bottom-edge: "baseline")
+  show enum: set text(top-edge: "cap-height", bottom-edge: "baseline")
+  body
+}

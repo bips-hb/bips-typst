@@ -104,6 +104,49 @@
   ]
 ]
 
+#bips-slide(title: "Compact Lists in Columns")[
+  Use `#compact` to tighten list spacing in dense layouts:
+
+  #three-columns[
+    Default:
+    - Item A
+    - Item B
+    - Item C
+  ][
+    #compact[
+      Compact:
+      - Item A
+      - Item B
+      - Item C
+    ]
+  ][
+    #compact(spacing: 0.2em, leading: 0.2em)[
+      Tighter:
+      - Item A
+      - Item B
+      - Item C
+    ]
+  ]
+]
+
+#bips-slide(title: "Compact with Line Breaks")[
+  `#compact` also tightens intra-item line breaks:
+
+  #two-columns[
+    Default spacing:
+    - First item with a \ second line
+    - Second item
+    - Third item with a \ longer description
+  ][
+    #compact[
+      Compact spacing:
+      - First item with a \ second line
+      - Second item
+      - Third item with a \ longer description
+    ]
+  ]
+]
+
 #bips-slide(title: "Usage Examples")[
   *Basic two columns:*
   ```typst
