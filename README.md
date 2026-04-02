@@ -1,115 +1,82 @@
-# Bypst: BIPS Typst Presentation Template
+# BIPS Typst Presentation Template
 
-Fast, modern presentation template for BIPS using [Typst](https://typst.app/) and [Touying](https://touying-typ.github.io/).
+A 16:9 presentation template for [BIPS](https://www.leibniz-bips.de/) using [Typst](https://typst.app/) and [Touying](https://touying-typ.github.io/). Based on the institutional style from [bips-beamer](http://github.com/bips-hb/bips-beamer).
 
-## Features
-
-- **Lightning fast** — Compiles in milliseconds, not minutes
-- **BIPS branded** — Colors, fonts, and logo placement based on [bips-beamer](http://github.com/bips-hb/bips-beamer)
-- **Git-friendly** — Plain text format for version control
-- **Full-featured** — Animations, multi-author support, callout boxes, and more
+**Version: 0.1.1**
 
 ## Quick Start
 
 ```typst
-#import "@local/bips-typst:0.1.0": *
+#import "@local/bips-typst:0.1.1": *
 #show: bips-theme
 
 #title-slide(
   title: "Your Presentation Title",
   author: "Your Name",
-  institute: bips_en, // or bips_de for the German title
-  date: "June 6, 2025",
+  institute: bips_en, // or bips_de
+  date: datetime.today().display(),
 )
 
 #bips-slide(title: "Introduction")[
-  - Bullet points work as expected
-  - *Bold* and _italic_ text in BIPS blue
-  - Math notation: $ s^2 = 1/(n-1) sum_(i=1)^n (x_i - overline(x))^2 $
-  
-  #pause  // Click to reveal next content
-  
-  - Animations with `#pause`
+  - Bullet points
+  - *Bold* and _italic_ in BIPS blue
+  - Math: $s^2 = 1/(n-1) sum_(i=1)^n (x_i - overline(x))^2$
+
+  #pause
+
+  - Revealed on click
 ]
 
 #thanks-slide(
   contact-author: "Your Name",
   email: "your.email@leibniz-bips.de",
-  qr-url: "https://link-to-slides.example.com" // Generates QR code for last slide
+  qr-url: "https://link-to-slides.example.com",
 )
 ```
 
 ## Installation
 
-### Option 1: Local Package (Recommended for Development)
+Clone and install locally:
 
-1. Clone this repository
-2. Install locally: `just install`
-3. Use in any project:
-   ```typst
-   #import "@local/bips-typst:0.1.0": *
-   ```
-
-### Option 2: Direct Download
-
-1. Download `bips-theme.typ` and `bips-logo.png`
-2. Place in your project folder
-3. Import: `#import "bips-theme.typ": *`
-
-**Note**: All examples use the local package import (`@local/bips-typst:0.1.0`). For direct download, replace with the file-based import shown above.
-
-### Option 3: Published Package (Future)
-
-When published to Typst Universe:
-```typst
-#import "@preview/bips-typst:0.1.0": *
+```sh
+git clone https://github.com/bips-hb/bips-typst.git
+cd bips-typst
+just install
 ```
 
-## Core Features
-
-### Slide Types
-
-- `#title-slide()` — Opening slide with author/institution
-- `#bips-slide()` — Content slides with optional title/subtitle
-- `#section-slide()` — Section dividers (with optional logo/page number control)
-- `#thanks-slide()` — Closing slide with contact info
-- `#empty-slide[]` — Blank slide (no logo/numbering)
-
-### Useful Helpers
+Then import in any `.typ` file:
 
 ```typst
-// Two-column layout
-#two-columns[Left content][Right content]
-
-// Callout boxes
-#callout(type: "note")[Important information]
-#callout(type: "tip")[Helpful hint]
-#callout(type: "warning")[Caution needed]
-
-// Color helpers
-#blue[text] #orange[text] #green[text] #gray[text]
+#import "@local/bips-typst:0.1.1": *
 ```
 
-### Animation Functions
+## Slide Types
 
-The theme re-exports Touying's animation utilities:
+| Function | Purpose |
+|---|---|
+| `#title-slide()` | Opening slide with author, institute, date |
+| `#bips-slide()` | Content slide with optional title/subtitle |
+| `#section-slide()` | Section divider |
+| `#thanks-slide()` | Closing slide with contact info and optional QR code |
+| `#bibliography-slide[]` | References |
+| `#empty-slide[]` | Blank slide without branding |
+
+### Content slide options
 
 ```typst
-#pause  // Click to reveal next content
-
-#uncover(2)[Content on 2nd click]  // Show on specific subslide
-#only(1)[Content on 1st click only]  // Only on specific subslide
-
-#alternatives[
-  First version
-][
-  Second version
-][
-  Third version
+#bips-slide(
+  title: "Slide Title",
+  subtitle: "Optional Subtitle",
+  content-align: center + horizon, // center content vertically and horizontally
+  text-size: 16pt,                 // override text size for this slide
+)[
+  Content here
 ]
 ```
 
-### Multiple Authors
+`content-align` accepts any Typst alignment: `center`, `horizon`, `center + horizon`, etc.
+
+### Multi-author title slides
 
 ```typst
 #title-slide(
@@ -117,114 +84,152 @@ The theme re-exports Touying's animation utilities:
   authors: (
     "Jane Doe" + inst(1,2),
     "John Smith" + inst(1),
-    "Alice Johnson" + inst(3),
   ),
   institutes: (
     "BIPS",
     "University of Bremen",
-    "Other Institution",
   ),
 )
 ```
 
-### Section Slides
-
-Section slides support optional logo and page number control:
+### Section slides
 
 ```typst
-// Default: shows logo, hides page number (department preference)
 #section-slide("Results")
-
-// Hide logo and page number (clean divider)
-#section-slide("Methods", show-logo: false, show-page-number: false)
-
-// Show both logo and page number (full branding)
-#section-slide("Discussion", show-logo: true, show-page-number: true)
-
-// Show page number but hide logo (minimal branding)
-#section-slide("Conclusions", show-logo: false, show-page-number: true)
+#section-slide("Methods", show-logo: false, show-page-number: true)
 ```
 
-### Customization
+## Layout Helpers
 
-Global settings:
+```typst
+// Two columns (equal by default)
+#two-columns[Left][Right]
+#two-columns(columns: (2fr, 1fr), gutter: 2em)[Wide][Narrow]
+
+// Three columns
+#three-columns[A][B][C]
+```
+
+## Utilities
+
+### Color helpers
+
+```typst
+#blue[text]  #orange[text]  #green[text]  #gray[text]
+```
+
+### Callout boxes
+
+```typst
+#callout(type: "note")[Information]
+#callout(type: "tip")[Helpful hint]
+#callout(type: "warning")[Caution]
+#callout(type: "important")[Critical]
+#callout(type: "tip", title: "Custom Title")[With a title]
+```
+
+### Compact list spacing
+
+For dense layouts (e.g. multi-column slides), use `#compact` to tighten list spacing:
+
+```typst
+#compact[
+  - Item A
+  - Item B
+  - Item C
+]
+```
+
+Adjustable: `#compact(spacing: 0.2em, leading: 0.2em)[...]`
+
+For lighter adjustments, `#set list(spacing: 0.4em)` works as a local override.
+
+### Vertical fill
+
+```typst
+#vfill  // shorthand for v(1fr)
+```
+
+### Institutional names
+
+```typst
+#bips_en  // Leibniz Institute for Prevention Research and Epidemiology — BIPS
+#bips_de  // Leibniz-Institut für Präventionsforschung und Epidemiologie — BIPS
+```
+
+## Animations
+
+The theme re-exports Touying's animation functions:
+
+```typst
+#pause                              // reveal on click
+#uncover(2)[On second click]        // show on specific subslide
+#only(1)[First click only]          // only on specific subslide
+#alternatives[Version A][Version B] // swap content
+```
+
+**Note**: Do not use `#pause` inside `#two-columns` / `#three-columns`. Use `#uncover()` or `#only()` instead.
+
+## Global Customization
+
 ```typst
 #show: bips-theme.with(
+  aspect-ratio: "16-9",       // default
   base-size: 20pt,
   slide-title-size: 28pt,
+  page-number-size: 16pt,
   code-block-scale: 0.9,
+  code-inline-scale: 1,
 )
-```
-
-Per-slide overrides:
-```typst
-#bips-slide(
-  title: "Dense Content",
-  text-size: 16pt,
-)[
-  Smaller text for this slide only
-]
 ```
 
 ## Examples
 
-See `gallery/` for complete examples:
-- `basic.typ` — Simple starter template
-- `animations.typ` — Step-by-step reveals
-- `multi-author.typ` — Collaboration examples
-- `customization.typ` — Font and styling options
+The `gallery/` directory contains 13 example presentations:
 
-Copy `gallery/basic.typ` for a ready-to-use template or `gallery/complete.typ` for a comprehensive example.
+- `basic.typ` — starter template
+- `complete.typ` — comprehensive feature showcase
+- `animations.typ` — step-by-step reveals
+- `columns.typ` — multi-column layouts and `#compact`
+- `multi-author.typ` — multiple affiliations
+- `callouts.typ` — callout box types
+- `customization.typ` — font and styling overrides
+- `bibliography.typ` — references
+- `content-elements.typ` — tables, code, math
+- `font-customization.typ` — typography options
+- `qr-code.typ` — QR code on thanks slide
+- `aspect-ratio.typ` — non-default aspect ratios
+- `lecture-demo.typ` — longer example
 
 ## Development
 
-### Contributing
-
-1. Clone the repository: `git clone https://github.com/bips-hb/bips-typst.git`
-2. Install locally: `just install`
-3. Make changes to files in `lib/`
-4. Test: `just all` or `just test`
-5. Reinstall after changes: `just uninstall && just install`
-
-### Commands
-
-- `just install` - Install package locally for development
-- `just uninstall` - Remove local package installation  
-- `just all` - Compile all gallery demos
-- `just test` - Run test suite with validation
-- `just clean` - Remove generated PDFs
-
-### Package Structure
-
-```
-lib/                    # Package source
-├── bips-typst.typ     # Main entry point
-├── theme.typ          # Theme implementation
-├── bips-logo.png      # Required asset
-└── references.bib     # Bibliography file
-
-template/              # Example templates
-gallery/              # Demo presentations  
-tests/                # Test suite
-debug/                # Development debugging files (git-ignored)
+```sh
+just install    # install package locally
+just uninstall  # remove local package
+just all        # compile all gallery demos
+just test       # run test suite
+just clean      # remove generated PDFs
 ```
 
-## Tips
+After editing theme files, run `just install` before compiling.
 
-- Use `typst watch file.typ` for live preview while editing
-- Tables automatically get BIPS styling
-- Images: `#image("figure.png", width: 50%)`
-- Check [Touying docs](https://touying-typ.github.io/) for advanced features
+### Project Structure
+
+```
+bips-typst.typ   # package entrypoint
+theme.typ        # theme implementation
+bips-logo.png    # logo asset
+typst.toml       # package metadata
+template/        # Typst Universe templates
+gallery/         # example presentations
+tests/           # test suite
+```
 
 ## Requirements
 
-- Typst (latest version recommended)
-- No other dependencies — template includes everything needed
+- Typst >= 0.12.0
+- Dependencies: touying 0.6.1, codetastic 0.2.2 (resolved automatically)
 
 ## License
 
-CC BY-SA 4.0
-
-## Contributing
-
-Issues and PRs welcome.
+MIT

@@ -59,8 +59,12 @@
 
 // Slide title and subtitle styling
 #let font-size-slide-title = 26pt
+#let font-size-slide-title-only = 30pt  // Slightly larger when no subtitle
 #let font-color-slide-title = bips-blue
 #let font-weight-slide-title = 600
+
+// Height of the title area (keeps gradient line at consistent position)
+#let slide-title-area-height = 2cm
 
 #let font-size-slide-subtitle = 20pt
 #let font-color-slide-subtitle = bips-blue
@@ -290,9 +294,8 @@
   // Code styling - separate scaling for inline vs block code
   show raw.where(block: true): set text(size: effective-code-block-scale * 1em)
   show raw.where(block: false): set text(size: effective-code-inline-scale * 1em)
-  // Constrain inline code height to match surrounding text, preventing
-  // bullet misalignment in lists (same issue as emojis)
-  show raw.where(block: false): it => box(baseline: 0.12em)[#it]
+  // Align monospace font baseline with Fira Sans (monospace sits slightly high)
+  show raw.where(block: false): it => box(baseline: 0.1em)[#it]
 
   // Note: Heading styles are handled within slide functions to avoid
   // interference with Touying's animation system (#pause)
@@ -366,50 +369,50 @@
     }
 
     #if title != none or subtitle != none {
-      // Title and subtitle section - smart spacing without grid
-      v(.1em)
-
-      // Combine title and subtitle in natural flow
-      if title != none and subtitle != none {
-        // Both title and subtitle - natural line break between them
-        block(
-          width: 90%,
-          [
+      // Fixed-height title area keeps gradient line at same position
+      // regardless of whether subtitle is present
+      box(height: slide-title-area-height, width: 100%)[
+        #if title != none and subtitle != none {
+          // Both title and subtitle - bottom-aligned in the fixed area
+          align(bottom)[
+            #block(width: 90%)[
+              #text(
+                size: pick-first(title-size, font-size-slide-title),
+                weight: font-weight-slide-title,
+                fill: font-color-slide-title,
+              )[#title]
+            ]
+            #v(-0.5em)
+            #block(width: 90%)[
+              #text(
+                size: pick-first(subtitle-size, font-size-slide-subtitle),
+                weight: font-weight-slide-subtitle,
+                fill: font-color-slide-subtitle,
+              )[#subtitle]
+            ]
+          ]
+        } else if title != none {
+          // Title only - centered vertically, slightly larger
+          align(horizon)[
             #text(
-              size: pick-first(title-size, font-size-slide-title),
+              size: pick-first(title-size, font-size-slide-title-only),
               weight: font-weight-slide-title,
               fill: font-color-slide-title,
             )[#title]
-          ],
-        )
-        v(-0.5em)
-        block(
-          width: 90%,
-          [
+          ]
+        } else if subtitle != none {
+          // Subtitle only - centered vertically
+          align(horizon)[
             #text(
               size: pick-first(subtitle-size, font-size-slide-subtitle),
               weight: font-weight-slide-subtitle,
               fill: font-color-slide-subtitle,
             )[#subtitle]
-          ],
-        )
-      } else if title != none {
-        // Title only
-        text(
-          size: pick-first(title-size, font-size-slide-title),
-          weight: font-weight-slide-title,
-          fill: font-color-slide-title,
-        )[#title]
-      } else if subtitle != none {
-        // Subtitle only
-        text(
-          size: pick-first(subtitle-size, font-size-slide-subtitle),
-          weight: font-weight-slide-subtitle,
-          fill: font-color-slide-subtitle,
-        )[#subtitle]
-      }
+          ]
+        }
+      ]
 
-      // Gradient line after title/subtitle
+      // Gradient line after title/subtitle - always at same position
       rect(
         width: 85%,
         height: 1pt,
