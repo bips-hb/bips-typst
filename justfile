@@ -3,7 +3,7 @@
 # Compile all gallery demos
 all:
     #!/bin/bash
-    echo "Compiling all gallery demos (showing Typst's speed!)..."
+    echo "Compiling all gallery demos..."
     echo ""
     total_start=$(gdate +%s%3N 2>/dev/null || date +%s%3N)
     count=0
@@ -35,7 +35,6 @@ all:
     
     if [ $failed -eq 0 ]; then
         echo "🚀 All $count demos compiled successfully in ${total_duration}ms total!"
-        echo "⚡ LaTeX would take minutes, Typst took under a second."
         echo "📁 Check gallery/ for generated PDFs"
     else
         echo "⚠️  $count compiled successfully, $failed failed (${total_duration}ms total)"
