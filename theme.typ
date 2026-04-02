@@ -149,57 +149,17 @@
 // BACKGROUND UTILITY FUNCTIONS
 // ===================================================================
 
-/// Create background with BIPS logo and/or page number
-/// This centralizes the positioning logic for consistent placement across slide types
-#let bips-background(
-  show-logo: true, 
-  show-page-number: true,
-  page-number-size: font-size-page-number,  // Allow override for theme customization
-) = {
-  if show-logo or show-page-number {
-    {
-      if show-logo {
-        // BIPS logo placement
-        place(
-          top + right,
-          dx: -1cm,
-          dy: 1cm,
-          image("bips-logo.png", width: 3cm),
-        )
-      }
-      
-      if show-page-number {
-        // Page number placement
-        place(
-          top + right,
-          dx: -2.25cm,
-          dy: 4.25cm,
-          text(
-            size: page-number-size,
-            fill: font-color-page-number,
-            weight: font-weight-page-number,
-          )[
-            #context {
-              let slide-num = utils.slide-counter.get().first()
-              // Use a simple state counter to track if title slide exists
-              let title-slide-marker = query(<bips-title-slide-marker>)
-              let has-title-slide = title-slide-marker.len() > 0
-              
-              if has-title-slide {
-                // With title slide: first content slide (slide-num=1) should show "1"
-                str(slide-num)
-              } else {
-                // Without title slide: first slide (slide-num=0) should show "1"  
-                str(slide-num + 1)
-              }
-            }
-          ],
-        )
-      }
-    }
-  } else {
-    // Return empty background when both are disabled
-    none
+/// Create background with BIPS logo
+/// Page numbers are handled separately via Touying's header system
+/// to ensure correct numbering across #pause subslides
+#let bips-background(show-logo: true) = {
+  if show-logo {
+    place(
+      top + right,
+      dx: -1cm,
+      dy: 1cm,
+      image("bips-logo.png", width: 3cm),
+    )
   }
 }
 
@@ -278,24 +238,24 @@
   // Tighter par leading compensates for the taller ascender line height on line breaks within items.
   show list: set text(fill: font-color-base, top-edge: "ascender", bottom-edge: "descender")
   show list: set par(leading: 0.4em)
-  // Nested lists get tighter spacing
+  // Nested lists/enums get tighter spacing (including cross-type nesting)
   show list: it => {
     show list: set list(spacing: 0.4em)
+    show enum: set enum(spacing: 0.4em)
     it
   }
   show enum: set text(fill: font-color-base, top-edge: "ascender", bottom-edge: "descender")
   show enum: set par(leading: 0.4em)
-  // Nested enums get tighter spacing
   show enum: it => {
     show enum: set enum(spacing: 0.4em)
+    show list: set list(spacing: 0.4em)
     it
   }
 
-  // Code styling - separate scaling for inline vs block code
+  // Code styling - Fira Mono pairs with Fira Sans for consistent metrics
+  show raw: set text(font: "Fira Mono")
   show raw.where(block: true): set text(size: effective-code-block-scale * 1em)
   show raw.where(block: false): set text(size: effective-code-inline-scale * 1em)
-  // Align monospace font baseline with Fira Sans (monospace sits slightly high)
-  show raw.where(block: false): it => box(baseline: 0.1em)[#it]
 
   // Note: Heading styles are handled within slide functions to avoid
   // interference with Touying's animation system (#pause)
@@ -305,11 +265,7 @@
     config-page(
       paper: "presentation-" + aspect-ratio,
       margin: (top: 1.55cm, bottom: 1.55cm, left: 1.55cm, right: 1.75cm),
-      background: bips-background(
-        show-logo: true, 
-        show-page-number: true,
-        page-number-size: effective-font-size-page-number,
-      ),
+      background: bips-background(show-logo: true),
     ),
     body,
   )
@@ -338,6 +294,19 @@
   body,
 ) = {
   slide(..args)[
+    // Page number — placed in content (not background/header) so the counter
+    // is evaluated per-subslide AFTER Touying's page-preamble steps it,
+    // giving correct numbering across #pause states.
+    #place(
+      top + right,
+      dx: -0.5cm,
+      dy: 2.7cm,
+      text(
+        size: font-size-page-number,
+        fill: font-color-page-number,
+        weight: font-weight-page-number,
+      )[#context utils.slide-counter.display()],
+    )
     // Apply slide-specific styling overrides including headings
     #show raw.where(block: true): set text(
       size: pick-first(code-block-scale, font-scale-code-block) * 1em,
@@ -453,16 +422,9 @@
   date-size: none,
 ) = {
   slide(
+    config: config-common(freeze-slide-counter: true),
     setting: body => {
-      set page(
-        background: bips-background(
-          show-logo: true,
-          show-page-number: false,  // No page number on title slide
-        ),
-      )
-
-      // Mark that a title slide exists for slide numbering logic
-      place(hide[#metadata("title-slide") <bips-title-slide-marker>])
+      set page(background: bips-background(show-logo: true))
 
       set align(center)
 
@@ -597,13 +559,7 @@
 ) = {
   slide(
     setting: body => {
-      // Use utility function for consistent logo/page number placement
-      set page(
-        background: bips-background(
-          show-logo: show-logo,
-          show-page-number: show-page-number,
-        )
-      )
+      set page(background: bips-background(show-logo: show-logo))
       
       // Add invisible heading for PDF outline/bookmarks
       place(hide[#heading(level: 1, outlined: true)[#section-title]])
@@ -740,12 +696,7 @@
 #let empty-slide(..content) = {
   slide(
     setting: body => {
-      set page(
-        background: bips-background(
-          show-logo: false,
-          show-page-number: false,
-        )
-      )
+      set page(background: bips-background(show-logo: false))
       content.pos().join()
     },
   )[]
