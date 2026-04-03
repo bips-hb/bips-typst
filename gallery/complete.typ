@@ -83,6 +83,9 @@
 #section-slide[Layout & Utilities]
 
 // [BIPS] Two-column and three-column layout helpers.
+// Alternatives: Touying's `components.side-by-side[][]` or Typst's built-in
+// `grid()` work the same way inside a slide body.
+// See https://typst.app/docs/reference/layout/grid/
 #bips-slide(title: "Multi-Column Layouts")[
   // [BIPS] `two-columns[][]{:}` — equal widths by default
   #two-columns[
