@@ -1,163 +1,270 @@
+// Complete Feature Showcase — BIPS Typst Theme
+//
+// This file demonstrates all major features of the BIPS theme and the
+// Touying presentation framework it is built on. It serves as both a
+// gallery demo and user-facing documentation.
+//
+// Features are annotated with their source:
+//   [BIPS]   — provided by the BIPS theme (theme.typ)
+//   [Touying] — provided by the Touying package
+//   [Typst]  — built-in Typst functionality
+//
+// Run: typst compile --root . gallery/complete.typ
+
 #import "../bips-typst.typ": *
 
+// [BIPS] Apply the BIPS theme with default settings.
+// Optional overrides: base-size, slide-title-size, heading-*-size, etc.
 #show: bips-theme
 
-// Title slide
+// ===================================================================
+// TITLE SLIDE
+// ===================================================================
+
+// [BIPS] Multi-author title slide with institute affiliations.
+// Use `author:` for a single author, or `authors:` + `institutes:` for
+// multiple affiliations with superscript numbering via `inst()`.
 #title-slide(
   title: "Bypst: The BIPS Typst Theme",
-  subtitle: "Modern Presentations with Typst and Touying",
-  author: "Jane Doe & John Smith",
-  institute: bips_en,
+  subtitle: "A Complete Feature Showcase",
+  authors: (
+    [Jane Doe#inst(1)],
+    [John Smith#inst(2)],
+    [Alice Johnson#inst(1, 2)],
+  ),
+  institutes: (
+    "Leibniz Institute for Prevention Research and Epidemiology — BIPS",
+    "University of Bremen",
+  ),
   date: datetime.today().display(),
   occasion: "The 27th Conference on Typst Presentations",
 )
 
-// Regular content slides
+// ===================================================================
+// SLIDE TYPES
+// ===================================================================
+
+// [BIPS] Section slides create visual dividers. They don't consume a
+// slide number and appear in the PDF outline for navigation.
+#section-slide[Slide Types]
+
+// [BIPS] Content slide with title and subtitle — the workhorse slide type.
+// Text formatting is auto-styled by the theme:
 #bips-slide(
-  title: "Introduction to BIPS Typst Theme",
-  subtitle: "Modern slide design with Typst",
+  title: "Text Formatting",
+  subtitle: "Automatic styling from the BIPS theme",
 )[
-  - The BIPS Typst theme brings the institutional design to modern presentation tools
-  - Built on top of the powerful _Touying_ package for Typst
-  - Maintains consistency with BIPS branding and visual identity
-  - Key advantages:
-    + Fast compilation (milliseconds vs. seconds with LaTeX)
-    + Clean, modern syntax
-    + Powerful mathematical typesetting
-    + Easy customization and theming
-    + Professional BIPS styling with configurable typography
+  // [BIPS] Bold and emphasis are automatically colored in BIPS blue:
+  - *Bold text* renders in BIPS blue — use for key terms
+  - _Emphasized text_ renders in blue italic — use for concepts
+  - #link("https://typst.app")[Links] appear with a blue underline
+  - Regular text uses the base gray color
+
+  // [Typst] Standard Typst formatting works as expected:
+  - Inline `code` uses Fira Mono at matching metrics
+  - Footnotes work naturally#footnote[Like this one — appears at the slide bottom.]
 ]
 
-#bips-slide(title: "Key Features")[
-  The BIPS Typst theme includes:
+// [BIPS] Content slide with title only (no subtitle) — renders slightly larger.
+#bips-slide(title: "Color Utilities & Headings")[
+  // [BIPS] Color helper functions for inline coloring:
+  #blue[`#blue[]`], #orange[`#orange[]`], #green[`#green[]`], #gray[`#gray[]`]
 
-  1. *Color Scheme*: Official BIPS colors (#blue[blue], #orange[orange], #green[green])
-  2. *Layouts*: Title, content, section, thanks, and empty slides
-  3. *Branding*: BIPS logo positioning and institutional information
-  4. *Typography*: Configurable font sizes, colors, and weights
-  5. *Utilities*: Color functions, column layouts, callout boxes
-
-  Math works seamlessly: $sum_(i=1)^n x_i = macron(x) dot n$
+  // [BIPS] Headings are styled in BIPS blue at all levels:
+  === Heading Level 3
+  Content below a heading. Levels 1--3 all render in BIPS blue with
+  em-based sizing that scales proportionally with `base-size`.
 ]
 
-// Section slide
-#section-slide[Theme Features & Usage]
+// ===================================================================
+// LAYOUT & UTILITIES
+// ===================================================================
 
-#bips-slide(
-  title: "Color Utilities & Formatting",
-  subtitle: "Easy-to-use color functions",
-)[
-  Color utilities: #blue[`#blue[]`], #orange[`#orange[]`], #green[`#green[]`], #gray[`#gray[]`]
+#section-slide[Layout & Utilities]
 
-  Text formatting:
-  - *Bold text* appears in blue (customizable)
-  - _Emphasized text_ appears in blue italic (customizable)
-  - #link("https://typst.app")[Link text] appears in blue with underline
-  - Regular text uses the base color
-  - #small[`#small[]`] and #tiny[`#tiny[]`] for reduced text sizes
-]
-
-// Section slide
-#section-slide[Research Applications]
-
-#bips-slide(
-  title: "Research Use Cases",
-  subtitle: "Where this theme excels",
-)[
-  Perfect for:
-
-  - *Academic Presentations*: Conference talks, seminars, thesis defenses
-  - *Research Reports*: Data presentations, methodology explanations
-  - *Institutional Communication*: BIPS internal and external presentations
-  - *Collaborative Work*: Version control friendly, text-based format
-
-  #emph[Emphasis] uses BIPS blue color for highlighting important concepts.
-]
-
-#bips-slide(title: "Technical Advantages")[
+// [BIPS] Two-column and three-column layout helpers.
+#bips-slide(title: "Multi-Column Layouts")[
+  // [BIPS] `two-columns[][]{:}` — equal widths by default
   #two-columns[
-    === PowerPoint vs. Typst
-    - Version control friendly
-    - Programmatic generation
-    - Clean, modern syntax
+    *Left column*
 
-    === LaTeX Beamer vs. Typst
-    - Much faster compilation
-    - Cleaner syntax
-    - Comparable math typesetting
+    Default 1fr / 1fr split. Useful for text + image or side-by-side comparisons.
   ][
-    === Markdown slides vs. Typst
-    - Superior math typesetting
-    - Better layout control
-    - Richer formatting options
+    *Right column*
+
+    Custom widths: `two-columns(columns: (2fr, 1fr))[...][...]`
+  ]
+
+  #v(0.5em)
+
+  // [BIPS] `three-columns[][][]` — three equal columns
+  #three-columns[
+    #blue[Column A]
+  ][
+    #orange[Column B]
+  ][
+    #green[Column C]
   ]
 ]
 
-// Empty slide example
-#empty-slide[
-  #align(center + horizon)[
-    This is an empty slide
+// [BIPS] Callout blocks — styled boxes for notes, tips, warnings, etc.
+#bips-slide(title: "Callout Blocks")[
+  #callout(type: "note")[Default note — icon appears inline with content.]
 
-    (No logo, no page number)
+  #callout(type: "tip", title: "Pro Tip")[
+    Use `title:` to add a header line to any callout type.
+  ]
 
-    #text(size: 14pt, style: "italic")[
-      Useful for special content or transitions
+  #callout(type: "warning")[Warnings use BIPS orange for high visibility.]
+
+  #callout(type: "important")[Important callouts use red for critical information.]
+]
+
+// [BIPS] Tables and math — styled automatically by the theme.
+#bips-slide(title: "Tables & Mathematics")[
+  // [Typst] Tables are auto-styled with BIPS blue header row and subtle borders:
+  #two-columns[
+    #table(
+      columns: 3,
+      [*Method*], [*MSE*], [*AUC*],
+      [Random Forest], [0.042], [0.91],
+      [Gradient Boost], [0.038], [0.93],
+      [Neural Net], [0.035], [0.94],
+    )
+  ][
+    // [Typst] Display and inline math:
+    The estimator is unbiased:
+
+    $ hat(theta)_n = 1/n sum_(i=1)^n X_i $
+
+    with variance $"Var"(hat(theta)_n) = sigma^2 / n$.
+  ]
+]
+
+// [BIPS] Text size utilities and compact spacing.
+#bips-slide(title: "Text Sizes & Compact Spacing")[
+  Normal body text at the default `base-size` (18pt).
+
+  // [BIPS] `#small[]` and `#tiny[]` scale proportionally with base-size:
+  #small[`#small[]` — useful for source attributions or secondary information.]
+
+  #tiny[`#tiny[]` — the smallest preset, for disclaimers or fine print.]
+
+  #v(0.5em)
+
+  // [BIPS] `#compact[]` reduces list/enum spacing for dense content:
+  #two-columns[
+    *Normal spacing:*
+    - Item A
+    - Item B
+    - Item C
+  ][
+    *Compact spacing:*
+    #compact[
+      - Item A
+      - Item B
+      - Item C
     ]
   ]
 ]
 
-// Animation examples section
-#section-slide[Animation Examples]
+// [BIPS] Vertical fill and content alignment.
+#bips-slide(title: "Vertical Fill & Alignment")[
+  Top-aligned content (the default).
 
-#bips-slide(
-  title: "Manual Incremental Reveals",
-  subtitle: "Using #pause for step-by-step presentation",
-)[
-  Here are some key points:
+  // [BIPS] `#vfill` is shorthand for `v(1fr)` — pushes content apart:
+  #vfill
 
-  - First point appears immediately
-  #pause
-  - Second point appears on next click
-  #pause
-  - Final point completes the slide
-  - Note that slide numbers stay consistent across pause states
-
-  #pause
-
-  You can also reveal equations: $f(x) = x^2 + 2x + 1$
-  #pause
-  And simplify them: $f(x) = (x + 1)^2$
+  Bottom content, pushed down by `#vfill` between the two blocks.
 ]
 
+// ===================================================================
+// ANIMATIONS (TOUYING)
+// ===================================================================
+
+#section-slide[Animations]
+
+// [Touying] `#pause` — the simplest animation. Content before each #pause
+// appears on the current subslide; content after appears on the next click.
+// Slide numbers stay consistent across all subslides.
 #bips-slide(
-  title: "Two-Column Animation",
-  subtitle: "Using #meanwhile for synchronized reveals",
+  title: "Incremental Reveals with #pause",
+  subtitle: "Touying's simplest animation primitive",
+)[
+  - This point is visible from the start
+  #pause
+  - This appears on click 2
+  #pause
+  - This appears on click 3
+
+  #pause
+  Equations can also be revealed: $E = m c^2$
+]
+
+// [Touying] `#uncover()` and `#only()` — fine-grained subslide control.
+// Unlike #pause (which is sequential), these target specific subslides.
+#bips-slide(
+  title: "Fine-Grained Animations",
+  subtitle: "Touying: #uncover and #only",
+)[
+  // [Touying] `uncover("2-")` makes content invisible (but space-reserving)
+  // until subslide 2. Subslide specs: "2", "2-", "2-4", "-3".
+  Always visible content.
+  #pause
+
+  #uncover("3-")[This appears from subslide 3 onward.]
+
+  #only("2")[_This text is only on subslide 2 — then it vanishes._]
+]
+
+// [Touying] `#alternatives` — replace content in-place across subslides.
+// Useful for showing different versions of the same element.
+#bips-slide(
+  title: "Replacing Content with #alternatives",
+  subtitle: "Touying: swapping content in-place",
+)[
+  The current analysis method is:
+
+  #alternatives[
+    *Step 1:* Data collection and cleaning
+  ][
+    *Step 2:* Exploratory analysis and visualization
+  ][
+    *Step 3:* Model fitting and validation
+  ]
+
+  #small[(Click through to cycle between steps)]
+]
+
+// [Touying] `#meanwhile` — synchronize multi-column animations.
+// The right column starts fresh when #meanwhile is reached.
+#bips-slide(
+  title: "Multi-Column Animations",
+  subtitle: "Touying: #pause in grids with #meanwhile",
 )[
   #grid(columns: (1fr, 1fr))[
-    Left column starts:
-    - First item here
+    *Left column:*
+    - Data collection
     #pause
-    - Second item appears
+    - Preprocessing
     #pause
-    - Third item follows
+    - Feature engineering
   ][
     #meanwhile
-    - Right column content appears when #meanwhile is triggered
-    - Pretty neat.
-
+    *Right column* appears at the same time as the left column begins.
+    - Synchronized content across columns
   ]
 ]
 
+// [Touying] `#pause` works inside math environments too.
 #bips-slide(
-  title: "Math Step-by-Step",
-  subtitle: "Revealing equation steps",
+  title: "Step-by-Step Equations",
+  subtitle: "Touying: #pause inside math blocks",
 )[
-  Let's solve this equation step by step:
+  Completing the square:
 
   $
     f(x) &= x^2 + 4x + 4 \
-    #pause
-    &= x^2 + 4x + 4 \
     #pause
     &= (x + 2)^2
   $
@@ -166,68 +273,50 @@
   Therefore, the vertex is at $x = -2$.
 ]
 
-// Another section
-#section-slide[Getting Started]
+// ===================================================================
+// CUSTOMIZATION
+// ===================================================================
+
+#section-slide[Customization]
 
 #bips-slide(
-  title: "Using the BIPS Theme",
-  subtitle: "Quick start guide",
+  title: "Per-Slide Overrides",
+  subtitle: "BIPS theme: text-size, title-size, code-block-scale",
+  text-size: 16pt,
 )[
-  #grid(
-    columns: (1fr, 1fr),
-    gutter: 1em,
-    [
-      To use this theme in your presentations:
+  // [BIPS] Individual slides can override text-size, title-size,
+  // subtitle-size, code-block-scale, and code-inline-scale.
+  This slide uses `text-size: 16pt` (default is 18pt), which allows
+  fitting more content when needed.
 
-      1. Import the theme
-      2. Apply the theme with `#show`
-      3. Create title slide
-      4. Add content slides
-
-      Then create slides with the various slide functions.
-    ],
-    [
-      ```typst
-      #import "@local/bips-typst:0.2.0": *
-
-      #show: bips-theme
-
-      #title-slide(
-        title: [Your Title],
-        subtitle: [Your Subtitle],
-        author: [Your Name],
-        // ... other parameters
-      )
-
-      #slide[
-        = Slide Title
-        Your content here
-      ]
-      ```
-    ],
+  // [Typst] Code blocks are auto-styled with Fira Mono:
+  ```typst
+  #show: bips-theme.with(
+    base-size: 20pt,          // Scale everything up
+    heading-1-size: 24pt,     // Explicit heading override
+    code-block-scale: 0.75,   // Smaller code blocks
   )
+  ```
 ]
 
-#bips-slide(title: "Customization Options")[
-  #two-columns[
-    *Typography:*
-    - Font sizes for all elements
-    - Font colors and weights
-    - List and enumeration spacing
-    - `#small[]` and `#tiny[]` utilities
-  ][
-    *Styling:*
-    - Color utilities: `#blue[]`, `#orange[]`, etc.
-    - Configurable emphasis and bold styling
-    - `inline code` and code block scaling
-    - Page numbering from content slide 1
+// [BIPS] Section slide without logo — `show-logo: false`.
+#section-slide("Special Slides", show-logo: false)
+
+// [BIPS] Empty slide — no logo, no page number, no branding.
+// Useful for full-bleed images, transitions, or special layouts.
+#empty-slide[
+  #align(center + horizon)[
+    _This is an empty slide_ — no logo, no page number.
+
+    Useful for full-bleed images or transition screens.
   ]
 ]
 
-// Final slide
+// [BIPS] Thanks/contact slide with QR code.
+// Use `qr-url:` to generate a QR code, or omit it to show the BIPS website.
 #thanks-slide(
   thanks-text: "Thank you for your attention!",
   contact-author: "Dr. Jane Doe",
   email: "jane.doe@leibniz-bips.de",
-  qr-url: "https://github.com/bips-hb/bips-typst", // QR code linking to presentation URL
+  qr-url: "https://github.com/bips-hb/bips-typst",
 )
