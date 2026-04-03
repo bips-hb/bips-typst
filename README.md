@@ -2,12 +2,12 @@
 
 A 16:9 presentation template for [BIPS](https://www.leibniz-bips.de/) using [Typst](https://typst.app/) and [Touying](https://touying-typ.github.io/). Based on the institutional style from [bips-beamer](http://github.com/bips-hb/bips-beamer).
 
-**Version: 0.1.1**
+**Version: 0.2.0**
 
 ## Quick Start
 
 ```typst
-#import "@local/bips-typst:0.1.1": *
+#import "@local/bips-typst:0.2.0": *
 #show: bips-theme
 
 #title-slide(
@@ -47,7 +47,7 @@ just install
 Then import in any `.typ` file:
 
 ```typst
-#import "@local/bips-typst:0.1.1": *
+#import "@local/bips-typst:0.2.0": *
 ```
 
 ## Slide Types
@@ -96,7 +96,7 @@ Then import in any `.typ` file:
 
 ```typst
 #section-slide("Results")
-#section-slide("Methods", show-logo: false, show-page-number: true)
+#section-slide("Methods", show-logo: false)
 ```
 
 ## Layout Helpers
@@ -175,12 +175,25 @@ The theme re-exports Touying's animation functions:
 ```typst
 #show: bips-theme.with(
   aspect-ratio: "16-9",       // default
-  base-size: 20pt,
-  slide-title-size: 28pt,
+  base-size: 20pt,            // scales headings, small/tiny proportionally
+  slide-title-size: 28pt,     // explicit pt overrides take precedence
+  slide-subtitle-size: 22pt,
+  heading-1-size: 22pt,
+  heading-2-size: 20pt,
+  heading-3-size: 18pt,
+  small-size: 16pt,
+  tiny-size: 14pt,
   page-number-size: 16pt,
   code-block-scale: 0.9,
   code-inline-scale: 1,
 )
+```
+
+### Text size utilities
+
+```typst
+#small[Smaller text for captions or notes]
+#tiny[Even smaller text for fine print]
 ```
 
 ## Examples

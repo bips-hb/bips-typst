@@ -6,7 +6,7 @@
 echo "🧪 Running BIPS Theme Test Suite..."
 
 # Compile test suite
-typst compile tests/test-suite.typ tests/test-suite.pdf
+typst compile --root . tests/test-suite.typ tests/test-suite.pdf
 
 if [ $? -ne 0 ]; then
     echo "❌ Test suite compilation failed!"
@@ -18,8 +18,8 @@ PAGES=$(pdfinfo tests/test-suite.pdf | grep Pages | awk '{print $2}')
 echo "📄 Total pages generated: $PAGES"
 
 # Expected range (rough estimate)
-MIN_EXPECTED=22
-MAX_EXPECTED=26
+MIN_EXPECTED=27
+MAX_EXPECTED=31
 
 if [ $PAGES -ge $MIN_EXPECTED ] && [ $PAGES -le $MAX_EXPECTED ]; then
     echo "✅ Page count within expected range ($MIN_EXPECTED-$MAX_EXPECTED)"

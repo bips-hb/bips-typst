@@ -1,6 +1,6 @@
 [package]
 name = "bips-typst"
-version = "0.1.1"
+version = "0.2.0"
 entrypoint = "bips-typst.typ"
 authors = ["Lukas Burk <burk@leibniz-bips.de>"]
 license = "MIT"

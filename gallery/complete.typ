@@ -1,4 +1,4 @@
-#import "@local/bips-typst:0.1.1": *
+#import "../bips-typst.typ": *
 
 #show: bips-theme
 
@@ -32,13 +32,12 @@
   The BIPS Typst theme includes:
 
   1. *Color Scheme*: Official BIPS colors (#blue[blue], #orange[orange], #green[green])
-  2. *Layouts*: Title slides, content slides, section slides, thanks slides
+  2. *Layouts*: Title, content, section, thanks, and empty slides
   3. *Branding*: BIPS logo positioning and institutional information
   4. *Typography*: Configurable font sizes, colors, and weights
-  5. *Color Utilities*: Easy-to-use color functions
+  5. *Utilities*: Color functions, column layouts, callout boxes
 
-  Mathematical equations work seamlessly:
-  $ sum_(i=1)^n x_i = macron(x) dot n $
+  Math works seamlessly: $sum_(i=1)^n x_i = macron(x) dot n$
 ]
 
 // Section slide
@@ -48,18 +47,14 @@
   title: "Color Utilities & Formatting",
   subtitle: "Easy-to-use color functions",
 )[
-  The theme provides convenient color utilities:
+  Color utilities: #blue[`#blue[]`], #orange[`#orange[]`], #green[`#green[]`], #gray[`#gray[]`]
 
-  - #blue[`#blue[text]`] - Apply BIPS blue color
-  - #orange[`#orange[text]`] - Apply BIPS orange color
-  - #green[`#green[text]`] - Apply BIPS green color
-  - #gray[`#gray[text]`] - Apply gray color
-
-  Text formatting options:
+  Text formatting:
   - *Bold text* appears in blue (customizable)
   - _Emphasized text_ appears in blue italic (customizable)
   - #link("https://typst.app")[Link text] appears in blue with underline
   - Regular text uses the base color
+  - #small[`#small[]`] and #tiny[`#tiny[]`] for reduced text sizes
 ]
 
 // Section slide
@@ -80,19 +75,22 @@
 ]
 
 #bips-slide(title: "Technical Advantages")[
-  Compared to traditional presentation tools:
+  #two-columns[
+    === PowerPoint vs. Typst
+    - Version control friendly
+    - Programmatic generation
+    - Clean, modern syntax
 
-  === PowerPoint vs. Typst
-  - Typst: Version control friendly, programmatic generation
-  - PowerPoint: WYSIWYG editing, widespread compatibility
-
-  === LaTeX Beamer vs. Typst
-  - Typst: Much faster compilation, cleaner syntax
-  - Beamer: Mature ecosystem, extensive documentation
-
-  === Markdown slides vs. Typst
-  - Typst: Superior mathematical typesetting, better layouts
-  - Markdown: Simpler syntax for basic presentations
+    === LaTeX Beamer vs. Typst
+    - Much faster compilation
+    - Cleaner syntax
+    - Comparable math typesetting
+  ][
+    === Markdown slides vs. Typst
+    - Superior math typesetting
+    - Better layout control
+    - Richer formatting options
+  ]
 ]
 
 // Empty slide example
@@ -122,17 +120,13 @@
   - Second point appears on next click
   #pause
   - Final point completes the slide
-  - Note that slide numebrs with pauses are still buggy somehow
+  - Note that slide numbers stay consistent across pause states
 
   #pause
-  You can also reveal blocks of content:
-  #pause
 
-  Mathematical equations work too:
-  $ f(x) = x^2 + 2x + 1 $
+  You can also reveal equations: $f(x) = x^2 + 2x + 1$
   #pause
-  $ f(x) = (x + 1)^2 $
-
+  And simplify them: $f(x) = (x + 1)^2$
 ]
 
 #bips-slide(
@@ -194,7 +188,7 @@
     ],
     [
       ```typst
-      #import "@local/bips-typst:0.1.1": *
+      #import "@local/bips-typst:0.2.0": *
 
       #show: bips-theme
 
@@ -215,20 +209,19 @@
 ]
 
 #bips-slide(title: "Customization Options")[
-  Theme customization through global variables:
-
-  *Typography Configuration:*
-  - Font sizes for all elements (titles, subtitles, body text)
-  - Font colors for all text types
-  - Font weights (bold, regular, etc.)
-  - List and enumeration spacing
-
-  *Easy Customization:*
-  - All variables organized at the top of `bips-theme.typ`
-  - Color utility functions: `#blue[]`, `#orange[]`, `#green[]`, `#gray[]`
-  - Configurable emphasis and strong text styling
-  - Page numbering starts at 1 for content slides
-  - Separate scaling for `inline code` (0.95) and code blocks (0.8)
+  #two-columns[
+    *Typography:*
+    - Font sizes for all elements
+    - Font colors and weights
+    - List and enumeration spacing
+    - `#small[]` and `#tiny[]` utilities
+  ][
+    *Styling:*
+    - Color utilities: `#blue[]`, `#orange[]`, etc.
+    - Configurable emphasis and bold styling
+    - `inline code` and code block scaling
+    - Page numbering from content slide 1
+  ]
 ]
 
 // Final slide
@@ -236,5 +229,5 @@
   thanks-text: "Thank you for your attention!",
   contact-author: "Dr. Jane Doe",
   email: "jane.doe@leibniz-bips.de",
-  qr-url: "https://codeberg.org/lksbrk/bips-typst", // QR code linking to presentation URL
+  qr-url: "https://github.com/bips-hb/bips-typst", // QR code linking to presentation URL
 )

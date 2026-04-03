@@ -12,13 +12,9 @@ all:
     # Compile gallery demos
     for file in gallery/*.typ; do
         basename=$(basename "$file")
-        # Skip the theme file itself  
-        if [[ "$basename" == "bips-theme.typ" ]]; then
-            continue
-        fi
         echo "📄 Compiling $basename..."
         start_time=$(gdate +%s%3N 2>/dev/null || date +%s%3N)
-        if typst compile "$file"; then
+        if typst compile --root . "$file"; then
             end_time=$(gdate +%s%3N 2>/dev/null || date +%s%3N)
             duration=$((end_time - start_time))
             echo "   ✅ Compiled in ${duration}ms"
@@ -48,7 +44,7 @@ test:
     echo "🧪 Running BIPS Theme Test Suite..."
     
     # Compile test suite
-    typst compile tests/test-suite.typ tests/test-suite.pdf
+    typst compile --root . tests/test-suite.typ tests/test-suite.pdf
     
     if [ $? -ne 0 ]; then
         echo "❌ Test suite compilation failed!"
@@ -60,8 +56,8 @@ test:
     echo "📄 Total pages generated: $PAGES"
     
     # Expected range (rough estimate)
-    MIN_EXPECTED=22
-    MAX_EXPECTED=26
+    MIN_EXPECTED=27
+    MAX_EXPECTED=31
     
     if [ $PAGES -ge $MIN_EXPECTED ] && [ $PAGES -le $MAX_EXPECTED ]; then
         echo "✅ Page count within expected range ($MIN_EXPECTED-$MAX_EXPECTED)"

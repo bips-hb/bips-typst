@@ -1,4 +1,4 @@
-#import "@preview/touying:0.6.1": *
+#import "@preview/touying:0.7.0": *
 #import "@preview/codetastic:0.2.2": qrcode
 
 // ===================================================================
@@ -34,15 +34,10 @@
 // Main content styling
 #let font-size-base = 18pt
 #let font-color-base = bips-text-gray
-#let font-weight-base = "regular"
 
 #let font-size-small = 14pt
-#let font-color-small = bips-text-gray
-#let font-weight-small = "regular"
 
 #let font-size-tiny = 12pt
-#let font-color-tiny = bips-text-gray
-#let font-weight-tiny = "regular"
 
 // Regular heading styling
 #let font-size-heading-1 = 20pt
@@ -110,9 +105,6 @@
 #let font-weight-thanks-slide-contact = "regular"
 
 // Page number styling
-// Note: Page numbers cannot be customized per-slide due to Touying's architecture.
-// The footer (containing page numbers) is rendered at the page level, not slide level,
-// making per-slide size customization impossible without significant refactoring.
 #let font-size-page-number = 18pt
 #let font-color-page-number = bips-text-gray
 #let font-weight-page-number = "regular"
@@ -144,6 +136,24 @@
   }
   return none
 }
+
+/// State used to pass computed sizes from bips-theme() to slide functions.
+/// Initialized with module-level defaults; updated by bips-theme() with
+/// effective values that account for base-size scaling and explicit overrides.
+#let _bips-sizes = state("bips-sizes", (
+  slide-title: font-size-slide-title,
+  slide-title-only: font-size-slide-title-only,
+  slide-subtitle: font-size-slide-subtitle,
+  page-number: font-size-page-number,
+  small: font-size-small,
+  tiny: font-size-tiny,
+))
+
+/// Render content at a smaller size (scales with base-size)
+#let small(body) = context text(size: _bips-sizes.get().small)[#body]
+
+/// Render content at the smallest size (scales with base-size)
+#let tiny(body) = context text(size: _bips-sizes.get().tiny)[#body]
 
 // ===================================================================
 // BACKGROUND UTILITY FUNCTIONS
@@ -185,14 +195,6 @@
 ) = {
   // Calculate effective font sizes (use override if provided, otherwise theme default)
   let effective-font-size-base = pick-first(base-size, font-size-base)
-  let effective-font-size-slide-title = pick-first(slide-title-size, font-size-slide-title)
-  let effective-font-size-slide-subtitle = pick-first(slide-subtitle-size, font-size-slide-subtitle)
-  let effective-font-size-heading-1 = pick-first(heading-1-size, font-size-heading-1)
-  let effective-font-size-heading-2 = pick-first(heading-2-size, font-size-heading-2)
-  let effective-font-size-heading-3 = pick-first(heading-3-size, font-size-heading-3)
-  let effective-font-size-small = pick-first(small-size, font-size-small)
-  let effective-font-size-tiny = pick-first(tiny-size, font-size-tiny)
-  let effective-font-size-page-number = pick-first(page-number-size, font-size-page-number)
   let effective-code-block-scale = pick-first(code-block-scale, font-scale-code-block)
   let effective-code-inline-scale = pick-first(code-inline-scale, font-scale-code-inline)
 
@@ -202,6 +204,37 @@
     size: effective-font-size-base,
     fill: font-color-base,
   )
+
+  // Heading styles use em-based defaults so they scale proportionally with base-size.
+  // Explicit pt overrides take precedence over the em-based defaults.
+  show heading.where(level: 1): set text(
+    size: pick-first(heading-1-size, 1.11em),
+    weight: font-weight-heading-1,
+    fill: font-color-heading-1,
+  )
+  show heading.where(level: 2): set text(
+    size: pick-first(heading-2-size, 1em),
+    weight: font-weight-heading-2,
+    fill: font-color-heading-2,
+  )
+  show heading.where(level: 3): set text(
+    size: pick-first(heading-3-size, 0.89em),
+    weight: font-weight-heading-3,
+    fill: font-color-heading-3,
+  )
+
+  // Publish effective sizes via state so slide functions can read them.
+  // Sizes that aren't overridden explicitly use the module-level defaults,
+  // which means they don't auto-scale with base-size. Use em-based values
+  // in the state to get proportional scaling where appropriate.
+  _bips-sizes.update((
+    slide-title: pick-first(slide-title-size, font-size-slide-title),
+    slide-title-only: font-size-slide-title-only,
+    slide-subtitle: pick-first(slide-subtitle-size, font-size-slide-subtitle),
+    page-number: pick-first(page-number-size, font-size-page-number),
+    small: pick-first(small-size, font-size-small),
+    tiny: pick-first(tiny-size, font-size-tiny),
+  ))
 
   // Emphasis (_text_) in BIPS blue (color only, no italic)
   show emph: it => text(fill: font-color-emphasis, style: "italic", weight: "regular")[#it.body]
@@ -257,13 +290,10 @@
   show raw.where(block: true): set text(size: effective-code-block-scale * 1em)
   show raw.where(block: false): set text(size: effective-code-inline-scale * 1em)
 
-  // Note: Heading styles are handled within slide functions to avoid
-  // interference with Touying's animation system (#pause)
-
   // Use Touying's infrastructure with BIPS customizations
   touying-slides(
     config-page(
-      paper: "presentation-" + aspect-ratio,
+      ..utils.page-args-from-aspect-ratio(aspect-ratio),
       margin: (top: 1.55cm, bottom: 1.55cm, left: 1.55cm, right: 1.75cm),
       background: bips-background(show-logo: true),
     ),
@@ -301,13 +331,13 @@
       top + right,
       dx: -0.5cm,
       dy: 2.7cm,
-      text(
-        size: font-size-page-number,
+      context text(
+        size: _bips-sizes.get().page-number,
         fill: font-color-page-number,
         weight: font-weight-page-number,
-      )[#context utils.slide-counter.display()],
+      )[#utils.slide-counter.display()],
     )
-    // Apply slide-specific styling overrides including headings
+    // Apply slide-specific styling overrides
     #show raw.where(block: true): set text(
       size: pick-first(code-block-scale, font-scale-code-block) * 1em,
     )
@@ -315,17 +345,9 @@
       size: pick-first(code-inline-scale, font-scale-code-inline) * 1em,
     )
 
-    // Handle heading styling within slides to avoid animation interference
-    #show heading.where(level: 3): set text(
-      size: font-size-heading-3,
-      weight: font-weight-heading-3,
-      fill: font-color-heading-3,
-    )
-
     // Helper to wrap body with optional alignment and text size
     #let render-body(body) = {
-      let content-size = pick-first(text-size, none)
-      let styled = if content-size != none { text(size: content-size)[#body] } else { body }
+      let styled = if text-size != none { text(size: text-size)[#body] } else { body }
       if content-align != none {
         // Only add vertical fills when alignment has a vertical component
         let has-vertical = content-align == horizon or content-align == bottom or content-align in (center + horizon, center + bottom, left + horizon, left + bottom, right + horizon, right + bottom)
@@ -337,49 +359,55 @@
       }
     }
 
+    // Title area is wrapped in context to read state-based sizes.
+    // IMPORTANT: body/render-body must stay OUTSIDE context to preserve
+    // Touying's ability to split content at #pause boundaries.
     #if title != none or subtitle != none {
       // Fixed-height title area keeps gradient line at same position
       // regardless of whether subtitle is present
-      box(height: slide-title-area-height, width: 100%)[
-        #if title != none and subtitle != none {
-          // Both title and subtitle - bottom-aligned in the fixed area
-          align(bottom)[
-            #block(width: 90%)[
+      context {
+        let sizes = _bips-sizes.get()
+        box(height: slide-title-area-height, width: 100%)[
+          #if title != none and subtitle != none {
+            // Both title and subtitle - bottom-aligned in the fixed area
+            align(bottom)[
+              #block(width: 90%)[
+                #text(
+                  size: pick-first(title-size, sizes.slide-title),
+                  weight: font-weight-slide-title,
+                  fill: font-color-slide-title,
+                )[#title]
+              ]
+              #v(-0.5em)
+              #block(width: 90%)[
+                #text(
+                  size: pick-first(subtitle-size, sizes.slide-subtitle),
+                  weight: font-weight-slide-subtitle,
+                  fill: font-color-slide-subtitle,
+                )[#subtitle]
+              ]
+            ]
+          } else if title != none {
+            // Title only - centered vertically, slightly larger
+            align(horizon)[
               #text(
-                size: pick-first(title-size, font-size-slide-title),
+                size: pick-first(title-size, sizes.slide-title-only),
                 weight: font-weight-slide-title,
                 fill: font-color-slide-title,
               )[#title]
             ]
-            #v(-0.5em)
-            #block(width: 90%)[
+          } else if subtitle != none {
+            // Subtitle only - centered vertically
+            align(horizon)[
               #text(
-                size: pick-first(subtitle-size, font-size-slide-subtitle),
+                size: pick-first(subtitle-size, sizes.slide-subtitle),
                 weight: font-weight-slide-subtitle,
                 fill: font-color-slide-subtitle,
               )[#subtitle]
             ]
-          ]
-        } else if title != none {
-          // Title only - centered vertically, slightly larger
-          align(horizon)[
-            #text(
-              size: pick-first(title-size, font-size-slide-title-only),
-              weight: font-weight-slide-title,
-              fill: font-color-slide-title,
-            )[#title]
-          ]
-        } else if subtitle != none {
-          // Subtitle only - centered vertically
-          align(horizon)[
-            #text(
-              size: pick-first(subtitle-size, font-size-slide-subtitle),
-              weight: font-weight-slide-subtitle,
-              fill: font-color-slide-subtitle,
-            )[#subtitle]
-          ]
-        }
-      ]
+          }
+        ]
+      }
 
       // Gradient line after title/subtitle - always at same position
       rect(
@@ -424,8 +452,6 @@
   slide(
     config: config-common(freeze-slide-counter: true),
     setting: body => {
-      set page(background: bips-background(show-logo: true))
-
       set align(center)
 
       v(1fr)
@@ -555,26 +581,24 @@
 #let section-slide(
   section-title,
   show-logo: true,     // Show BIPS logo by default (department requirement)
-  show-page-number: false,  // Hide page number by default (cleaner look)
 ) = {
   slide(
-    setting: body => {
-      set page(background: bips-background(show-logo: show-logo))
-      
-      // Add invisible heading for PDF outline/bookmarks
-      place(hide[#heading(level: 1, outlined: true)[#section-title]])
-      
-      set align(center + horizon)
-      
-      text(
+    config: utils.merge-dicts(
+      config-common(freeze-slide-counter: true),
+      config-page(background: bips-background(show-logo: show-logo)),
+    ),
+  )[
+    // Invisible heading for PDF outline/bookmarks
+    #place(hide[#heading(level: 1, outlined: true)[#section-title]])
+
+    #align(center + horizon)[
+      #text(
         size: font-size-section-slide,
         weight: font-weight-section-slide,
         fill: font-color-section-slide,
-      )[
-        #section-title
-      ]
-    },
-  )[]
+      )[#section-title]
+    ]
+  ]
 }
 
 // -------------------------------------------------------------------
@@ -613,9 +637,12 @@
   email: "",
   qr-url: none, // Optional: URL to generate QR code for (replaces website URL)
 ) = {
-  slide[
-    #set page(background: none)
-
+  slide(
+    config: utils.merge-dicts(
+      config-common(freeze-slide-counter: true),
+      config-page(background: none),
+    ),
+  )[
     // 3-row grid layout: thanks text, QR/website, contact+logo
     #grid(
       rows: (1fr, 1fr, auto),
@@ -693,17 +720,17 @@
 // Empty Slide
 // -------------------------------------------------------------------
 
-#let empty-slide(..content) = {
+#let empty-slide(body) = {
   slide(
-    setting: body => {
-      set page(background: bips-background(show-logo: false))
-      content.pos().join()
-    },
-  )[]
+    config: utils.merge-dicts(
+      config-common(freeze-slide-counter: true),
+      config-page(background: bips-background(show-logo: false)),
+    ),
+  )[#body]
 }
 
 // ===================================================================
-// UTILITY FUNCTIONS
+// LAYOUT AND COLOR UTILITIES
 // ===================================================================
 
 // -------------------------------------------------------------------

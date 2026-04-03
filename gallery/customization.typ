@@ -1,4 +1,4 @@
-#import "@local/bips-typst:0.1.1": *
+#import "../bips-typst.typ": *
 
 // Example of theme customization options
 #show: bips-theme.with(
@@ -144,11 +144,11 @@
   - _Emphasized text_ appears in blue italic
   - #link("https://typst.app")[Links] appear in blue with underline
   
-  For advanced color customization, edit the color variables at the top of `bips-theme.typ`.
+  For advanced color customization, edit the color variables at the top of `theme.typ`.
 ]
 
 #bips-slide(title: "Advanced Customization")[
-  For deeper customization, edit variables in `bips-theme.typ`:
+  For deeper customization, edit variables in `theme.typ`:
   
   ```typst
   // Color definitions

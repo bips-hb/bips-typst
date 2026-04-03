@@ -2,9 +2,9 @@
 #import "theme.typ": *
 
 // Note: Basic Touying functions like `pause` and `slide` are already available 
-// through theme.typ's `#import "@preview/touying:0.6.1": *`
+// through theme.typ's `#import "@preview/touying:0.7.0": *`
 
 // Re-export additional Touying utilities for user convenience
 // These animation and utility functions are useful but not in Touying's main namespace
-#import "@preview/touying:0.6.1": meanwhile, uncover, only, alternatives
-#import "@preview/touying:0.6.1": utils  // Includes slide-counter and other utilities
+#import "@preview/touying:0.7.0": meanwhile, uncover, only, alternatives
+#import "@preview/touying:0.7.0": utils  // Includes slide-counter and other utilities

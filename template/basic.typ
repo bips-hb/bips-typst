@@ -1,7 +1,7 @@
 // Local package (after running `just install` in the bips-typst repo):
-#import "@local/bips-typst:0.1.1": *
+#import "@local/bips-typst:0.2.0": *
 // When published to Typst Universe, change to:
-// #import "@preview/bips-typst:0.1.1": *
+// #import "@preview/bips-typst:0.2.0": *
 
 #show: bips-theme
 

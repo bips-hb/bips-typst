@@ -1,4 +1,4 @@
-#import "@local/bips-typst:0.1.1": *
+#import "../bips-typst.typ": *
 
 #show: bips-theme.with(base-size: 17pt)
 

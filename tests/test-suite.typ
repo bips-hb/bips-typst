@@ -1,4 +1,4 @@
-#import "@local/bips-typst:0.1.1": *
+#import "../bips-typst.typ": *
 
 // Test Suite for BIPS Theme
 // Run: typst compile tests/test-suite.typ tests/test-suite.pdf
@@ -162,6 +162,63 @@
   email: "test@leibniz-bips.de",
   qr-url: "https://github.com/bips-hb/bips-typst",
 )
+
+// ===================================================================
+// UTILITY AND STYLING TESTS
+// ===================================================================
+
+// Test 11: small[] and tiny[] utilities (Expected: 1 page)
+#bips-slide(title: "Test 11: Small and Tiny Utilities")[
+  Normal text at base size.
+
+  #small[This text uses the #raw("#small[]") utility — smaller than base.]
+
+  #tiny[This text uses the #raw("#tiny[]") utility — smallest size.]
+
+  Back to normal text.
+]
+
+// Test 12: compact layout helper (Expected: 1 page)
+#bips-slide(title: "Test 12: Compact Layout")[
+  #two-columns[
+    #compact[
+      - Compact item A
+      - Compact item B
+      - Compact item C
+      - Compact item D
+    ]
+  ][
+    #compact(spacing: 0.2em, leading: 0.2em)[
+      - Extra compact A
+      - Extra compact B
+      - Extra compact C
+      - Extra compact D
+    ]
+  ]
+]
+
+// Test 13: content-align parameter (Expected: 1 page)
+#bips-slide(title: "Test 13: Content Alignment", content-align: center + horizon)[
+  This content should be centered both horizontally and vertically.
+]
+
+// Test 14: vfill helper (Expected: 1 page)
+#bips-slide(title: "Test 14: Vertical Fill")[
+  Top content.
+  #vfill
+  Bottom content pushed down by `#vfill`.
+]
+
+// Test 15: Heading levels 1, 2, 3 styling (Expected: 1 page)
+#bips-slide(title: "Test 15: Heading Levels")[
+  = Heading Level 1
+
+  == Heading Level 2
+
+  === Heading Level 3
+
+  All headings should render in BIPS blue with bold weight.
+]
 
 // ===================================================================
 // SUMMARY

@@ -18,7 +18,12 @@ Ready-to-use examples showcasing different features of the BIPS Typst theme. Per
 |------|--------------|-------------|
 | `complete.typ` | All features in one presentation | Learning everything available |
 | `customization.typ` | Font sizes and styling options | Non-standard formatting needs |
+| `font-customization.typ` | Typography options | Fine-tuning text appearance |
+| `content-elements.typ` | Tables, code, math | Technical presentations |
+| `bibliography.typ` | References | Academic papers |
 | `qr-code.typ` | QR codes for presentation sharing | Conference presentations |
+| `aspect-ratio.typ` | Non-default aspect ratios | Special display requirements |
+| `lecture-demo.typ` | Longer example | Extended presentations |
 
 ## Quick Start
 
@@ -55,7 +60,7 @@ just clean
 ## Creating Your Own
 
 1. Copy `basic.typ` as your starting point
-2. Import the theme: `#import "bips-theme.typ": *`
+2. Import the theme: `#import "@local/bips-typst:0.2.0": *`
 3. Customize as needed using examples from other files
 4. Compile and present!
 
