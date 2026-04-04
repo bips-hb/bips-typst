@@ -63,7 +63,7 @@
 
 #let font-size-slide-subtitle = 20pt
 #let font-color-slide-subtitle = bips-blue
-#let font-weight-slide-subtitle = "bold"
+#let font-weight-slide-subtitle = "regular"
 
 // Title slide styling
 #let font-size-title-slide-main = 26pt
@@ -378,7 +378,7 @@
                   fill: font-color-slide-title,
                 )[#title]
               ]
-              #v(-0.5em)
+              #v(-0.25em)
               #block(width: 90%)[
                 #text(
                   size: pick-first(subtitle-size, sizes.slide-subtitle),
