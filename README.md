@@ -175,6 +175,11 @@ The theme re-exports Touying's animation functions:
 ```typst
 #show: bips-theme.with(
   aspect-ratio: "16-9",       // default
+  // Font families (string or array with fallbacks)
+  font: "Fira Sans",
+  code-font: "Fira Mono",
+  math-font: "New Computer Modern Math",
+  // Font sizes
   base-size: 20pt,            // scales headings, small/tiny proportionally
   slide-title-size: 28pt,     // explicit pt overrides take precedence
   slide-subtitle-size: 22pt,
@@ -198,21 +203,13 @@ The theme re-exports Touying's animation functions:
 
 ## Examples
 
-The `gallery/` directory contains 13 example presentations:
+The `gallery/` directory contains example presentations:
 
 - `basic.typ` — starter template
 - `complete.typ` — comprehensive feature showcase
-- `animations.typ` — step-by-step reveals
-- `columns.typ` — multi-column layouts and `#compact`
-- `multi-author.typ` — multiple affiliations
-- `callouts.typ` — callout box types
-- `customization.typ` — font and styling overrides
-- `bibliography.typ` — references
-- `content-elements.typ` — tables, code, math
-- `font-customization.typ` — typography options
-- `qr-code.typ` — QR code on thanks slide
-- `aspect-ratio.typ` — non-default aspect ratios
-- `lecture-demo.typ` — longer example
+- `bibliography.typ` — citations and references
+- `aspect-ratio.typ` — 4:3 format
+- `lecture-demo.typ` — realistic 100-slide scale test
 
 ## Development
 
@@ -238,10 +235,22 @@ gallery/         # example presentations
 tests/           # test suite
 ```
 
+## Fonts
+
+The theme uses [Fira Sans](https://fonts.google.com/specimen/Fira+Sans) for body text and [Fira Mono](https://fonts.google.com/specimen/Fira+Mono) for code, with automatic fallbacks if they are not installed:
+
+| Role | Preferred | Fallback |
+|------|-----------|----------|
+| Body text | Fira Sans | Noto Sans |
+| Code | Fira Mono | DejaVu Sans Mono (Typst built-in) |
+| Math | New Computer Modern Math | (Typst built-in) |
+
+For the best results, install the Fira fonts. Override with the `font:`, `code-font:`, and `math-font:` parameters on `bips-theme()`.
+
 ## Requirements
 
 - Typst >= 0.12.0
-- Dependencies: touying 0.6.1, codetastic 0.2.2 (resolved automatically)
+- Dependencies: touying 0.7.0, codetastic 0.2.2 (resolved automatically)
 
 ## License
 

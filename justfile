@@ -40,11 +40,11 @@ all:
 
 # Run tytanic test suite (compile-only tests for all theme features)
 test:
-    tt run
+    tt run --use-system-fonts
 
 # Run tytanic tests with verbose output
 test-verbose:
-    tt run -v
+    tt run --use-system-fonts -v
 
 # Format all Typst source files with typstyle
 format:

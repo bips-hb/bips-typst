@@ -1,34 +1,30 @@
-// Local package (after running `just install` in the bips-typst repo):
-#import "@local/bips-typst:0.2.0": *
-// When published to Typst Universe, change to:
-// #import "@preview/bips-typst:0.2.0": *
+// To use with a local installation (after `just install`):
+// #import "@local/bips-typst:0.2.0": *
+#import "@preview/bips-typst:0.2.0": *
 
-#show: bips-theme.with(
-  base-size: 18pt,
-  slide-title-size: 26pt,
-)
+#show: bips-theme
 
 #title-slide(
   title: "Complete BIPS Presentation Example",
   subtitle: "Showcasing all features",
   authors: (
-    "Jane Doe" + inst(1, 2),
-    "John Smith" + inst(1),
+    [Jane Doe#inst(1, 2)],
+    [John Smith#inst(1)],
   ),
   institutes: (
     bips_en,
     "University of Bremen",
   ),
   date: datetime.today().display(),
-  occasion: "Annual Conference 2025",
+  occasion: "Annual Conference",
 )
 
 #bips-slide(title: "Features Overview")[
   This template includes:
 
-  - Multiple slide types
-  - Callout boxes
-  - Animations
+  - Multiple slide types (content, section, thanks, empty)
+  - Callout boxes (note, tip, warning, important)
+  - Animations via `#pause`, `#uncover`, `#only`
   - Multi-column layouts
   - Bibliography support
   - QR code generation
@@ -41,16 +37,12 @@
     This is a note callout.
   ]
 
-  #callout(type: "tip")[
-    This is a tip callout.
+  #callout(type: "tip", title: "Pro Tip")[
+    Callouts can have custom titles.
   ]
 
   #callout(type: "warning")[
     This is a warning callout.
-  ]
-
-  #callout(type: "important")[
-    This is an important callout.
   ]
 ]
 
@@ -64,6 +56,18 @@
   #pause
 
   - Third item appears last
+]
+
+#bips-slide(title: "Two-Column Layout")[
+  #two-columns[
+    *Left column*
+
+    Text, images, or any content.
+  ][
+    *Right column*
+
+    Side-by-side comparisons.
+  ]
 ]
 
 #thanks-slide(

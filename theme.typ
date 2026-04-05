@@ -32,8 +32,9 @@
 // ===================================================================
 
 // Font families (with fallbacks for systems without Fira fonts)
-#let font-family-text = ("Fira Sans", "Noto Sans", "Liberation Sans")
-#let font-family-code = ("Fira Mono", "Noto Sans Mono", "Liberation Mono")
+// Fallback chains: preferred → common alternatives → Typst built-in
+#let font-family-text = ("Fira Sans", "Noto Sans")
+#let font-family-code = ("Fira Mono", "DejaVu Sans Mono")
 #let font-family-math = ("New Computer Modern Math",)
 
 // Main content styling
@@ -188,6 +189,10 @@
   // Title alignment inside the title area box (e.g. left, center, right)
   // Applies to the horizontal alignment of slide titles/subtitles.
   title-align: left,
+  // Font family overrides (string or array of strings with fallbacks)
+  font: none,
+  code-font: none,
+  math-font: none,
   // Global font size overrides (optional)
   base-size: none,
   slide-title-size: none,
@@ -213,12 +218,18 @@
     font-scale-code-inline,
   )
 
+  // Resolve font families
+  let effective-font = pick-first(font, font-family-text)
+  let effective-code-font = pick-first(code-font, font-family-code)
+  let effective-math-font = pick-first(math-font, font-family-math)
+
   // Global text and styling configuration
   show: set text(
-    font: ("Fira Sans", "Noto Sans", "Liberation Sans"),
+    font: effective-font,
     size: effective-font-size-base,
     fill: font-color-base,
   )
+  show math.equation: set text(font: effective-math-font)
 
   // Heading styles use em-based defaults so they scale proportionally with base-size.
   // Explicit pt overrides take precedence over the em-based defaults.
@@ -314,7 +325,7 @@
   }
 
   // Code styling - Fira Mono pairs with Fira Sans for consistent metrics
-  show raw: set text(font: ("Fira Mono", "Noto Sans Mono", "Liberation Mono"))
+  show raw: set text(font: effective-code-font)
   show raw.where(block: true): set text(size: effective-code-block-scale * 1em)
   show raw.where(block: false): set text(
     size: effective-code-inline-scale * 1em,

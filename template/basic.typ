@@ -1,7 +1,6 @@
-// Local package (after running `just install` in the bips-typst repo):
-#import "@local/bips-typst:0.2.0": *
-// When published to Typst Universe, change to:
-// #import "@preview/bips-typst:0.2.0": *
+// To use with a local installation (after `just install`):
+// #import "@local/bips-typst:0.2.0": *
+#import "@preview/bips-typst:0.2.0": *
 
 #show: bips-theme
 
@@ -15,7 +14,7 @@
 
 #bips-slide(title: "Introduction")[
   Your content here...
-  
+
   - Bullet points
   - Math: $x^2 + y^2 = z^2$
   - *Bold* and _italic_ text
