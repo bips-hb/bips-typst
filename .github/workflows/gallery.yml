@@ -39,10 +39,18 @@ jobs:
       - name: Download Fira fonts
         run: |
           mkdir -p .fonts
-          curl -sL "https://fonts.google.com/download?family=Fira+Sans" -o /tmp/fira-sans.zip
-          curl -sL "https://fonts.google.com/download?family=Fira+Mono" -o /tmp/fira-mono.zip
-          unzip -qo /tmp/fira-sans.zip -d .fonts/
-          unzip -qo /tmp/fira-mono.zip -d .fonts/
+          base=https://github.com/google/fonts/raw/main/ofl
+          for f in \
+            firasans/FiraSans-Regular.ttf \
+            firasans/FiraSans-Italic.ttf \
+            firasans/FiraSans-Bold.ttf \
+            firasans/FiraSans-BoldItalic.ttf \
+            firasans/FiraSans-Light.ttf \
+            firasans/FiraSans-SemiBold.ttf \
+            firamono/FiraMono-Regular.ttf \
+            firamono/FiraMono-Bold.ttf; do
+            curl -sL "$base/$f" -o ".fonts/$(basename "$f")"
+          done
 
       - name: Build gallery
         run: |
