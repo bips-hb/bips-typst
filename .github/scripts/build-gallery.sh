@@ -3,11 +3,17 @@ set -euo pipefail
 
 mkdir -p _site
 
+# Use .fonts directory if present (CI downloads Fira fonts there)
+font_args=()
+if [ -d .fonts ]; then
+  font_args=(--font-path .fonts)
+fi
+
 # Compile each gallery demo and generate a thumbnail
 for src in gallery/*.typ; do
   name=$(basename "$src" .typ)
   echo "Compiling $name..."
-  typst compile --root . "$src" "_site/${name}.pdf"
+  typst compile --root . "${font_args[@]}" "$src" "_site/${name}.pdf"
   pdftoppm -png -singlefile -r 150 "_site/${name}.pdf" "_site/${name}"
 done
 

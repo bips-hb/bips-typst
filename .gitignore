@@ -9,6 +9,7 @@ CLAUDE.local.md
 
 # GitHub Pages build output
 _site/
+.fonts/
 
 # OS files
 .DS_Store

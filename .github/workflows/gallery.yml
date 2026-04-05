@@ -34,7 +34,15 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y poppler-utils fonts-fira-sans
+          sudo apt-get install -y poppler-utils
+
+      - name: Download Fira fonts
+        run: |
+          mkdir -p .fonts
+          curl -sL "https://fonts.google.com/download?family=Fira+Sans" -o /tmp/fira-sans.zip
+          curl -sL "https://fonts.google.com/download?family=Fira+Mono" -o /tmp/fira-mono.zip
+          unzip -qo /tmp/fira-sans.zip -d .fonts/
+          unzip -qo /tmp/fira-mono.zip -d .fonts/
 
       - name: Build gallery
         run: |
