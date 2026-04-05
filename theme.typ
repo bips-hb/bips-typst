@@ -68,15 +68,15 @@
 // Title slide styling
 #let font-size-title-slide-main = 26pt
 #let font-color-title-slide-main = bips-blue
-#let font-weight-title-slide-main = "bold"
+#let font-weight-title-slide-main = 500
 
 #let font-size-title-slide-subtitle = 20pt
 #let font-color-title-slide-subtitle = bips-blue
-#let font-weight-title-slide-subtitle = "bold"
+#let font-weight-title-slide-subtitle = 400
 
 #let font-size-title-slide-author = 20pt
 #let font-color-title-slide-author = bips-blue
-#let font-weight-title-slide-author = "bold"
+#let font-weight-title-slide-author = 500
 
 #let font-size-title-slide-institute = 18pt
 #let font-color-title-slide-institute = bips-text-gray
@@ -452,7 +452,7 @@
       // Gradient line after title/subtitle - always at same position
       rect(
         width: 85%,
-        height: 1pt,
+        height: 0.75pt,
         fill: gradient.linear(
           bips-text-gray,
           white,
@@ -510,7 +510,7 @@
         )
       }
 
-      v(1fr)
+      v(0.5fr)
 
       // Subtitle
       if subtitle != none {
@@ -620,7 +620,7 @@
 
 #let section-slide(
   section-title,
-  show-logo: true, // Show BIPS logo by default (department requirement)
+  show-logo: true, // Show BIPS logo by default (institutional default)
 ) = {
   slide(
     config: utils.merge-dicts(
@@ -630,7 +630,7 @@
   )[
     // Invisible heading for PDF outline/bookmarks
     #place(hide[#heading(level: 1, outlined: true)[#section-title]])
-
+    
     #align(center + horizon)[
       #text(
         size: font-size-section-slide,

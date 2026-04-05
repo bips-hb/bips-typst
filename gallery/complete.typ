@@ -98,7 +98,7 @@
     Custom widths: `two-columns(columns: (2fr, 1fr))[...][...]`
   ]
 
-  #v(0.5em)
+  #v(1em)
 
   // [BIPS] `three-columns[][][]` — three equal columns
   #three-columns[
@@ -130,7 +130,7 @@
   // [Typst] Basic image inclusion with sizing:
   #two-columns[
     #align(center)[
-      #image("/bips-logo.png", width: 60%)
+      #image("/bips-logo.png", height: 50%)
     ]
     Images are included with `#image()` and sized
     via `width` or `height`.
@@ -151,7 +151,7 @@
       columns: 3,
       [*Method*], [*MSE*], [*AUC*],
       [Random Forest], [0.042], [0.91],
-      [Gradient Boost], [0.038], [0.93],
+      [Gradient Boosting], [0.038], [0.93],
       [Neural Net], [0.035], [0.94],
     )
   ][
@@ -256,7 +256,7 @@
     *Step 3:* Model fitting and validation
   ]
 
-  #small[(Click through to cycle between steps)]
+  #small[(Switch slides to cycle between steps)]
 ]
 
 // [Touying] `#meanwhile` — synchronize multi-column animations.
@@ -305,12 +305,14 @@
   title: "Per-Slide Overrides",
   subtitle: "BIPS theme: text-size, title-size, code-block-scale",
   text-size: 16pt,
+  code-block-scale: 1, // Keep code block at 100% so it's not too small
 )[
   // [BIPS] Individual slides can override text-size, title-size,
   // subtitle-size, code-block-scale, and code-inline-scale.
   This slide uses `text-size: 16pt` (default is 18pt), which allows
-  fitting more content when needed.
-
+  fitting more content when needed.\
+  You can adjust global defaults:
+  
   // [Typst] Code blocks are auto-styled with Fira Mono:
   ```typst
   #show: bips-theme.with(
@@ -318,6 +320,17 @@
     heading-1-size: 24pt,     // Explicit heading override
     code-block-scale: 0.75,   // Smaller code blocks
   )
+  ```
+  
+  Or override defaults per slide
+  
+  ```typst
+    #bips-slide(
+      title: "Per-Slide Overrides",
+      subtitle: "BIPS theme: text-size, title-size, code-block-scale",
+      text-size: 16pt,
+      code-block-scale: 1, // Keep code block at 100% so it's not too small
+    )[...]
   ```
 ]
 
