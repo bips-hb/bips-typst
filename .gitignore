@@ -7,5 +7,8 @@ CLAUDE.local.md
 # Typst build artifacts
 *.pdf
 
+# GitHub Pages build output
+_site/
+
 # OS files
 .DS_Store
