@@ -1,6 +1,6 @@
 #import "../bips-typst.typ": *
 
-#show: bips-theme.with(base-size: 17pt)
+#show: bips-theme.with(base-size: 16pt)
 
 // ============================================================================
 // INTRODUCTION TO STATISTICAL MODELING - LECTURE DEMO
@@ -86,18 +86,21 @@
 ]
 
 #bips-slide(title: "Types of Statistical Models")[
-  === By Response Variable Type
-  - *Continuous*: Linear regression, ANOVA
-  - *Binary*: Logistic regression
-  - *Count*: Poisson regression
-  - *Categorical*: Multinomial regression
-  - *Time-to-event*: Survival models
+  #two-columns[
+    == By Response Variable Type
+    - *Continuous*: Linear regression, ANOVA
+    - *Binary*: Logistic regression
+    - *Count*: Poisson regression
+    - *Categorical*: Multinomial regression
+    - *Time-to-event*: Survival models
+  ][
+    == By Complexity
+    - *Simple*: One predictor variable
+    - *Multiple*: Several predictor variables
+    - *Multivariate*: Multiple response variables
+    - *Hierarchical*: Nested or grouped data
+  ]
 
-  === By Complexity
-  - *Simple*: One predictor variable
-  - *Multiple*: Several predictor variables
-  - *Multivariate*: Multiple response variables
-  - *Hierarchical*: Nested or grouped data
 ]
 
 #bips-slide(title: "Model Building Philosophy", text-size: 16pt)[
@@ -111,7 +114,7 @@
   8. *Interpretation*: Draw conclusions
 
   #callout(type: "tip")[
-    "All models are wrong, but some are useful." - George Box
+    "All models are wrong, but some are useful." --- George Box
   ]
 ]
 
@@ -144,7 +147,7 @@
 
 #bips-slide(title: "Parameter Estimation", subtitle: "Least Squares Method", text-size: 16pt)[
   Minimize: $ "SSE" = sum_(i=1)^n (y_i - hat(y)_i)^2 $
-
+  #vfill
   #two-columns[
     *Normal Equations:*
     $ hat(beta)_1 = (sum (x_i - overline(x))(y_i - overline(y))) / (sum (x_i - overline(x))^2) $
@@ -161,13 +164,13 @@
 #bips-slide(title: "Coefficient Interpretation")[
   #two-columns(
     [
-      === Slope Coefficient ($beta_1$)
-      - Expected change in $y$ for one-unit increase in $x$
+      == Slope Coefficient ($beta_1$)
+      - Expected change in $y$ for one-unit\ increase in $x$
       - Units: (units of $y$)/(units of $x$)
       - Sign indicates direction of relationship
     ],
     [
-      === Intercept ($beta_0$)
+      == Intercept ($beta_0$)
       - Expected value of $y$ when $x = 0$
       - May not be meaningful if $x = 0$ is outside observed range
       - Sometimes centered for better interpretation
@@ -181,10 +184,10 @@
   ]
 ]
 
-#bips-slide(title: "Goodness of Fit")[
-  === Coefficient of Determination ($R^2$)
+#bips-slide(title: "Goodness of Fit", subtitle: [Coefficient of Determination ($R^2$)])[
+  
   $ R^2 = ("SSR") / ("SST") = 1 - ("SSE") / ("SST") $
-
+  
   #two-columns(
     [
       Where:
@@ -200,39 +203,47 @@
       - *Caution*: High $R^2$ doesn't guarantee good model
     ],
   )
-
+  
 
 ]
 
 #bips-slide(title: "Hypothesis Testing")[
-  === Testing Slope Significance
-  - *Null hypothesis*: $H_0: beta_1 = 0$
-  - *Alternative*: $H_1: beta_1 ≠ 0$
-  - *Test statistic*: $t = (hat(beta)_1) / ("SE"(hat(beta)_1))$
-  - *Distribution*: $t$ with $n-2$ degrees of freedom
+  #two-columns[
+    == Testing Slope Significance
+    - *Null hypothesis*: $H_0: beta_1 = 0$
+    - *Alternative*: $H_1: beta_1 ≠ 0$
+    - *Test statistic*: $t = (hat(beta)_1) / ("SE"(hat(beta)_1))$
+    - *Distribution*: $t$ with $n-2$ degrees of freedom
+  ][
+    == Confidence Intervals
+    $ hat(beta)_1 ± t_(alpha\/2, n-2) × "SE"(hat(beta)_1) $
+    
+    == P-values and Interpretation
+    - Small p-value (< 0.05): Evidence against $H_0$
+    - Large p-value: Insufficient\ evidence against $H_0$
+  ]
 
-  === Confidence Intervals
-  $ hat(beta)_1 ± t_(alpha\/2, n-2) × "SE"(hat(beta)_1) $
-
-  === P-values and Interpretation
-  - Small p-value (< 0.05): Evidence against $H_0$
-  - Large p-value: Insufficient evidence against $H_0$
 ]
 
 #section-slide("Multiple Linear Regression")
 
-#bips-slide(title: "Multiple Regression", subtitle: "General Form & Matrix Notation", text-size: 16pt)[
+#bips-slide(
+  title: "Multiple Regression",
+  subtitle: "General Form & Matrix Notation",
+  text-size: 16pt,
+  content-align: horizon,
+)[
   $ y_i = beta_0 + beta_1 x_("1i") + beta_2 x_("2i") + ... + beta_p x_("pi") + epsilon_i $
-
+  
   #two-columns[
-    *Matrix Form:*
+    == Matrix Form:
     $ bold(y) = bold(X) bold(beta) + bold(epsilon) $
   ][
-    *Where:*
-    - $bold(y)$: response vector $(n × 1)$
-    - $bold(X)$: design matrix $(n × (p+1))$
-    - $bold(beta)$: parameters $((p+1) × 1)$
-    - $bold(epsilon)$: errors $(n × 1)$
+    == Where:
+    - $bold(y)$: response vector $(n times 1)$
+    - $bold(X)$: design matrix $(n times (p times 1))$
+    - $bold(beta)$: parameters $((p+1) times 1)$
+    - $bold(epsilon)$: errors $(n times 1)$
   ]
 ]
 
@@ -240,15 +251,17 @@
   $ hat(bold(beta)) = (bold(X)^top bold(X))^(-1) bold(X)^top bold(y) $
 
   #two-columns[
-    *Assumptions:*
+    == Assumptions:
     - Linearity in parameters
     - Independence of observations
     - Constant error variance
     - Normal error distribution
     - No multicollinearity
   ][
-    #callout(type: "note")[
-      $bold(X)^top bold(X)$ must be invertible.
+    #align(horizon)[
+      #callout(type: "note")[
+        $bold(X)^top bold(X)$ must be invertible.
+      ]
     ]
   ]
 ]
@@ -269,20 +282,22 @@
 ]
 
 #bips-slide(title: "Model Selection", text-size: 16pt)[
-  === Forward Selection
-  1. Start with no variables
-  2. Add variable with smallest p-value
-  3. Continue until no improvement
-
-  === Backward Elimination
-  1. Start with all variables
-  2. Remove variable with largest p-value > α
-  3. Continue until all p-values ≤ α
-
-  === Stepwise Selection
-  - Combination of forward and backward
-  - Can add or remove variables at each step
-  - Most commonly used approach
+  #two-columns[
+    === Forward Selection
+    1. Start with no variables
+    2. Add variable with smallest p-value
+    3. Continue until no improvement
+    
+    === Backward Elimination
+    1. Start with all variables
+    2. Remove variable with largest p-value > α
+    3. Continue until all p-values ≤ α
+  ][
+    === Stepwise Selection
+    - Combination of forward and backward
+    - Can add or remove variables at each step
+    - Most commonly used approach
+  ]
 ]
 
 #bips-slide(title: "Information Criteria")[
@@ -293,10 +308,14 @@
   $ "BIC" = n ln("SSE" / n) + p ln(n) $
 
   === Usage
-  - Lower values indicate better models
-  - Balance fit quality with model complexity
-  - BIC penalizes complexity more heavily than AIC
-  - Useful for comparing non-nested models
+  #two-columns(columns: (0.9fr, 1fr))[
+    - Lower values indicate better models
+    - Balance fit quality with model complexity
+  ][
+    - BIC penalizes complexity more heavily than AIC
+    - Useful for comparing non-nested models
+  
+  ]
 ]
 
 #section-slide("Model Diagnostics")
@@ -334,20 +353,23 @@
 ]
 
 #bips-slide(title: "Outliers and Influence", text-size: 16pt)[
-  === Outliers
-  - Observations with unusual response values
-  - Large residuals ($abs("studentized residual") > 2$)
-  - May indicate data errors or special cases
-
-  === Leverage
-  - Observations with unusual predictor values
-  - High leverage: $h_("ii") > 2p / n$
-  - Can have strong influence on fit
-
-  === Cook's Distance
-  - Measures overall influence of observation
-  - $D_i > 1$ suggests influential observation
-  - Combines residual size and leverage
+  #two-columns[
+    == Outliers
+    - Observations with unusual response values
+    - Large residuals ($abs("studentized residual") > 2$)
+    - May indicate data errors or special cases
+    
+    == Leverage
+    - Observations with unusual predictor values
+    - High leverage: $h_("ii") > 2p / n$
+    - Can have strong influence on fit
+  ][
+    == Cook's Distance
+    - Measures overall influence of observation
+    - $D_i > 1$ suggests influential observation
+    - Combines residual size and leverage
+  ]
+  
 ]
 
 #bips-slide(title: "Transformation Techniques", text-size: 16pt)[
@@ -369,18 +391,21 @@
 #section-slide("Categorical Predictors")
 
 #bips-slide(title: "Dummy Variables")[
-  === Binary Categorical Variable
-  Example: Gender (Male/Female)
-  - Create dummy: $x = cases(1 "if Male", 0 "if Female")$
-  - Model: $y = beta_0 + beta_1 x + epsilon$
-  - Interpretation:
-    - $beta_0$: Expected $y$ for reference group (Female)
-    - $beta_1$: Difference between groups (Male - Female)
+  #two-columns()[
+    === Binary Categorical Variable
+    Example: Gender (Male/Female)
+    - Create dummy: $x = cases(1 "if Male", 0 "if Female")$
+    - Model: $y = beta_0 + beta_1 x + epsilon$
+    - Interpretation:
+      - $beta_0$: Expected $y$ for reference group (Female)
+      - $beta_1$: Difference between groups (Male - Female)
+  ][
+    === Multiple Categories
+    For $k$ categories, create $k-1$ dummy variables
+    - Reference category has all dummies = 0
+    - Each coefficient represents difference from reference
+  ]
 
-  === Multiple Categories
-  For $k$ categories, create $k-1$ dummy variables
-  - Reference category has all dummies = 0
-  - Each coefficient represents difference from reference
 ]
 
 #bips-slide(title: "ANOVA as Regression", text-size: 15pt)[

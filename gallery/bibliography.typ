@@ -21,27 +21,27 @@
 ]
 
 #bips-slide(title: "Bibliography Options")[
-  The `bibliography-slide()` function provides several options:
+  The `bibliography()` function provides several options:
   
   ```typst
   // Default usage (APA style)
   #bibliography-slide[
-    #bibliography("references.bib", style: "apa", full: true)
+    #bibliography("references.bib", title: none, style: "apa", full: true)
   ]
 
   // Different citation style
   #bibliography-slide[
-    #bibliography("refs.bib", style: "ieee")
-  ]
-
-  // Custom title
-  #bibliography-slide(title: "Literature")[
-    #bibliography("refs.bib", style: "apa", full: true)
+    #bibliography("refs.bib",title: none, style: "ieee")
   ]
   ```
+  The `#bibliography-slide` has a slide title `"References"`, so we disable the automatic title in  `#bibliography()`.
+
 ]
 
 // Bibliography slide — call bibliography() in your document so paths resolve correctly
-#bibliography-slide[
-  #bibliography("references.bib", style: "apa", full: true)
+#bibliography-slide(
+  title: "References",
+  text-size: 16pt, // Adjust to fit more entries on the slide
+)[
+  #bibliography("references.bib", title: none, style: "apa", full: true)
 ]

@@ -48,7 +48,7 @@
 #let font-color-heading-2 = bips-blue
 #let font-weight-heading-2 = "bold"
 
-#let font-size-heading-3 = 16pt
+#let font-size-heading-3 = 17pt
 #let font-color-heading-3 = bips-blue
 #let font-weight-heading-3 = "bold"
 
@@ -652,18 +652,18 @@
 ///
 /// Example:
 /// ```
-/// #bibliography-slide[
+/// #bibliography-slide(text-size: 14pt)[
 ///   #bibliography("references.bib", style: "apa", full: true)
 /// ]
 /// ```
 #let bibliography-slide(
   title: "References",
+  text-size: none,
+  content-align: horizon,
   body,
 ) = {
-  bips-slide(title: title)[
-    #align(horizon)[
-      #body
-    ]
+  bips-slide(title: title, text-size: text-size, content-align: content-align)[
+    #body
   ]
 }
 
