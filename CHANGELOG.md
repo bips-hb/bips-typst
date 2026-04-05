@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.2.0] - April 2026
+
 ### Added
 - `title-align` parameter on `bips-theme()` for horizontal alignment of slide titles (left, center, right)
 - `base-size` parameter on `bips-theme()` to scale all text proportionally; headings, page numbers, `#small[]`, and `#tiny[]` adjust automatically via em-based sizing
@@ -24,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `empty-slide[]` for minimal slides without branding
 - tytanic test suite with 10 compile-only tests covering all slide types and features
 - typstyle formatting for consistent code style
+- GitHub Actions workflow to compile gallery demos and deploy previews to GitHub Pages
 
 ### Changed
 - **Upgraded Touying from 0.6.1 to 0.7.0** with new API for aspect ratios, config parameters, and page setup
@@ -35,6 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `thanks-slide` uses the `setting:` callback pattern consistently with other slide types
 - `empty-slide` simplified from variadic `..content` to single `body` parameter
 - `title-slide` no longer redundantly re-sets the page background
+- Multi-author title slides separate names with line breaks instead of commas
 - Gallery condensed from 13 demos to 5 focused examples (basic, complete, bibliography, aspect-ratio, lecture-demo)
 - Emphasis (`_text_`) renders as blue italic; strong (`*text*`) renders as blue bold
 - List/enum styling uses ascender/descender edges for consistent bullet alignment
@@ -77,6 +81,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Gallery of example presentations
 - Test suite for validation
 
-[Unreleased]: https://github.com/bips-hb/bips-typst/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/bips-hb/bips-typst/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/bips-hb/bips-typst/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/bips-hb/bips-typst/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/bips-hb/bips-typst/releases/tag/v0.1.0
