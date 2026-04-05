@@ -23,7 +23,7 @@
 #title-slide(
   title: "Test: Multi-Author Title",
   subtitle: "Multiple affiliations",
-  authors: ([Author A#inst(1)], [Author B#inst(2)], [Author C#inst(1,2)]),
+  authors: ([Author A#inst(1)], [Author B#inst(2)], [Author C#inst(1, 2)]),
   institutes: ("Institute Alpha", "Institute Beta"),
   date: "2025-01-01",
   occasion: "Test Conference",
@@ -198,7 +198,10 @@
 ]
 
 // Test 13: content-align parameter (Expected: 1 page)
-#bips-slide(title: "Test 13: Content Alignment", content-align: center + horizon)[
+#bips-slide(
+  title: "Test 13: Content Alignment",
+  content-align: center + horizon,
+)[
   This content should be centered both horizontally and vertically.
 ]
 
@@ -250,6 +253,6 @@
       - Logo appears on all content slides
       - Page numbers increment correctly
       - No spurious blank pages
-    ]
+    ],
   )
 ]

@@ -23,6 +23,19 @@
 
 ]
 
+
+#bips-slide(
+  title: "Welcome",
+)[
+  This is a basic BIPS presentation with:
+  
+  - Clean, simple design
+  - BIPS institutional branding
+  - Easy-to-use slide functions
+  - *Blue emphasis* and _italic text_
+
+]
+
 #thanks-slide(
   contact-author: "Your Name",
   email: "your.name@leibniz-bips.de",

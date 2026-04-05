@@ -120,7 +120,27 @@
 
   #callout(type: "warning")[Warnings use BIPS orange for high visibility.]
 
-  #callout(type: "important")[Important callouts use red for critical information.]
+  #callout(
+    type: "important",
+  )[Important callouts use red for critical information.]
+]
+
+// [BIPS] Images and figures — standard Typst image inclusion.
+#bips-slide(title: "Images & Figures")[
+  // [Typst] Basic image inclusion with sizing:
+  #two-columns[
+    #align(center)[
+      #image("/bips-logo.png", width: 60%)
+    ]
+    Images are included with `#image()` and sized
+    via `width` or `height`.
+  ][
+    // [Typst] `figure()` adds numbering and captions:
+    #figure(
+      image("/bips-logo.png", width: 50%),
+      caption: [The BIPS logo],
+    )
+  ]
 ]
 
 // [BIPS] Tables and math — styled automatically by the theme.
@@ -267,9 +287,8 @@
   Completing the square:
 
   $
-    f(x) &= x^2 + 4x + 4 \
-    #pause
-    &= (x + 2)^2
+      f(x) & = x^2 + 4x + 4 \
+    #pause & = (x + 2)^2
   $
 
   #pause

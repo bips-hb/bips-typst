@@ -4,7 +4,7 @@
 // ===================================================================
 // BIPS TYPST PRESENTATION THEME
 // ===================================================================
-// 
+//
 // A modern presentation template for BIPS using Typst and Touying
 // https://github.com/bips-hb/bips-typst
 //
@@ -22,7 +22,7 @@
 // ===================================================================
 
 #let bips-blue = rgb(23, 99, 170)
-#let bips-logo-blue = rgb(65,125,177)
+#let bips-logo-blue = rgb(65, 125, 177)
 #let bips-text-gray = rgb(66, 66, 66)
 #let bips-orange = rgb(250, 133, 55)
 #let bips-green = rgb(49, 210, 57)
@@ -147,6 +147,7 @@
   page-number: font-size-page-number,
   small: font-size-small,
   tiny: font-size-tiny,
+  title-align: left,
 ))
 
 /// Render content at a smaller size (scales with base-size)
@@ -179,6 +180,9 @@
 
 #let bips-theme(
   aspect-ratio: "16-9",
+  // Title alignment inside the title area box (e.g. left, center, right)
+  // Applies to the horizontal alignment of slide titles/subtitles.
+  title-align: left,
   // Global font size overrides (optional)
   base-size: none,
   slide-title-size: none,
@@ -195,8 +199,14 @@
 ) = {
   // Calculate effective font sizes (use override if provided, otherwise theme default)
   let effective-font-size-base = pick-first(base-size, font-size-base)
-  let effective-code-block-scale = pick-first(code-block-scale, font-scale-code-block)
-  let effective-code-inline-scale = pick-first(code-inline-scale, font-scale-code-inline)
+  let effective-code-block-scale = pick-first(
+    code-block-scale,
+    font-scale-code-block,
+  )
+  let effective-code-inline-scale = pick-first(
+    code-inline-scale,
+    font-scale-code-inline,
+  )
 
   // Global text and styling configuration
   show: set text(
@@ -234,10 +244,15 @@
     page-number: pick-first(page-number-size, font-size-page-number),
     small: pick-first(small-size, font-size-small),
     tiny: pick-first(tiny-size, font-size-tiny),
+    title-align: title-align,
   ))
 
   // Emphasis (_text_) in BIPS blue (color only, no italic)
-  show emph: it => text(fill: font-color-emphasis, style: "italic", weight: "regular")[#it.body]
+  show emph: it => text(
+    fill: font-color-emphasis,
+    style: "italic",
+    weight: "regular",
+  )[#it.body]
 
   // Strong text (*text*) in BIPS blue (color only, no bold)
   show strong: it => text(fill: font-color-strong, weight: "bold")[#it.body]
@@ -269,7 +284,11 @@
   // top-edge/bottom-edge ensure consistent line metrics so bullet markers
   // stay aligned with text even when emojis or other tall glyphs are present.
   // Tighter par leading compensates for the taller ascender line height on line breaks within items.
-  show list: set text(fill: font-color-base, top-edge: "ascender", bottom-edge: "descender")
+  show list: set text(
+    fill: font-color-base,
+    top-edge: "ascender",
+    bottom-edge: "descender",
+  )
   show list: set par(leading: 0.4em)
   // Nested lists/enums get tighter spacing (including cross-type nesting)
   show list: it => {
@@ -277,7 +296,11 @@
     show enum: set enum(spacing: 0.4em)
     it
   }
-  show enum: set text(fill: font-color-base, top-edge: "ascender", bottom-edge: "descender")
+  show enum: set text(
+    fill: font-color-base,
+    top-edge: "ascender",
+    bottom-edge: "descender",
+  )
   show enum: set par(leading: 0.4em)
   show enum: it => {
     show enum: set enum(spacing: 0.4em)
@@ -288,7 +311,9 @@
   // Code styling - Fira Mono pairs with Fira Sans for consistent metrics
   show raw: set text(font: "Fira Mono")
   show raw.where(block: true): set text(size: effective-code-block-scale * 1em)
-  show raw.where(block: false): set text(size: effective-code-inline-scale * 1em)
+  show raw.where(block: false): set text(
+    size: effective-code-inline-scale * 1em,
+  )
 
   // Use Touying's infrastructure with BIPS customizations
   touying-slides(
@@ -347,10 +372,24 @@
 
     // Helper to wrap body with optional alignment and text size
     #let render-body(body) = {
-      let styled = if text-size != none { text(size: text-size)[#body] } else { body }
+      let styled = if text-size != none { text(size: text-size)[#body] } else {
+        body
+      }
       if content-align != none {
         // Only add vertical fills when alignment has a vertical component
-        let has-vertical = content-align == horizon or content-align == bottom or content-align in (center + horizon, center + bottom, left + horizon, left + bottom, right + horizon, right + bottom)
+        let has-vertical = (
+          content-align == horizon
+            or content-align == bottom
+            or content-align
+              in (
+                center + horizon,
+                center + bottom,
+                left + horizon,
+                left + bottom,
+                right + horizon,
+                right + bottom,
+              )
+        )
         if has-vertical { v(1fr) }
         align(content-align)[#styled]
         if has-vertical { v(1fr) }
@@ -367,10 +406,11 @@
       // regardless of whether subtitle is present
       context {
         let sizes = _bips-sizes.get()
+        let h-align = sizes.title-align
         box(height: slide-title-area-height, width: 100%)[
           #if title != none and subtitle != none {
             // Both title and subtitle - bottom-aligned in the fixed area
-            align(bottom)[
+            align(bottom + h-align)[
               #block(width: 90%)[
                 #text(
                   size: pick-first(title-size, sizes.slide-title),
@@ -389,7 +429,7 @@
             ]
           } else if title != none {
             // Title only - centered vertically, slightly larger
-            align(horizon)[
+            align(horizon + h-align)[
               #text(
                 size: pick-first(title-size, sizes.slide-title-only),
                 weight: font-weight-slide-title,
@@ -398,7 +438,7 @@
             ]
           } else if subtitle != none {
             // Subtitle only - centered vertically
-            align(horizon)[
+            align(horizon + h-align)[
               #text(
                 size: pick-first(subtitle-size, sizes.slide-subtitle),
                 weight: font-weight-slide-subtitle,
@@ -580,7 +620,7 @@
 
 #let section-slide(
   section-title,
-  show-logo: true,     // Show BIPS logo by default (department requirement)
+  show-logo: true, // Show BIPS logo by default (department requirement)
 ) = {
   slide(
     config: utils.merge-dicts(
@@ -664,7 +704,10 @@
         #align(center + horizon)[
           #if qr-url != none [
             // Show QR code when URL is provided
-            #qrcode(qr-url, width: 4cm, debug: false, quiet-zone: 0, colors: (white, bips-blue))
+            #qrcode(qr-url, width: 4cm, debug: false, quiet-zone: 0, colors: (
+              white,
+              bips-blue,
+            ))
           ] else [
             // Show website URL as before
             #text(
@@ -711,7 +754,7 @@
             ]
           ],
         )
-      ]
+      ],
     )
   ]
 }
@@ -838,7 +881,11 @@
   let colors = (
     note: (border: bips-blue, bg: bips-blue.lighten(90%), icon: bips-blue),
     tip: (border: bips-green, bg: bips-green.lighten(90%), icon: bips-green),
-    warning: (border: bips-orange, bg: bips-orange.lighten(90%), icon: bips-orange),
+    warning: (
+      border: bips-orange,
+      bg: bips-orange.lighten(90%),
+      icon: bips-orange,
+    ),
     important: (border: red, bg: red.lighten(90%), icon: red),
   )
 
