@@ -553,7 +553,8 @@
             weight: font-weight-title-slide-author,
             fill: font-color-title-slide-author,
           )[
-            #authors.join(", ")
+            // #authors.join(linebreak())
+            #authors.join([#h(1em)])
           ],
         )
       } else if author != none {
