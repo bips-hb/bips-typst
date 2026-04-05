@@ -701,7 +701,7 @@
       ],
       [
         // Row 2: QR code or website (centered)
-        #align(center + horizon)[
+        #align(center + bottom)[
           #if qr-url != none [
             // Show QR code when URL is provided
             #qrcode(qr-url, width: 4cm, debug: false, quiet-zone: 0, colors: (
