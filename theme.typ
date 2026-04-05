@@ -31,6 +31,11 @@
 // TYPOGRAPHY CONFIGURATION
 // ===================================================================
 
+// Font families (with fallbacks for systems without Fira fonts)
+#let font-family-text = ("Fira Sans", "Noto Sans", "Liberation Sans")
+#let font-family-code = ("Fira Mono", "Noto Sans Mono", "Liberation Mono")
+#let font-family-math = ("New Computer Modern Math",)
+
 // Main content styling
 #let font-size-base = 18pt
 #let font-color-base = bips-text-gray
@@ -210,7 +215,7 @@
 
   // Global text and styling configuration
   show: set text(
-    font: "Fira Sans",
+    font: ("Fira Sans", "Noto Sans", "Liberation Sans"),
     size: effective-font-size-base,
     fill: font-color-base,
   )
@@ -309,7 +314,7 @@
   }
 
   // Code styling - Fira Mono pairs with Fira Sans for consistent metrics
-  show raw: set text(font: "Fira Mono")
+  show raw: set text(font: ("Fira Mono", "Noto Sans Mono", "Liberation Mono"))
   show raw.where(block: true): set text(size: effective-code-block-scale * 1em)
   show raw.where(block: false): set text(
     size: effective-code-inline-scale * 1em,
