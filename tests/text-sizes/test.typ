@@ -3,11 +3,13 @@
 #show: bips-theme
 #title-slide(title: "Test")
 
-// small and tiny
-#bips-slide(title: "Small and Tiny")[
-  Normal text.
-  #small[This is small text.]
-  #tiny[This is tiny text.]
+// text size utilities
+#bips-slide(title: "Text Sizes")[
+  #huge[Huge text.] \
+  #large[Large text.] \
+  Normal text. \
+  #small[Small text.] \
+  #tiny[Tiny text.]
 ]
 
 // compact spacing

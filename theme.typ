@@ -44,6 +44,8 @@
 #let font-size-small = 14pt
 
 #let font-size-tiny = 12pt
+#let font-size-large = 22pt
+#let font-size-huge = 26pt
 
 // Regular heading styling
 #let font-size-heading-1 = 20pt
@@ -54,8 +56,8 @@
 #let font-color-heading-2 = bips-blue
 #let font-weight-heading-2 = "bold"
 
-#let font-size-heading-3 = 17pt
-#let font-color-heading-3 = bips-blue
+#let font-size-heading-3 = 18pt
+#let font-color-heading-3 = bips-text-gray
 #let font-weight-heading-3 = "bold"
 
 // Slide title and subtitle styling
@@ -153,6 +155,8 @@
   page-number: font-size-page-number,
   small: font-size-small,
   tiny: font-size-tiny,
+  large: font-size-large,
+  huge: font-size-huge,
   title-align: left,
 ))
 
@@ -161,6 +165,12 @@
 
 /// Render content at the smallest size (scales with base-size)
 #let tiny(body) = context text(size: _bips-sizes.get().tiny)[#body]
+
+/// Render content at a larger size (scales with base-size)
+#let large(body) = context text(size: _bips-sizes.get().large)[#body]
+
+/// Render content at the largest size (scales with base-size)
+#let huge(body) = context text(size: _bips-sizes.get().huge)[#body]
 
 // ===================================================================
 // BACKGROUND UTILITY FUNCTIONS
@@ -202,6 +212,8 @@
   heading-3-size: none,
   small-size: none,
   tiny-size: none,
+  large-size: none,
+  huge-size: none,
   page-number-size: none,
   code-block-scale: none,
   code-inline-scale: none,
@@ -216,22 +228,16 @@
   let effective-code-inline-scale = pick-first(
     code-inline-scale,
     font-scale-code-inline,
-  )
-
-  // Resolve font families
+  ) // Resolve font families
   let effective-font = pick-first(font, font-family-text)
   let effective-code-font = pick-first(code-font, font-family-code)
-  let effective-math-font = pick-first(math-font, font-family-math)
-
-  // Global text and styling configuration
+  let effective-math-font = pick-first(math-font, font-family-math) // Global text and styling configuration
   show: set text(
     font: effective-font,
     size: effective-font-size-base,
     fill: font-color-base,
   )
-  show math.equation: set text(font: effective-math-font)
-
-  // Heading styles use em-based defaults so they scale proportionally with base-size.
+  show math.equation: set text(font: effective-math-font) // Heading styles use em-based defaults so they scale proportionally with base-size.
   // Explicit pt overrides take precedence over the em-based defaults.
   show heading.where(level: 1): set text(
     size: pick-first(heading-1-size, 1.11em),
@@ -247,9 +253,7 @@
     size: pick-first(heading-3-size, 0.89em),
     weight: font-weight-heading-3,
     fill: font-color-heading-3,
-  )
-
-  // Publish effective sizes via state so slide functions can read them.
+  ) // Publish effective sizes via state so slide functions can read them.
   // Sizes that aren't overridden explicitly use the module-level defaults,
   // which means they don't auto-scale with base-size. Use em-based values
   // in the state to get proportional scaling where appropriate.
@@ -260,30 +264,22 @@
     page-number: pick-first(page-number-size, font-size-page-number),
     small: pick-first(small-size, font-size-small),
     tiny: pick-first(tiny-size, font-size-tiny),
+    large: pick-first(large-size, font-size-large),
+    huge: pick-first(huge-size, font-size-huge),
     title-align: title-align,
-  ))
-
-  // Emphasis (_text_) in BIPS blue (color only, no italic)
+  )) // Emphasis (_text_) in BIPS blue (color only, no italic)
   show emph: it => text(
     fill: font-color-emphasis,
     style: "italic",
     weight: "regular",
-  )[#it.body]
-
-  // Strong text (*text*) in BIPS blue (color only, no bold)
-  show strong: it => text(fill: font-color-strong, weight: "bold")[#it.body]
-
-  // Links in BIPS blue with thin underline to distinguish from emphasis
-  show link: it => underline(text(fill: bips-blue)[#it])
-
-  // Table styling - set elegant defaults
+  )[#it.body] // Strong text (*text*) in BIPS blue (color only, no bold)
+  show strong: it => text(fill: font-color-strong, weight: "bold")[#it.body] // Links in BIPS blue with thin underline to distinguish from emphasis
+  show link: it => underline(text(fill: bips-blue)[#it]) // Table styling - set elegant defaults
   set table(
     stroke: none,
     fill: (_, y) => if y == 0 { bips-blue.lighten(85%) } else { none },
     inset: (x: 0.7em, y: 0.6em),
-  )
-
-  // Add subtle borders around tables
+  ) // Add subtle borders around tables
   show table: it => block(
     stroke: (
       top: 1pt + bips-blue.lighten(50%),
@@ -291,9 +287,7 @@
     ),
     inset: 0pt,
     it,
-  )
-
-  // List styling with configurable spacing
+  ) // List styling with configurable spacing
   // Spacing uses `set` (not `show`) so users can override with local `#set list(spacing: ...)`
   set list(spacing: list-spacing)
   set enum(spacing: enum-spacing)
@@ -322,16 +316,12 @@
     show enum: set enum(spacing: 0.4em)
     show list: set list(spacing: 0.4em)
     it
-  }
-
-  // Code styling - Fira Mono pairs with Fira Sans for consistent metrics
+  } // Code styling - Fira Mono pairs with Fira Sans for consistent metrics
   show raw: set text(font: effective-code-font)
   show raw.where(block: true): set text(size: effective-code-block-scale * 1em)
   show raw.where(block: false): set text(
     size: effective-code-inline-scale * 1em,
-  )
-
-  // Use Touying's infrastructure with BIPS customizations
+  ) // Use Touying's infrastructure with BIPS customizations
   touying-slides(
     config-page(
       ..utils.page-args-from-aspect-ratio(aspect-ratio),
@@ -959,8 +949,8 @@
 ///
 /// Example: #compact[- Item A \ - Item B \ - Item C]
 #let compact(spacing: 0.4em, leading: 0.4em, body) = {
-  set list(spacing: spacing)
-  set enum(spacing: spacing)
+  show list: set list(spacing: spacing)
+  show enum: set enum(spacing: spacing)
   set par(leading: leading)
   show list: set text(top-edge: "cap-height", bottom-edge: "baseline")
   show enum: set text(top-edge: "cap-height", bottom-edge: "baseline")
