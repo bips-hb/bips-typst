@@ -6,7 +6,7 @@
   title: "Bibliography Slides",
   subtitle: "Automated reference management",
   author: "BIPS Research Team",
-  institute: bips_en,
+  institute: bips-en,
   date: datetime.today().display(),
 )
 

@@ -7,7 +7,7 @@
   title: "Bypst: The BIPS Typst Theme",
   subtitle: "Now also in Retro 4:3!",
   author: "Jane Doe & John Smith",
-  institute: bips_en,
+  institute: bips-en,
   date: datetime(
     year: 2008,
     month: 3,

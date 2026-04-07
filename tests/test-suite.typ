@@ -15,7 +15,7 @@
   title: "Test: Title Slide",
   subtitle: "Single author variant",
   author: "Test Author",
-  institute: bips_en,
+  institute: bips-en,
   date: "2025-01-01",
 )
 

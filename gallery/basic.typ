@@ -6,7 +6,7 @@
   title: "BIPS Theme Basic Example",
   subtitle: "Simple presentation structure",
   author: "Your Name",
-  institute: bips_en,
+  institute: bips-en,
   date: datetime.today().display(),
 )
 
