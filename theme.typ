@@ -47,18 +47,14 @@
 #let font-size-large = 22pt
 #let font-size-huge = 26pt
 
-// Regular heading styling
-#let font-size-heading-1 = 20pt
-#let font-color-heading-1 = bips-blue
-#let font-weight-heading-1 = "bold"
-
-#let font-size-heading-2 = 18pt
-#let font-color-heading-2 = bips-blue
-#let font-weight-heading-2 = "bold"
-
-#let font-size-heading-3 = 18pt
-#let font-color-heading-3 = bips-text-gray
-#let font-weight-heading-3 = "bold"
+// Heading styling (sizes are em-based in show rules, so they scale with base-size)
+// h1: 1.11em, h2: 1em, h3: 1em (h3 distinguished by color, not size)
+#let heading-color-1 = bips-blue
+#let heading-weight-1 = "bold"
+#let heading-color-2 = bips-blue
+#let heading-weight-2 = "bold"
+#let heading-color-3 = bips-text-gray
+#let heading-weight-3 = "bold"
 
 // Slide title and subtitle styling
 #let font-size-slide-title = 26pt
@@ -241,18 +237,18 @@
   // Explicit pt overrides take precedence over the em-based defaults.
   show heading.where(level: 1): set text(
     size: pick-first(heading-1-size, 1.11em),
-    weight: font-weight-heading-1,
-    fill: font-color-heading-1,
+    weight: heading-weight-1,
+    fill: heading-color-1,
   )
   show heading.where(level: 2): set text(
     size: pick-first(heading-2-size, 1em),
-    weight: font-weight-heading-2,
-    fill: font-color-heading-2,
+    weight: heading-weight-2,
+    fill: heading-color-2,
   )
   show heading.where(level: 3): set text(
-    size: pick-first(heading-3-size, 0.89em),
-    weight: font-weight-heading-3,
-    fill: font-color-heading-3,
+    size: pick-first(heading-3-size, 1em),
+    weight: heading-weight-3,
+    fill: heading-color-3,
   ) // Publish effective sizes via state so slide functions can read them.
   // Sizes that aren't overridden explicitly use the module-level defaults,
   // which means they don't auto-scale with base-size. Use em-based values

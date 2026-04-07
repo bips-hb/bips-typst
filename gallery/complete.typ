@@ -69,10 +69,11 @@
 #bips-slide(title: "Color Utilities & Headings")[
   // [BIPS] Color helper functions for inline coloring:
   #blue[`#blue[]`], #orange[`#orange[]`], #green[`#green[]`], #gray[`#gray[]`]
-
+  = Heading level 1
+  == Heading level 2
   // [BIPS] Headings are styled in BIPS blue at all levels:
   === Heading Level 3
-  Content below a heading. Levels 1--3 all render in BIPS blue with
+  Content below a heading. Levels 1--2 render in BIPS blue with
   em-based sizing that scales proportionally with `base-size`.
 ]
 
