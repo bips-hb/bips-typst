@@ -12,8 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `title-align` parameter on `bips-theme()` for horizontal alignment of slide titles (left, center, right)
 - `base-size` parameter on `bips-theme()` to scale all text proportionally; headings, page numbers, `#small[]`, and `#tiny[]` adjust automatically via em-based sizing
 - Size override parameters on `bips-theme()`: `slide-title-size`, `slide-subtitle-size`, `heading-1-size`, `heading-2-size`, `heading-3-size`, `page-number-size`, `small-size`, `tiny-size`
-- `#small[]` and `#tiny[]` text size utility functions that scale proportionally with `base-size`
-- `#compact[]` utility for tighter list/enum spacing
+- `#huge[]`, `#large[]`, `#small[]`, and `#tiny[]` text size utility functions that scale proportionally with `base-size`
+- `#compact[]` utility for tighter list/enum spacing (applies recursively to nested lists)
 - `#vfill` shorthand (equivalent to `#v(1fr)`)
 - Color helpers: `#blue[]`, `#orange[]`, `#green[]`, `#gray[]`
 - `callout()` blocks with types note, tip, warning, important and optional `title:` parameter
@@ -38,7 +38,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `thanks-slide` uses the `setting:` callback pattern consistently with other slide types
 - `empty-slide` simplified from variadic `..content` to single `body` parameter
 - `title-slide` no longer redundantly re-sets the page background
-- Multi-author title slides separate names with line breaks instead of commas
+- **Renamed package from `bips-typst` to `bypst`** for Typst Universe naming compliance
+- Multi-author title slides separate names with horizontal space instead of commas
 - Gallery condensed from 13 demos to 5 focused examples (basic, complete, bibliography, aspect-ratio, lecture-demo)
 - Emphasis (`_text_`) renders as blue italic; strong (`*text*`) renders as blue bold
 - List/enum styling uses ascender/descender edges for consistent bullet alignment
@@ -47,12 +48,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Removed
 - Dead `show-page-number` parameter from `section-slide` (was accepted but silently ignored)
-- Unused typography variables: `font-weight-base`, `font-color-small`, `font-weight-small`, `font-color-tiny`, `font-weight-tiny`
+- Unused typography variables: `font-weight-base`, `font-color-small`, `font-weight-small`, `font-color-tiny`, `font-weight-tiny`, `font-size-heading-*`
 - 8 redundant gallery demos (animations, callouts, columns, content-elements, customization, font-customization, multi-author, qr-code) — all covered by `complete.typ`
 
 ### Fixed
 - Size override parameters in `bips-theme()` were silently ignored — now functional
-- Heading levels 1 and 2 had no styling (rendered as default black text) — now styled globally
+- Heading levels 1–3 had no styling (rendered as default black text) — now styled globally with BIPS blue (h1/h2) and gray (h3)
 - Page numbers remain stable across `#pause` subslides
 - Content overflow on animated slides no longer creates blank pages for all subslides
 
