@@ -1,6 +1,6 @@
 // To use with a local installation (after `just install`):
-// #import "@local/bips-typst:0.2.0": *
-#import "@preview/bips-typst:0.2.0": *
+// #import "@local/bypst:0.2.0": *
+#import "@preview/bypst:0.2.0": *
 
 #show: bips-theme
 

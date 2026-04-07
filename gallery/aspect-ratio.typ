@@ -1,4 +1,4 @@
-#import "../bips-typst.typ": *
+#import "../bypst.typ": *
 
 #show: bips-theme.with(aspect-ratio: "4-3")
 

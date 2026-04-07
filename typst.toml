@@ -1,7 +1,7 @@
 [package]
-name = "bips-typst"
+name = "bypst"
 version = "0.2.0"
-entrypoint = "bips-typst.typ"
+entrypoint = "bypst.typ"
 authors = ["Lukas Burk <burk@leibniz-bips.de>"]
 license = "MIT"
 description = "BIPS presentation template for Typst with Touying"

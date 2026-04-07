@@ -1,5 +1,5 @@
 // Test: text size utilities and helpers
-#import "/bips-typst.typ": *
+#import "/bypst.typ": *
 #show: bips-theme
 #title-slide(title: "Test")
 

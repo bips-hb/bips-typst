@@ -1,5 +1,5 @@
 // Test: per-slide and global customization
-#import "/bips-typst.typ": *
+#import "/bypst.typ": *
 #show: bips-theme
 
 #title-slide(title: "Test")

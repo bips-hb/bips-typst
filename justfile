@@ -48,13 +48,13 @@ test-verbose:
 
 # Format all Typst source files with typstyle
 format:
-    typstyle -i theme.typ bips-typst.typ
+    typstyle -i theme.typ bypst.typ
     typstyle -i gallery/*.typ
     typstyle -i tests/*/test.typ
 
 # Check formatting without modifying files
 format-check:
-    typstyle --check theme.typ bips-typst.typ
+    typstyle --check theme.typ bypst.typ
 
 # Install package locally for development
 install:

@@ -1,5 +1,5 @@
 // Test: thanks-slide with various configurations
-#import "/bips-typst.typ": *
+#import "/bypst.typ": *
 #show: bips-theme
 #title-slide(title: "Test")
 

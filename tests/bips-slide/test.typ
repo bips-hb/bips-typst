@@ -1,5 +1,5 @@
 // Test: bips-slide with title, subtitle, and content variations
-#import "/bips-typst.typ": *
+#import "/bypst.typ": *
 #show: bips-theme
 
 #title-slide(title: "Test")

@@ -1,5 +1,5 @@
 // Test: multi-column layout helpers
-#import "/bips-typst.typ": *
+#import "/bypst.typ": *
 #show: bips-theme
 #title-slide(title: "Test")
 

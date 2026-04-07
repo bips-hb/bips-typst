@@ -11,7 +11,7 @@
 //
 // Run: typst compile --root . gallery/complete.typ
 
-#import "../bips-typst.typ": *
+#import "../bypst.typ": *
 
 // [BIPS] Apply the BIPS theme with default settings.
 // Optional overrides: base-size, slide-title-size, heading-*-size, etc.

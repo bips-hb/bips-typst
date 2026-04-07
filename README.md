@@ -7,7 +7,7 @@ A 16:9 presentation template for [BIPS](https://www.leibniz-bips.de/) using [Typ
 ## Quick Start
 
 ```typst
-#import "@local/bips-typst:0.2.0": *
+#import "@local/bypst:0.2.0": *
 #show: bips-theme
 
 #title-slide(
@@ -47,7 +47,7 @@ just install
 Then import in any `.typ` file:
 
 ```typst
-#import "@local/bips-typst:0.2.0": *
+#import "@local/bypst:0.2.0": *
 ```
 
 ## Slide Types
@@ -226,7 +226,7 @@ After editing theme files, run `just install` before compiling.
 ### Project Structure
 
 ```
-bips-typst.typ   # package entrypoint
+bypst.typ        # package entrypoint
 theme.typ        # theme implementation
 bips-logo.png    # logo asset
 typst.toml       # package metadata

@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - "theme.typ"
-      - "bips-typst.typ"
+      - "bypst.typ"
       - "gallery/**"
       - ".github/**"
 

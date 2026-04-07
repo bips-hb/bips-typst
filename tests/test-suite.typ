@@ -1,4 +1,4 @@
-#import "../bips-typst.typ": *
+#import "../bypst.typ": *
 
 // Test Suite for BIPS Theme
 // Run: typst compile tests/test-suite.typ tests/test-suite.pdf
