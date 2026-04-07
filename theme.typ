@@ -2,7 +2,7 @@
 #import "@preview/codetastic:0.2.2": qrcode
 
 // ===================================================================
-// BIPS TYPST PRESENTATION THEME
+// BYPST — BIPS PRESENTATION THEME
 // ===================================================================
 //
 // A modern presentation template for BIPS using Typst and Touying

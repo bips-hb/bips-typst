@@ -1,6 +1,6 @@
-# BIPS Theme Gallery
+# bypst Gallery
 
-Ready-to-use examples showcasing different features of the BIPS Typst theme.
+Ready-to-use examples showcasing different features of the bypst theme.
 
 ## Examples
 

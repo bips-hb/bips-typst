@@ -12,7 +12,7 @@
 
 #bips-slide(
   title: "Welcome",
-  subtitle: "Getting started with BIPS Typst"
+  subtitle: "Getting started with bypst"
 )[
   This is a basic BIPS presentation with:
   

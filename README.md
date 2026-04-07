@@ -1,4 +1,4 @@
-# BIPS Typst Presentation Template
+# bypst — BIPS Presentation Template
 
 A 16:9 presentation template for [BIPS](https://www.leibniz-bips.de/) using [Typst](https://typst.app/) and [Touying](https://touying-typ.github.io/). Based on the institutional style from [bips-beamer](http://github.com/bips-hb/bips-beamer).
 
@@ -197,6 +197,8 @@ The theme re-exports Touying's animation functions:
 ### Text size utilities
 
 ```typst
+#huge[Largest text for emphasis]
+#large[Larger text for subheadings]
 #small[Smaller text for captions or notes]
 #tiny[Even smaller text for fine print]
 ```
@@ -215,7 +217,6 @@ The `gallery/` directory contains example presentations:
 
 ```sh
 just install    # install package locally
-just uninstall  # remove local package
 just all        # compile all gallery demos
 just test       # run test suite
 just clean      # remove generated PDFs

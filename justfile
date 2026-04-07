@@ -1,4 +1,4 @@
-# BIPS Typst Theme
+# bypst — BIPS Presentation Theme
 
 # Compile all gallery demos
 all:

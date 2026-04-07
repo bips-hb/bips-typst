@@ -1,4 +1,4 @@
-// Complete Feature Showcase — BIPS Typst Theme
+// Complete Feature Showcase — bypst
 //
 // This file demonstrates all major features of the BIPS theme and the
 // Touying presentation framework it is built on. It serves as both a

@@ -30,7 +30,7 @@ cat > _site/index.html <<'HTMLHEAD'
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BIPS Typst Gallery</title>
+<title>bypst Gallery</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; }
   body {
@@ -91,7 +91,7 @@ cat > _site/index.html <<'HTMLHEAD'
 </style>
 </head>
 <body>
-<h1>BIPS Typst Gallery</h1>
+<h1>bypst Gallery</h1>
 <p class="subtitle">Preview of gallery demos — click a thumbnail to open the full PDF.</p>
 <div class="grid">
 HTMLHEAD
