@@ -10,7 +10,36 @@ repository = "https://github.com/bips-hb/bips-typst"
 keywords = ["presentation", "slides", "academic", "beamer"]
 categories = ["presentation"]
 compiler = "0.12.0"
-exclude = ["gallery/", "tests/", "debug/", "*.pdf", "justfile"]
+exclude = [
+  "gallery/",
+  "tests/",
+  "debug/",
+  "*.pdf",
+  "justfile",
+  "CLAUDE.md",
+  ".github/",
+]
+
+[tool.tyler]
+srcdir = "."
+ignore = [
+  "dist{,/**}",
+  ".git{,/**,/**/.*}",
+  ".github{,/**}",
+  ".claude{,/**}",
+  ".DS_Store",
+  ".gitignore",
+  ".fonts{,/**}",
+  "_site{,/**}",
+  "debug{,/**}",
+  "gallery{,/**}",
+  "tests{,/**,/**/.*}",
+  "*.pdf",
+  "justfile",
+  "CLAUDE.md",
+  "CLAUDE.local.md",
+  "TODO.md",
+]
 
 [template]
 path = "template"
