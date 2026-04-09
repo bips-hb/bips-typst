@@ -131,14 +131,14 @@
   // [Typst] Basic image inclusion with sizing:
   #two-columns[
     #align(center)[
-      #image("/bips-logo.png", height: 50%)
+      #image("/logo.png", height: 50%)
     ]
     Images are included with `#image()` and sized
     via `width` or `height`.
   ][
     // [Typst] `figure()` adds numbering and captions:
     #figure(
-      image("/bips-logo.png", width: 50%),
+      image("/logo.png", width: 50%),
       caption: [The BIPS logo],
     )
   ]
