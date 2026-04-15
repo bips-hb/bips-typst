@@ -278,3 +278,16 @@ For the best results, install the Fira fonts. Override with the `font:`, `code-f
 ## License
 
 MIT
+
+## Related
+
+The BIPS presentation theme zoo for "I don't want to use PowerPoint" folks:
+
+| Markup format | Intermediate format | Output format | Based on | Repo / Package | Status |
+|---|---|---|---|---|---|
+| LaTeX | --- | PDF | | [bips-beamer](https://github.com/bips-hb/bips-beamer) | Stable |
+| [RMarkdown](https://rmarkdown.rstudio.com/) | LaTeX | PDF | bips-beamer | [bipsdown](https://github.com/bips-hb/bipsdown) | Stable |
+| [RMarkdown](https://rmarkdown.rstudio.com/) | [xaringan](http://slides.yihui.name/xaringan/) | HTML | | [bipsdown](https://github.com/bips-hb/bipsdown) | Experimental |
+| [Quarto](https://quarto.org/) | LaTeX | PDF | bips-beamer | [bips-quarto](https://github.com/bips-hb/bips-quarto) | Stable |
+| [Quarto](https://quarto.org/) | reveal.js | HTML | | [bips-quarto](https://github.com/bips-hb/bips-quarto) | Experimental |
+| [typst](https://typst.app/) | --- | PDF | | [bips-typst](https://github.com/bips-hb/bips-typst) / [bypst](https://typst.app/universe/package/bypst) | Stable |
