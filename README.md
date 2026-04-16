@@ -13,6 +13,7 @@ A 16:9 presentation template for [BIPS](https://www.leibniz-bips.de/) using [Typ
   author: "Your Name",
   institute: bips-en, // or bips-de
   date: datetime.today().display(),
+  // logo: image("path/to/logo.png")
 )
 
 #bips-slide(title: "Introduction")[
@@ -34,11 +35,14 @@ A 16:9 presentation template for [BIPS](https://www.leibniz-bips.de/) using [Typ
 
 ## Installation
 
-Once available from the [Typst package registry](https://typst.app/universe/package/bypst), just import it like any other package:
+The theme is available from the [Typst package registry](https://typst.app/universe/package/bypst), just import it like any other package:
 
 ```typst
 #import "@preview/bypst:0.2.0": *
 ```
+
+Please note that the official BIPS logo is not bundled with the package to avoid licensing concerns.
+See below on how to include your local copy of the logo in the slides.
 
 ### Local development
 
