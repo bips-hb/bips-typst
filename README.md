@@ -281,7 +281,8 @@ For the best results, install the Fira fonts. Override with the `font:`, `code-f
 
 ## License
 
-MIT
+The theme code itself is licensed under the MIT license.  
+The BIPS logo is owned by BIPS itself (Leibniz Institute for Prevention Research and Epidemiology - BIPS GmbH).
 
 ## Related
 
