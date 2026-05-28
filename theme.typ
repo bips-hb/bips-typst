@@ -365,6 +365,7 @@
   text-size: none,
   code-block-scale: none,
   code-inline-scale: none,
+  line: true,
   ..args,
   body,
 ) = {
@@ -472,15 +473,17 @@
       }
 
       // Gradient line after title/subtitle - always at same position
-      rect(
-        width: 85%,
-        height: 0.75pt,
-        fill: gradient.linear(
-          bips-text-gray,
-          white,
-          angle: 0deg,
-        ),
-      )
+	  if line != false {
+       rect(
+         width: 85%,
+         height: 0.75pt,
+         fill: gradient.linear(
+           bips-text-gray,
+           white,
+           angle: 0deg,
+         ),
+       )
+	  } 
 
       v(1em)
 
