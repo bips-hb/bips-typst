@@ -365,7 +365,9 @@
   text-size: none,
   code-block-scale: none,
   code-inline-scale: none,
-  line: true,
+  // Show the gradient separator line under the title (set false to hide it
+  // while keeping the slide counter running, e.g. for full-bleed graphics)
+  show-line: true,
   ..args,
   body,
 ) = {
@@ -473,17 +475,17 @@
       }
 
       // Gradient line after title/subtitle - always at same position
-	  if line != false {
-       rect(
-         width: 85%,
-         height: 0.75pt,
-         fill: gradient.linear(
-           bips-text-gray,
-           white,
-           angle: 0deg,
-         ),
-       )
-	  } 
+      if show-line {
+        rect(
+          width: 85%,
+          height: 0.75pt,
+          fill: gradient.linear(
+            bips-text-gray,
+            white,
+            angle: 0deg,
+          ),
+        )
+      }
 
       v(1em)
 
@@ -658,7 +660,7 @@
   )[
     // Invisible heading for PDF outline/bookmarks
     #place(hide[#heading(level: 1, outlined: true)[#section-title]])
-    
+
     #align(center + horizon)[
       #text(
         size: font-size-section-slide,

@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+- `show-line` parameter on `bips-slide()` to hide the gradient separator under the title while keeping the slide counter running (useful for full-bleed/transparent graphics)
+
 ## [0.2.0] - April 2026
 
 ### Added
