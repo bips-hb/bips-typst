@@ -12,10 +12,10 @@
 
 #bips-slide(
   title: "Welcome",
-  subtitle: "Getting started with bypst"
+  subtitle: "Getting started with bypst",
 )[
   This is a basic BIPS presentation with:
-  
+
   - Clean, simple design
   - BIPS institutional branding
   - Easy-to-use slide functions
@@ -28,7 +28,7 @@
   title: "Welcome",
 )[
   This is a basic BIPS presentation with:
-  
+
   - Clean, simple design
   - BIPS institutional branding
   - Easy-to-use slide functions

@@ -12,17 +12,17 @@
 
 #bips-slide(title: "Citations in Presentations")[
   Academic presentations often require proper citations:
-  
+
   - Previous meta-analysis showed significant effects @johnson2023
-  - This finding was replicated in larger cohorts @smith2022 
+  - This finding was replicated in larger cohorts @smith2022
   - Recent advances suggest new directions @brown2024
-  
+
   The bibliography slide helper makes it easy to display all references.
 ]
 
 #bips-slide(title: "Bibliography Options")[
   The `bibliography()` function provides several options:
-  
+
   ```typst
   // Default usage (APA style)
   #bibliography-slide[

@@ -39,5 +39,8 @@
 
 // #pause in math
 #bips-slide(title: "Math Animation")[
-  $ x &= 1 + 2 \ #pause &= 3 $
+  $
+         x & = 1 + 2 \
+    #pause & = 3
+  $
 ]

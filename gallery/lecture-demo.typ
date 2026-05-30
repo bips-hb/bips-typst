@@ -33,7 +33,10 @@
   - Some programming experience (R or Python preferred)
 ]
 
-#bips-slide(title: "Course Structure", subtitle: "14-Week Schedule & Assessment")[
+#bips-slide(
+  title: "Course Structure",
+  subtitle: "14-Week Schedule & Assessment",
+)[
   #two-columns[
     1. *Weeks 1-2*: Linear Regression
     2. *Weeks 3-4*: Multiple Regression
@@ -69,7 +72,10 @@
 
 #section-slide("What is Statistical Modeling?")
 
-#bips-slide(title: "Statistical Models", subtitle: "Definition & Key Components")[
+#bips-slide(
+  title: "Statistical Models",
+  subtitle: "Definition & Key Components",
+)[
   #two-columns[
     A mathematical representation that:
     - Captures variable relationships
@@ -145,12 +151,18 @@
 
 ]
 
-#bips-slide(title: "Parameter Estimation", subtitle: "Least Squares Method", text-size: 16pt)[
+#bips-slide(
+  title: "Parameter Estimation",
+  subtitle: "Least Squares Method",
+  text-size: 16pt,
+)[
   Minimize: $ "SSE" = sum_(i=1)^n (y_i - hat(y)_i)^2 $
   #vfill
   #two-columns[
     *Normal Equations:*
-    $ hat(beta)_1 = (sum (x_i - overline(x))(y_i - overline(y))) / (sum (x_i - overline(x))^2) $
+    $
+      hat(beta)_1 = (sum (x_i - overline(x))(y_i - overline(y))) / (sum (x_i - overline(x))^2)
+    $
 
     $ hat(beta)_0 = overline(y) - hat(beta)_1 overline(x) $
   ][
@@ -184,10 +196,13 @@
   ]
 ]
 
-#bips-slide(title: "Goodness of Fit", subtitle: [Coefficient of Determination ($R^2$)])[
-  
+#bips-slide(
+  title: "Goodness of Fit",
+  subtitle: [Coefficient of Determination ($R^2$)],
+)[
+
   $ R^2 = ("SSR") / ("SST") = 1 - ("SSE") / ("SST") $
-  
+
   #two-columns(
     [
       Where:
@@ -203,7 +218,7 @@
       - *Caution*: High $R^2$ doesn't guarantee good model
     ],
   )
-  
+
 
 ]
 
@@ -217,7 +232,7 @@
   ][
     == Confidence Intervals
     $ hat(beta)_1 ± t_(alpha\/2, n-2) × "SE"(hat(beta)_1) $
-    
+
     == P-values and Interpretation
     - Small p-value (< 0.05): Evidence against $H_0$
     - Large p-value: Insufficient\ evidence against $H_0$
@@ -233,8 +248,10 @@
   text-size: 16pt,
   content-align: horizon,
 )[
-  $ y_i = beta_0 + beta_1 x_("1i") + beta_2 x_("2i") + ... + beta_p x_("pi") + epsilon_i $
-  
+  $
+    y_i = beta_0 + beta_1 x_("1i") + beta_2 x_("2i") + ... + beta_p x_("pi") + epsilon_i
+  $
+
   #two-columns[
     == Matrix Form:
     $ bold(y) = bold(X) bold(beta) + bold(epsilon) $
@@ -247,7 +264,11 @@
   ]
 ]
 
-#bips-slide(title: "Multiple Regression Estimation", subtitle: "Normal Equations & Assumptions", text-size: 16pt)[
+#bips-slide(
+  title: "Multiple Regression Estimation",
+  subtitle: "Normal Equations & Assumptions",
+  text-size: 16pt,
+)[
   $ hat(bold(beta)) = (bold(X)^top bold(X))^(-1) bold(X)^top bold(y) $
 
   #two-columns[
@@ -287,7 +308,7 @@
     1. Start with no variables
     2. Add variable with smallest p-value
     3. Continue until no improvement
-    
+
     === Backward Elimination
     1. Start with all variables
     2. Remove variable with largest p-value > α
@@ -314,13 +335,17 @@
   ][
     - BIC penalizes complexity more heavily than AIC
     - Useful for comparing non-nested models
-  
+
   ]
 ]
 
 #section-slide("Model Diagnostics")
 
-#bips-slide(title: "Residual Analysis", subtitle: "Types & Diagnostic Plots", text-size: 16pt)[
+#bips-slide(
+  title: "Residual Analysis",
+  subtitle: "Types & Diagnostic Plots",
+  text-size: 16pt,
+)[
   #two-columns[
     *Residual Types:*
     - *Raw*: $e_i = y_i - hat(y)_i$
@@ -336,7 +361,10 @@
   ]
 ]
 
-#bips-slide(title: "Assumption Checking", subtitle: "Linearity & Homoscedasticity")[
+#bips-slide(
+  title: "Assumption Checking",
+  subtitle: "Linearity & Homoscedasticity",
+)[
   #two-columns[
     *Linearity:*
     - *Check*: Residuals vs. fitted
@@ -358,7 +386,7 @@
     - Observations with unusual response values
     - Large residuals ($abs("studentized residual") > 2$)
     - May indicate data errors or special cases
-    
+
     == Leverage
     - Observations with unusual predictor values
     - High leverage: $h_("ii") > 2p / n$
@@ -369,7 +397,7 @@
     - $D_i > 1$ suggests influential observation
     - Combines residual size and leverage
   ]
-  
+
 ]
 
 #bips-slide(title: "Transformation Techniques", text-size: 16pt)[
@@ -445,7 +473,11 @@
 
 #section-slide("Generalized Linear Models")
 
-#bips-slide(title: "GLM Framework", subtitle: "Three Components", text-size: 16pt)[
+#bips-slide(
+  title: "GLM Framework",
+  subtitle: "Three Components",
+  text-size: 16pt,
+)[
   #two-columns[
     *Components:*
     1. *Random*: Response distribution
@@ -461,7 +493,11 @@
   *Exponential Family:* Normal, Binomial, Poisson, Gamma
 ]
 
-#bips-slide(title: "Logistic Regression", subtitle: "Binary Response Models", text-size: 15pt)[
+#bips-slide(
+  title: "Logistic Regression",
+  subtitle: "Binary Response Models",
+  text-size: 15pt,
+)[
   *Model:* $y_i ~ "Bernoulli"(pi_i)$, $"logit"(pi_i) = bold(x)_i^top bold(beta)$
 
   #two-columns[
@@ -518,7 +554,11 @@
 
 #section-slide("Advanced Topics")
 
-#bips-slide(title: "Mixed Effects Models", subtitle: "Accounting for Clustering", text-size: 16pt)[
+#bips-slide(
+  title: "Mixed Effects Models",
+  subtitle: "Accounting for Clustering",
+  text-size: 16pt,
+)[
   #two-columns[
     *Components:*
     - *Fixed effects*: Population-level
@@ -526,7 +566,9 @@
     - *Applications*: Longitudinal, hierarchical
   ][
     *Model:*
-    $ y_(i j) = bold(x)_(i j)^top bold(beta) + bold(z)_(i j)^top bold(u)_i + epsilon_(i j) $
+    $
+      y_(i j) = bold(x)_(i j)^top bold(beta) + bold(z)_(i j)^top bold(u)_i + epsilon_(i j)
+    $
 
     Accounts for within-group correlation
   ]
@@ -548,7 +590,11 @@
   Combine autoregressive, integrated, moving average components
 ]
 
-#bips-slide(title: "Machine Learning Integration", subtitle: "Modern Extensions", text-size: 16pt)[
+#bips-slide(
+  title: "Machine Learning Integration",
+  subtitle: "Modern Extensions",
+  text-size: 16pt,
+)[
   #two-columns[
     *Regularized Regression:*
     - *Ridge*: $L_2$ penalty
@@ -626,7 +672,9 @@
   - *Offset*: Population size (log scale)
 
   === Model Features
-  $ ln(E[Y_t]) = ln("population"_t) + beta_0 + beta_1 t + beta_2 sin(2pi t / 52) + beta_3 cos(2pi t / 52) $
+  $
+    ln(E[Y_t]) = ln("population"_t) + beta_0 + beta_1 t + beta_2 sin(2pi t / 52) + beta_3 cos(2pi t / 52)
+  $
 
   - Population offset accounts for varying population
   - Sinusoidal terms capture seasonal patterns
@@ -716,7 +764,11 @@
 
 #section-slide("Best Practices")
 
-#bips-slide(title: "Model Building Guidelines", subtitle: "Best Practices", text-size: 16pt)[
+#bips-slide(
+  title: "Model Building Guidelines",
+  subtitle: "Best Practices",
+  text-size: 16pt,
+)[
   #two-columns[
     *Start Simple:*
     - Begin with univariate analyses
@@ -884,7 +936,11 @@
   - Hierarchical modeling
 ]
 
-#bips-slide(title: "Reproducible Research", subtitle: "Modern Statistical Practice", text-size: 16pt)[
+#bips-slide(
+  title: "Reproducible Research",
+  subtitle: "Modern Statistical Practice",
+  text-size: 16pt,
+)[
   #two-columns[
     *Version Control:*
     - Git for code/documentation
@@ -906,7 +962,11 @@
   ]
 ]
 
-#bips-slide(title: "Course Summary", subtitle: "Key Concepts & Next Steps", text-size: 16pt)[
+#bips-slide(
+  title: "Course Summary",
+  subtitle: "Key Concepts & Next Steps",
+  text-size: 16pt,
+)[
   #two-columns[
     *Concepts Mastered:*
     - Linear & generalized linear models

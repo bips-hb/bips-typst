@@ -156,6 +156,22 @@
   title-align: left,
 ))
 
+/// Page number element for slide content.
+/// MUST be placed inside the slide CONTENT (not background/header) so the
+/// slide counter is read after Touying's page-preamble steps it, giving
+/// correct numbering across #pause states. `place()` positions it absolutely
+/// without affecting content flow. See CLAUDE.md for the full rationale.
+#let _page-number() = place(
+  top + right,
+  dx: -0.5cm,
+  dy: 2.7cm,
+  context text(
+    size: _bips-sizes.get().page-number,
+    fill: font-color-page-number,
+    weight: font-weight-page-number,
+  )[#utils.slide-counter.display()],
+)
+
 /// State for the logo image, settable via bips-theme(logo: ...).
 /// Default is the bundled placeholder; users should replace with their own.
 #let _bips-logo = state("bips-logo", image("logo.png"))
@@ -372,19 +388,8 @@
   body,
 ) = {
   slide(..args)[
-    // Page number — placed in content (not background/header) so the counter
-    // is evaluated per-subslide AFTER Touying's page-preamble steps it,
-    // giving correct numbering across #pause states.
-    #place(
-      top + right,
-      dx: -0.5cm,
-      dy: 2.7cm,
-      context text(
-        size: _bips-sizes.get().page-number,
-        fill: font-color-page-number,
-        weight: font-weight-page-number,
-      )[#utils.slide-counter.display()],
-    )
+    // Page number (see _page-number helper for the counter-timing rationale)
+    #_page-number()
     // Apply slide-specific styling overrides
     #show raw.where(block: true): set text(
       size: pick-first(code-block-scale, font-scale-code-block) * 1em,
@@ -796,13 +801,23 @@
 // Empty Slide
 // -------------------------------------------------------------------
 
-#let empty-slide(body) = {
+/// Minimal slide with no logo, title, or separator — just the body.
+/// Useful for full-bleed images or transition screens.
+///
+/// By default the slide counter is frozen, so the slide is unnumbered and
+/// does not advance the count. Set `count: true` to keep it in the numbered
+/// sequence and show the page number (e.g. a full-bleed figure that should
+/// still count as a slide).
+#let empty-slide(count: false, body) = {
   slide(
     config: utils.merge-dicts(
-      config-common(freeze-slide-counter: true),
+      config-common(freeze-slide-counter: not count),
       config-page(background: bips-background(show-logo: false)),
     ),
-  )[#body]
+  )[
+    #if count { _page-number() }
+    #body
+  ]
 }
 
 // ===================================================================

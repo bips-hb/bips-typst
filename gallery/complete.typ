@@ -144,6 +144,16 @@
   ]
 ]
 
+// [BIPS] `show-line: false` hides the gradient separator under the title.
+// Useful for full-bleed or transparent graphics where the line would be
+// distracting. The slide counter keeps running, so page numbers stay
+// sequential.
+#bips-slide(title: "Full-Bleed Graphic", show-line: false)[
+  #align(center + horizon)[
+    #image("/logo.png", height: 70%)
+  ]
+]
+
 // [BIPS] Tables and math — styled automatically by the theme.
 #bips-slide(title: "Tables & Mathematics")[
   // [Typst] Tables are auto-styled with BIPS blue header row and subtle borders:
@@ -313,7 +323,7 @@
   This slide uses `text-size: 16pt` (default is 18pt), which allows
   fitting more content when needed.\
   You can adjust global defaults:
-  
+
   // [Typst] Code blocks are auto-styled with Fira Mono:
   ```typst
   #show: bips-theme.with(
@@ -322,9 +332,9 @@
     code-block-scale: 0.75,   // Smaller code blocks
   )
   ```
-  
+
   Or override defaults per slide
-  
+
   ```typst
     #bips-slide(
       title: "Per-Slide Overrides",
@@ -346,6 +356,13 @@
 
     Useful for full-bleed images or transition screens.
   ]
+]
+
+// [BIPS] `count: true` keeps an empty slide in the numbered sequence and
+// shows its page number. Good for a full-bleed figure that should still
+// count as a slide (the logo and title separator stay hidden).
+#empty-slide(count: true)[
+  #align(center + horizon)[#image("/logo.png", height: 75%)]
 ]
 
 // [BIPS] Thanks/contact slide with QR code.
