@@ -242,6 +242,11 @@
   page-number-size: none,
   code-block-scale: none,
   code-inline-scale: none,
+  // Handout mode: collapse all pauses/uncover/only to final state,
+  // emitting one page per slide (no incremental subslides).
+  // `auto` (default) reads the `handout` CLI input flag
+  // (`typst compile --input handout=true`); `true`/`false` override it.
+  handout: auto,
   body,
 ) = {
   // Calculate effective font sizes (use override if provided, otherwise theme default)
@@ -256,7 +261,13 @@
   ) // Resolve font families
   let effective-font = pick-first(font, font-family-text)
   let effective-code-font = pick-first(code-font, font-family-code)
-  let effective-math-font = pick-first(math-font, font-family-math) // Global text and styling configuration
+  let effective-math-font = pick-first(math-font, font-family-math)
+  // Handout: explicit true/false wins; `auto` falls back to the CLI input flag.
+  let effective-handout = if handout == auto {
+    sys.inputs.at("handout", default: "false") == "true"
+  } else {
+    handout
+  } // Global text and styling configuration
   show: set text(
     font: effective-font,
     size: effective-font-size-base,
@@ -353,6 +364,7 @@
     size: effective-code-inline-scale * 1em,
   ) // Use Touying's infrastructure with BIPS customizations
   touying-slides(
+    config-common(handout: effective-handout),
     config-page(
       ..utils.page-args-from-aspect-ratio(aspect-ratio),
       margin: (top: 1.55cm, bottom: 1.55cm, left: 1.55cm, right: 1.75cm),
@@ -656,7 +668,9 @@
 #let section-slide(
   section-title,
   show-logo: true, // Show BIPS logo by default (institutional default)
+  ..body, // Optional secondary content shown (centered) below the title
 ) = {
+  let body = body.pos().at(0, default: none)
   slide(
     config: utils.merge-dicts(
       config-common(freeze-slide-counter: true),
@@ -672,6 +686,10 @@
         weight: font-weight-section-slide,
         fill: font-color-section-slide,
       )[#section-title]
+      #if body != none {
+        v(0.6em)
+        body
+      }
     ]
   ]
 }

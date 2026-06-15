@@ -46,7 +46,11 @@
 
 // [BIPS] Section slides create visual dividers. They don't consume a
 // slide number and appear in the PDF outline for navigation.
-#section-slide[Slide Types]
+// Optional trailing content appears centered below the title (the title
+// alone is the PDF outline entry) — handy for a short paper title or subtitle.
+#section-slide("Slide Types")[
+  #small[The building blocks of a BIPS presentation]
+]
 
 // [BIPS] Content slide with title and subtitle — the workhorse slide type.
 // Text formatting is auto-styled by the theme:
