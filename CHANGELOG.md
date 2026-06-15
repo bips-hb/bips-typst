@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
+- `empty-slide()` now accepts a `content-align` argument (matching `bips-slide()`), so content can be centered/bottom-aligned without a manual `#align` wrapper
 - `section-slide()` now accepts optional trailing content (e.g. `#section-slide("Paper 1")[Full descriptive title]`) shown centered below the section title at normal text size; the title alone remains the PDF outline entry
 - `handout` parameter on `bips-theme()` (default `auto`) that forwards to Touying's `config-common(handout: ...)`, collapsing all `#pause`/`#uncover`/`#only` steps into a compact one-page-per-slide PDF. With the default `auto`, the theme watches the `handout` CLI input flag, so `typst compile --input handout=true` builds a handout from the same source with no document changes. Set `handout: true`/`false` explicitly in `bips-theme()` to override the flag
 

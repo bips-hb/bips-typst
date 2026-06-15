@@ -354,12 +354,11 @@
 
 // [BIPS] Empty slide — no logo, no page number, no branding.
 // Useful for full-bleed images, transitions, or special layouts.
-#empty-slide[
-  #align(center + horizon)[
-    _This is an empty slide_ — no logo, no page number.
+// `content-align` centers content without a manual `#align` wrapper.
+#empty-slide(content-align: center + horizon)[
+  _This is an empty slide_ — no logo, no page number.
 
-    Useful for full-bleed images or transition screens.
-  ]
+  Useful for full-bleed images or transition screens.
 ]
 
 // [BIPS] `count: true` keeps an empty slide in the numbered sequence and

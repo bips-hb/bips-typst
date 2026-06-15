@@ -378,6 +378,34 @@
 // SLIDE TYPE DEFINITIONS
 // ===================================================================
 
+// Wrap body in `content-align`, adding vertical fills when the alignment has a
+// vertical component (horizon/bottom) so content centers/bottoms within the
+// slide. Returns body unchanged when content-align is none. Shared by all slide
+// types so alignment behaves consistently. Kept outside any `context` block so
+// Touying can still split body content at #pause boundaries.
+#let _aligned(content-align, body) = {
+  if content-align == none {
+    body
+  } else {
+    let has-vertical = (
+      content-align == horizon
+        or content-align == bottom
+        or content-align
+          in (
+            center + horizon,
+            center + bottom,
+            left + horizon,
+            left + bottom,
+            right + horizon,
+            right + bottom,
+          )
+    )
+    if has-vertical { v(1fr) }
+    align(content-align)[#body]
+    if has-vertical { v(1fr) }
+  }
+}
+
 // -------------------------------------------------------------------
 // Content Slides
 // -------------------------------------------------------------------
@@ -415,27 +443,7 @@
       let styled = if text-size != none { text(size: text-size)[#body] } else {
         body
       }
-      if content-align != none {
-        // Only add vertical fills when alignment has a vertical component
-        let has-vertical = (
-          content-align == horizon
-            or content-align == bottom
-            or content-align
-              in (
-                center + horizon,
-                center + bottom,
-                left + horizon,
-                left + bottom,
-                right + horizon,
-                right + bottom,
-              )
-        )
-        if has-vertical { v(1fr) }
-        align(content-align)[#styled]
-        if has-vertical { v(1fr) }
-      } else {
-        styled
-      }
+      _aligned(content-align, styled)
     }
 
     // Title area is wrapped in context to read state-based sizes.
@@ -826,7 +834,7 @@
 /// does not advance the count. Set `count: true` to keep it in the numbered
 /// sequence and show the page number (e.g. a full-bleed figure that should
 /// still count as a slide).
-#let empty-slide(count: false, body) = {
+#let empty-slide(count: false, content-align: none, body) = {
   slide(
     config: utils.merge-dicts(
       config-common(freeze-slide-counter: not count),
@@ -834,7 +842,7 @@
     ),
   )[
     #if count { _page-number() }
-    #body
+    #_aligned(content-align, body)
   ]
 }
 
