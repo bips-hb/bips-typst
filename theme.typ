@@ -678,7 +678,10 @@
   show-logo: true, // Show BIPS logo by default (institutional default)
   ..body, // Optional secondary content shown (centered) below the title
 ) = {
+  // Treat an empty content block (`[]`) the same as no body, so
+  // `#section-slide("foo")` and `#section-slide("foo")[]` render identically.
   let body = body.pos().at(0, default: none)
+  if body == [] { body = none }
   slide(
     config: utils.merge-dicts(
       config-common(freeze-slide-counter: true),
