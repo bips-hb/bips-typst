@@ -21,27 +21,32 @@
 ]
 
 #bips-slide(title: "Bibliography Options")[
-  The `bibliography()` function provides several options:
+  Pass the `.bib` file via `read()` and let the slide build the bibliography:
 
   ```typst
-  // Default usage (APA style)
-  #bibliography-slide[
-    #bibliography("references.bib", title: none, style: "apa", full: true)
-  ]
+  #bibliography-slide(
+    bib: read("references.bib"),
+    full: true,
+  )
+  ```
 
-  // Different citation style
+  Use `read()` (not a bare path) so the path resolves relative to *your*
+  document. `style` defaults to `"springer-basic-author-date"`; override per
+  call, e.g. `style: "ieee"`. Or build the `#bibliography()` yourself:
+
+  ```typst
   #bibliography-slide[
-    #bibliography("refs.bib",title: none, style: "ieee")
+    #bibliography("refs.bib", title: none, style: "apa")
   ]
   ```
-  The `#bibliography-slide` has a slide title `"References"`, so we disable the automatic title in  `#bibliography()`.
-
+  The slide title is already `"References"`, so the bibliography's own
+  heading is disabled by default.
 ]
 
-// Bibliography slide — call bibliography() in your document so paths resolve correctly
+// Bibliography slide — `read()` so the path resolves in your document
 #bibliography-slide(
   title: "References",
   text-size: 16pt, // Adjust to fit more entries on the slide
-)[
-  #bibliography("references.bib", title: none, style: "apa", full: true)
-]
+  bib: read("references.bib"),
+  full: true,
+)

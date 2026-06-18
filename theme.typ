@@ -714,25 +714,58 @@
 // Bibliography Slide
 // -------------------------------------------------------------------
 
-/// Display a bibliography slide with references
+/// Display a bibliography slide with references.
 ///
-/// Due to Typst's path resolution, `bibliography()` must be called from
-/// the user's document (not inside this package). Pass the result as content.
+/// Two ways to supply the references:
 ///
-/// Example:
-/// ```
-/// #bibliography-slide(text-size: 14pt)[
-///   #bibliography("references.bib", style: "apa", full: true)
-/// ]
-/// ```
+/// 1. Pass the bib file via `bib:` and let the slide call `bibliography()`
+///    for you, forwarding `style`/`full` and defaulting bibliography's own
+///    heading off (the slide title already says "References"). You must read
+///    the file in your own document with `read("references.bib")` — a bare
+///    path string can't be forwarded because `bibliography()` resolves paths
+///    relative to where it is *called* (here, inside the package), not your
+///    document. `read()` runs in your document, so its path resolves there.
+///
+///    ```
+///    #bibliography-slide(
+///      bib: read("references.bib"),
+///      text-size: 9pt,
+///    )
+///    ```
+///
+/// 2. Or build the bibliography yourself and pass it as content (useful for
+///    full control over `bibliography()` arguments):
+///
+///    ```
+///    #bibliography-slide(text-size: 14pt)[
+///      #bibliography("references.bib", title: none, style: "apa", full: true)
+///    ]
+///    ```
 #let bibliography-slide(
   title: "References",
   text-size: none,
   content-align: horizon,
-  body,
+  bib: none, // `read("references.bib")` (string or bytes); builds the bibliography internally
+  style: "springer-basic-author-date", // forwarded to bibliography(); `auto` uses its built-in default
+  full: false, // forwarded to bibliography() when `bib` is given
+  bib-title: none, // bibliography()'s own heading; off by default (slide already has a title)
+  ..body, // or pass pre-built bibliography content as a trailing block
 ) = {
+  let refs = if bib != none {
+    // read() returns a string by default; bibliography() needs bytes (a plain
+    // string would be read as a path). bytes() preserves UTF-8 content.
+    let src = if type(bib) == str { bytes(bib) } else { bib }
+    // `style: auto` means "use bibliography's built-in default" — omit the arg.
+    if style == auto {
+      bibliography(src, title: bib-title, full: full)
+    } else {
+      bibliography(src, title: bib-title, style: style, full: full)
+    }
+  } else {
+    body.pos().at(0, default: none)
+  }
   bips-slide(title: title, text-size: text-size, content-align: content-align)[
-    #body
+    #refs
   ]
 }
 
@@ -1030,6 +1063,10 @@
   show list: set text(top-edge: "cap-height", bottom-edge: "baseline")
   // Tabular figures keep the enum marker gutter fixed; see the main `show enum`
   // rule above for why (proportional digits shift the marker under #pause).
-  show enum: set text(top-edge: "cap-height", bottom-edge: "baseline", number-width: "tabular")
+  show enum: set text(
+    top-edge: "cap-height",
+    bottom-edge: "baseline",
+    number-width: "tabular",
+  )
   body
 }
