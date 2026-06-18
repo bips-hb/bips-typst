@@ -11,6 +11,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `section-slide()` now accepts optional trailing content (e.g. `#section-slide("Paper 1")[Full descriptive title]`) shown centered below the section title at normal text size; the title alone remains the PDF outline entry
 - `handout` parameter on `bips-theme()` (default `auto`) that forwards to Touying's `config-common(handout: ...)`, collapsing all `#pause`/`#uncover`/`#only` steps into a compact one-page-per-slide PDF. With the default `auto`, the theme watches the `handout` CLI input flag, so `typst compile --input handout=true` builds a handout from the same source with no document changes. Set `handout: true`/`false` explicitly in `bips-theme()` to override the flag
 
+### Fixed
+- Enum markers no longer shift horizontally when a list is revealed item-by-item with `#pause`. Fira Sans uses proportional figures, so the marker gutter (right-aligned by Typst's default `number-align: end`) widened as `2.`/`3.` appeared, nudging `1.` rightward across reveal steps; enum text now uses tabular figures (`number-width: "tabular"`) to keep the gutter a fixed width
+
 ## [0.3.0] - May 2026
 
 ### Added

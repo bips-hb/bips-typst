@@ -351,6 +351,11 @@
     fill: font-color-base,
     top-edge: "ascender",
     bottom-edge: "descender",
+    // Tabular figures keep the marker gutter a fixed width. With Fira Sans's
+    // proportional digits the gutter is sized to the widest marker, so a list
+    // revealed item-by-item (Touying #pause) shifts "1." right as "2."/"3."
+    // appear. Equal-width digits pin the marker in place.
+    number-width: "tabular",
   )
   show enum: set par(leading: 0.4em)
   show enum: it => {
@@ -1023,6 +1028,8 @@
   show enum: set enum(spacing: spacing)
   set par(leading: leading)
   show list: set text(top-edge: "cap-height", bottom-edge: "baseline")
-  show enum: set text(top-edge: "cap-height", bottom-edge: "baseline")
+  // Tabular figures keep the enum marker gutter fixed; see the main `show enum`
+  // rule above for why (proportional digits shift the marker under #pause).
+  show enum: set text(top-edge: "cap-height", bottom-edge: "baseline", number-width: "tabular")
   body
 }
