@@ -15,3 +15,19 @@
     Chrome-free but still counted; the page number is shown.
   ]
 ]
+
+// slide-level passthrough: a full-bleed background via config-page, plus the
+// new content-align argument instead of a manual #align wrapper
+#empty-slide(
+  config: config-page(fill: bips-blue),
+  content-align: center + horizon,
+)[
+  #text(fill: white)[Full-bleed background via config passthrough]
+]
+
+// composer: full-bleed multi-pane layout with multiple content blocks
+#empty-slide(composer: (1fr, 1fr))[
+  #rect(fill: bips-blue, width: 100%, height: 100%)
+][
+  #rect(fill: bips-orange, width: 100%, height: 100%)
+]

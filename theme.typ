@@ -433,6 +433,22 @@
   }
 }
 
+// Pull Touying `slide()` overrides (config, repeat, setting) out of a slide
+// function's `..args`, so the non-content slide types are as composable as
+// `bips-slide`. `config` is returned separately for the caller to merge into
+// its own base config; the rest default to slide()'s own defaults (no-ops).
+// `composer` is intentionally omitted: it only matters with multiple body
+// blocks, which the fixed-layout slides don't take. `empty-slide` handles
+// `composer` itself (see below).
+#let _slide-overrides(args) = {
+  let named = args.named()
+  (
+    config: named.at("config", default: (:)),
+    repeat: named.at("repeat", default: auto),
+    setting: named.at("setting", default: body => body),
+  )
+}
+
 // -------------------------------------------------------------------
 // Content Slides
 // -------------------------------------------------------------------
@@ -567,9 +583,17 @@
   author-size: none,
   institute-size: none,
   date-size: none,
+  // slide() overrides (config/repeat/composer). `setting` is owned by the
+  // title slide layout and is not forwarded.
+  ..args,
 ) = {
+  let o = _slide-overrides(args)
   slide(
-    config: config-common(freeze-slide-counter: true),
+    config: utils.merge-dicts(
+      config-common(freeze-slide-counter: true),
+      o.config,
+    ),
+    repeat: o.repeat,
     setting: body => {
       set align(center)
       // Fix text size so block spacing (1.2em) doesn't scale with base-size
@@ -718,17 +742,23 @@
 #let section-slide(
   section-title,
   show-logo: true, // Show BIPS logo by default (institutional default)
-  ..body, // Optional secondary content shown (centered) below the title
+  // Optional secondary content (centered, below the title) as a trailing
+  // block, plus any slide() overrides (config/repeat/composer/setting).
+  ..args,
 ) = {
   // Treat an empty content block (`[]`) the same as no body, so
   // `#section-slide("foo")` and `#section-slide("foo")[]` render identically.
-  let body = body.pos().at(0, default: none)
+  let body = args.pos().at(0, default: none)
   if body == [] { body = none }
+  let o = _slide-overrides(args)
   slide(
     config: utils.merge-dicts(
       config-common(freeze-slide-counter: true),
       config-page(background: bips-background(show-logo: show-logo)),
+      o.config,
     ),
+    repeat: o.repeat,
+    setting: o.setting,
   )[
     // Invisible heading for PDF outline/bookmarks
     #place(hide[#heading(level: 1, outlined: true)[#section-title]])
@@ -815,12 +845,17 @@
   contact-author: "",
   email: "",
   qr-url: none, // Optional: URL to generate QR code for (replaces website URL)
+  ..args, // slide() overrides (config/repeat/composer/setting)
 ) = {
+  let o = _slide-overrides(args)
   slide(
     config: utils.merge-dicts(
       config-common(freeze-slide-counter: true),
       config-page(background: none),
+      o.config,
     ),
+    repeat: o.repeat,
+    setting: o.setting,
   )[
     // 3-row grid layout: thanks text, QR/website, contact+logo
     #grid(
@@ -912,16 +947,43 @@
 /// does not advance the count. Set `count: true` to keep it in the numbered
 /// sequence and show the page number (e.g. a full-bleed figure that should
 /// still count as a slide).
-#let empty-slide(count: false, content-align: none, body) = {
-  slide(
-    config: utils.merge-dicts(
-      config-common(freeze-slide-counter: not count),
-      config-page(background: bips-background(show-logo: false)),
-    ),
-  )[
-    #if count { _page-number() }
-    #_aligned(content-align, body)
-  ]
+///
+/// Pass a `composer` (e.g. `composer: (1fr, 1fr)`) with multiple trailing
+/// content blocks for a full-bleed multi-pane layout — Touying arranges the
+/// panes and animations split correctly across them. In that mode
+/// `content-align` is ignored (the composer owns the layout).
+#let empty-slide(count: false, content-align: none, ..args) = {
+  let named = args.named()
+  let base-config = utils.merge-dicts(
+    config-common(freeze-slide-counter: not count),
+    config-page(background: bips-background(show-logo: false)),
+    named.at("config", default: (:)),
+  )
+  let repeat = named.at("repeat", default: auto)
+  let composer = named.at("composer", default: auto)
+  let user-setting = named.at("setting", default: body => body)
+
+  if composer == auto {
+    // Single-body mode (the common case): page number + content-align wrap.
+    let body = args.pos().at(0, default: none)
+    slide(config: base-config, repeat: repeat, setting: user-setting)[
+      #if count { _page-number() }
+      #_aligned(content-align, body)
+    ]
+  } else {
+    // Multi-pane mode: forward all bodies to the composer. The page number is
+    // injected via setting so it isn't laid out as one of the panes.
+    slide(
+      config: base-config,
+      repeat: repeat,
+      composer: composer,
+      setting: body => {
+        if count { _page-number() }
+        user-setting(body)
+      },
+      ..args.pos(),
+    )
+  }
 }
 
 // ===================================================================
