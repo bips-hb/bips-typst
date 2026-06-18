@@ -176,6 +176,11 @@
 /// Default is the bundled placeholder; users should replace with their own.
 #let _bips-logo = state("bips-logo", image("logo.png"))
 
+/// State holding the raw `config-info(...)` values passed to bips-theme().
+/// title-slide() reads this as a fallback for fields not passed explicitly,
+/// so one `config-info(...)` populates both PDF metadata and the title slide.
+#let _bips-info = state("bips-info", (:))
+
 /// Render content at a smaller size (scales with base-size)
 #let small(body) = context text(size: _bips-sizes.get().small)[#body]
 
@@ -247,6 +252,11 @@
   // `auto` (default) reads the `handout` CLI input flag
   // (`typst compile --input handout=true`); `true`/`false` override it.
   handout: auto,
+  // Extra Touying config dicts (e.g. config-info(...), config-common(...),
+  // config-page(...)) forwarded to touying-slides(). They deep-merge after
+  // the theme's own config, so user values override on conflict. This is how
+  // you set PDF metadata, enable pdfpc, presenter notes, appendix mode, etc.
+  ..args,
   body,
 ) = {
   // Calculate effective font sizes (use override if provided, otherwise theme default)
@@ -367,7 +377,17 @@
   show raw.where(block: true): set text(size: effective-code-block-scale * 1em)
   show raw.where(block: false): set text(
     size: effective-code-inline-scale * 1em,
-  ) // Use Touying's infrastructure with BIPS customizations
+  ) // Stash any config-info(...) values so title-slide() can use them as
+  // defaults. config-info(...) returns `(info: (...))` with raw content,
+  // before Touying wraps the values for its own pipeline.
+  let info = (:)
+  for cfg in args.pos() {
+    if type(cfg) == dictionary and "info" in cfg {
+      info += cfg.info
+    }
+  }
+  _bips-info.update(info)
+  // Use Touying's infrastructure with BIPS customizations
   touying-slides(
     config-common(handout: effective-handout),
     config-page(
@@ -375,6 +395,8 @@
       margin: (top: 1.55cm, bottom: 1.55cm, left: 1.55cm, right: 1.75cm),
       background: bips-background(show-logo: true),
     ),
+    // User-supplied config dicts override the above via Touying's deep merge.
+    ..args.pos(),
     body,
   )
 }
@@ -553,122 +575,137 @@
       // Fix text size so block spacing (1.2em) doesn't scale with base-size
       set text(size: font-size-base)
 
-      v(1fr)
+      // Fall back to the theme's config-info(...) for any field not passed
+      // explicitly, so PDF metadata and the title slide share one source.
+      // Title slides have no #pause, so wrapping in context is safe here.
+      context {
+        let info = _bips-info.get()
+        let title = pick-first(title, info.at("title", default: none))
+        let subtitle = pick-first(subtitle, info.at("subtitle", default: none))
+        let author = pick-first(author, info.at("author", default: none))
+        let date = pick-first(date, info.at("date", default: none))
+        let institute = pick-first(institute, info.at(
+          "institution",
+          default: none,
+        ))
 
-      // Title (width constrained to prevent overlap with logo in top-right)
-      if title != none {
-        block(
-          width: 85%,
-          text(
-            size: pick-first(title-size, font-size-title-slide-main),
-            weight: font-weight-title-slide-main,
-            fill: font-color-title-slide-main,
-          )[
-            #title
-          ],
-        )
-      }
+        v(1fr)
 
-      v(0.5fr)
+        // Title (width constrained to prevent overlap with logo in top-right)
+        if title != none {
+          block(
+            width: 85%,
+            text(
+              size: pick-first(title-size, font-size-title-slide-main),
+              weight: font-weight-title-slide-main,
+              fill: font-color-title-slide-main,
+            )[
+              #title
+            ],
+          )
+        }
 
-      // Subtitle
-      if subtitle != none {
-        block(
-          width: 85%,
-          text(
-            size: pick-first(subtitle-size, font-size-title-slide-subtitle),
-            weight: font-weight-title-slide-subtitle,
-            fill: font-color-title-slide-subtitle,
-          )[
-            #subtitle
-          ],
-        )
-      }
+        v(0.5fr)
 
-      v(1fr)
+        // Subtitle
+        if subtitle != none {
+          block(
+            width: 85%,
+            text(
+              size: pick-first(subtitle-size, font-size-title-slide-subtitle),
+              weight: font-weight-title-slide-subtitle,
+              fill: font-color-title-slide-subtitle,
+            )[
+              #subtitle
+            ],
+          )
+        }
 
-      // Author(s) - support both single and multiple authors
-      if authors != none {
-        // Multiple authors format
-        block(
-          text(
-            size: pick-first(author-size, font-size-title-slide-author),
-            weight: font-weight-title-slide-author,
-            fill: font-color-title-slide-author,
-          )[
-            // #authors.join(linebreak())
-            #authors.join([#h(1em)])
-          ],
-        )
-      } else if author != none {
-        // Single author format (backward compatibility)
-        block(
-          text(
-            size: pick-first(author-size, font-size-title-slide-author),
-            weight: font-weight-title-slide-author,
-            fill: font-color-title-slide-author,
-          )[
-            #author
-          ],
-        )
-      }
+        v(1fr)
 
-      v(1fr)
+        // Author(s) - support both single and multiple authors
+        if authors != none {
+          // Multiple authors format
+          block(
+            text(
+              size: pick-first(author-size, font-size-title-slide-author),
+              weight: font-weight-title-slide-author,
+              fill: font-color-title-slide-author,
+            )[
+              // #authors.join(linebreak())
+              #authors.join([#h(1em)])
+            ],
+          )
+        } else if author != none {
+          // Single author format (backward compatibility)
+          block(
+            text(
+              size: pick-first(author-size, font-size-title-slide-author),
+              weight: font-weight-title-slide-author,
+              fill: font-color-title-slide-author,
+            )[
+              #author
+            ],
+          )
+        }
 
-      // Institute(s) - support both single and multiple institutes
-      if institutes != none {
-        // Multiple institutes format with numbering
-        block(
-          text(
-            size: pick-first(institute-size, font-size-title-slide-institute),
-            weight: font-weight-title-slide-institute,
-            fill: font-color-title-slide-institute,
-          )[
-            #for (i, inst) in institutes.enumerate() [
-              #super[#(i + 1)] #inst
-              #if i < institutes.len() - 1 [\ ]
-            ]
-          ],
-        )
-      } else if institute != none {
-        // Single institute format (backward compatibility)
-        block(
-          text(
-            size: pick-first(institute-size, font-size-title-slide-institute),
-            weight: font-weight-title-slide-institute,
-            fill: font-color-title-slide-institute,
-          )[
-            #institute
-          ],
-        )
-      }
+        v(1fr)
 
-      v(1fr)
+        // Institute(s) - support both single and multiple institutes
+        if institutes != none {
+          // Multiple institutes format with numbering
+          block(
+            text(
+              size: pick-first(institute-size, font-size-title-slide-institute),
+              weight: font-weight-title-slide-institute,
+              fill: font-color-title-slide-institute,
+            )[
+              #for (i, inst) in institutes.enumerate() [
+                #super[#(i + 1)] #inst
+                #if i < institutes.len() - 1 [\ ]
+              ]
+            ],
+          )
+        } else if institute != none {
+          // Single institute format (backward compatibility)
+          block(
+            text(
+              size: pick-first(institute-size, font-size-title-slide-institute),
+              weight: font-weight-title-slide-institute,
+              fill: font-color-title-slide-institute,
+            )[
+              #institute
+            ],
+          )
+        }
 
-      // Date
-      if date != none {
-        block(
-          text(
-            size: pick-first(date-size, font-size-title-slide-date),
-            weight: font-weight-title-slide-date,
-            fill: font-color-title-slide-date,
-          )[
-            #date
-          ],
-        )
-      }
+        v(1fr)
 
-      // Occasion
-      if occasion != none {
-        block(
-          text(
-            size: pick-first(date-size, font-size-title-slide-date),
-            weight: font-weight-title-slide-date,
-            fill: font-color-title-slide-date,
-          )[
-            #occasion
-          ],
-        )
+        // Date
+        if date != none {
+          block(
+            text(
+              size: pick-first(date-size, font-size-title-slide-date),
+              weight: font-weight-title-slide-date,
+              fill: font-color-title-slide-date,
+            )[
+              #date
+            ],
+          )
+        }
+
+        // Occasion
+        if occasion != none {
+          block(
+            text(
+              size: pick-first(date-size, font-size-title-slide-date),
+              weight: font-weight-title-slide-date,
+              fill: font-color-title-slide-date,
+            )[
+              #occasion
+            ],
+          )
+        }
       }
     },
   )[]

@@ -1,12 +1,12 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
-
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
 ### Added
+- `bips-theme()` now forwards arbitrary Touying config dicts via `..args`, so `#show: bips-theme.with(config-info(...), config-common(...), config-page(...))` works. This unlocks Touying capabilities the theme previously hid: PDF document metadata, pdfpc export, presenter notes (`show-notes-on-second-screen`), appendix mode, and extra page overrides. User config deep-merges after the theme's own config, so it wins on conflict
+- `title-slide()` fields (`title`, `subtitle`, `author`, `date`, `institute`) now fall back to the theme's `config-info(...)` when not passed explicitly, so a single `config-info()` populates both the PDF metadata and the title slide. Explicit `title-slide()` arguments still override
 - `bibliography-slide()` can now build the bibliography itself: pass the `.bib` file via `bib: read("references.bib")` plus optional `style`/`full`, instead of wrapping a manual `#bibliography(...)` call. Use `read()` rather than a bare path — `bibliography()` resolves paths relative to where it is called (inside the package), but `read()` runs in your document so its path resolves there; the slide accepts the resulting string (or bytes) and forwards it. `style` defaults to `"springer-basic-author-date"` (override per call, or `auto` for Typst's built-in default), and the bibliography's own heading is suppressed by default (`bib-title: none`) since the slide already has a "References" title. Passing pre-built content as a trailing block still works
 - `empty-slide()` now accepts a `content-align` argument (matching `bips-slide()`), so content can be centered/bottom-aligned without a manual `#align` wrapper
 - `section-slide()` now accepts optional trailing content (e.g. `#section-slide("Paper 1")[Full descriptive title]`) shown centered below the section title at normal text size; the title alone remains the PDF outline entry

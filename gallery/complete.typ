@@ -15,7 +15,16 @@
 
 // [BIPS] Apply the BIPS theme with default settings.
 // Optional overrides: base-size, slide-title-size, heading-*-size, etc.
-#show: bips-theme
+// [Touying] Any Touying config dict (config-info, config-common, config-page)
+// passed here is forwarded to Touying. config-info() sets the PDF document
+// metadata and provides defaults for title-slide() fields not passed
+// explicitly. config-common() exposes knobs like pdfpc / presenter notes.
+#show: bips-theme.with(
+  config-info(
+    title: [Bypst: The BIPS Typst Theme],
+    author: [BIPS],
+  ),
+)
 
 // ===================================================================
 // TITLE SLIDE
