@@ -610,23 +610,36 @@
   ]
 }
 
-/// A content slide whose title/subtitle live in a proper header block — the
-/// divider is the header's bottom edge (so it actually divides), the logo sits
-/// top-right (from the theme background), and the page number top-right. Unlike
-/// `bips-slide`, the body is native Touying content, so `#pause`, `composer`
-/// (multi-pane), and multiple body blocks all work directly. Use it for layout
-/// flexibility beyond `bips-slide`'s single-stream body.
+/// The flexible base content slide: title/subtitle live in a native Touying
+/// header block (the divider is the header's bottom edge), over a fully native
+/// body. Every BIPS chrome component is independently toggleable. `bips-slide`
+/// and `empty-slide` are presets over this function.
 ///
-/// With no `title`/`subtitle` the header is omitted (body fills from the top,
-/// `show-line` has no effect). Slide-level `config`/`repeat`/`composer`/
-/// `setting` overrides are forwarded like the other slide types.
-#let plain-slide(
+/// Because the body is native Touying content, `#pause`, `composer` (multi-pane
+/// via multiple trailing blocks), and multi-block bodies all work directly.
+///
+/// Toggles:
+/// - `show-logo` — top-right logo (default true).
+/// - `page-number` — show the page number (default true).
+/// - `show-line` — divider line under the header (default true; no-op with no header).
+/// - `count` — advance the slide counter (default true; frozen if false).
+///
+/// With no `title`/`subtitle` the header is omitted and the body fills from the
+/// top margin. Slide-level `config` / `repeat` / `composer` / `setting` overrides
+/// are forwarded.
+#let base-slide(
   title: none,
   subtitle: none,
+  show-logo: true,
+  page-number: true,
+  show-line: true,
+  count: true,
+  content-align: none,
   title-size: none,
   subtitle-size: none,
-  show-line: true,
-  content-align: none,
+  text-size: none,
+  code-block-scale: none,
+  code-inline-scale: none,
   ..args,
 ) = {
   let named = args.named()
@@ -636,19 +649,19 @@
   let user-setting = named.at("setting", default: body => body)
   let has-header = title != none or subtitle != none
 
-  // The header content is bottom-anchored against the body, so its last
-  // element sits at the body's top edge (the top margin). Putting `body-gap`
-  // last places the divider that far above the body — i.e. at the constant
-  // divider position (base margin + title area + gap = flush with the logo).
+  // The header content is bottom-anchored against the body, so putting body-gap
+  // last places the divider that far above the body — at the constant divider
+  // position (base margin + title area + gap = flush with the logo).
   let body-gap = 0.8cm
   let top-margin = (
     1.55cm + slide-title-area-height + _title-divider-gap + body-gap
   )
 
   let header(self) = {
-    // Page number centered under the logo, placed flow-free. Header frame top
-    // = page top, so dy is the absolute distance from the top edge.
-    place(top + right, dx: 1.25cm, dy: 3.75cm, _page-number-content())
+    // Page number centered under the logo, placed flow-free.
+    if page-number {
+      place(top + right, dx: 1.25cm, dy: 3.75cm, _page-number-content())
+    }
     _title-area(
       title,
       subtitle,
@@ -659,10 +672,17 @@
     v(body-gap)
   }
 
-  // Per-slide config: keep the theme background (logo) and add the header.
-  // zero-margin-header: false so the header respects the content margins.
+  // Per-slide chrome: logo background (show-logo authoritative per slide) and
+  // counter participation. bips-background(show-logo: false) renders nothing,
+  // suppressing the global theme logo for this slide.
+  let chrome-config = utils.merge-dicts(
+    config-common(freeze-slide-counter: not count),
+    config-page(background: bips-background(show-logo: show-logo)),
+  )
+
   let config = if has-header {
     utils.merge-dicts(
+      chrome-config,
       config-common(zero-margin-header: false),
       config-page(
         margin: (top: top-margin, bottom: 1.55cm, left: 1.55cm, right: 1.75cm),
@@ -672,27 +692,40 @@
       user-config,
     )
   } else {
-    user-config
+    utils.merge-dicts(chrome-config, user-config)
   }
 
   // With no header the page number goes in the content (place is flow-free).
-  let chrome = if not has-header { _page-number() }
+  let content-number = if not has-header and page-number { _page-number() }
+
+  let render-body(body) = {
+    let styled = if text-size != none { text(size: text-size)[#body] } else {
+      body
+    }
+    _aligned(content-align, styled)
+  }
 
   if composer == auto {
     let body = args.pos().at(0, default: none)
     slide(config: config, repeat: repeat, setting: user-setting)[
-      #chrome
-      #_aligned(content-align, body)
+      #content-number
+      #show raw.where(block: true): set text(
+        size: pick-first(code-block-scale, font-scale-code-block) * 1em,
+      )
+      #show raw.where(block: false): set text(
+        size: pick-first(code-inline-scale, font-scale-code-inline) * 1em,
+      )
+      #render-body(body)
     ]
   } else {
-    // Multi-pane mode: forward all bodies to the composer (content-align is
-    // ignored — the composer owns the layout).
+    // Multi-pane mode: forward all bodies to the composer (content-align and
+    // body-level code-scale are ignored — the composer owns the layout).
     slide(
       config: config,
       repeat: repeat,
       composer: composer,
       setting: body => {
-        chrome
+        content-number
         user-setting(body)
       },
       ..args.pos(),
