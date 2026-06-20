@@ -31,3 +31,14 @@
 ][
   #rect(fill: bips-orange, width: 100%, height: 100%)
 ]
+
+// New toggles: logo on, number on, while staying counted.
+#empty-slide(count: true, show-logo: true)[
+  Full-bleed-ish slide that keeps the logo and counts in the sequence.
+]
+
+// Number explicitly off even though counted.
+#empty-slide(count: true, page-number: false)[Counted but no visible number.]
+
+// Logo on without counting.
+#empty-slide(show-logo: true)[Logo, no number, not counted.]

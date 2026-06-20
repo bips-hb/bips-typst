@@ -1098,51 +1098,31 @@
 // Empty Slide
 // -------------------------------------------------------------------
 
-/// Minimal slide with no logo, title, or separator — just the body.
-/// Useful for full-bleed images or transition screens.
+/// Minimal slide built on `base-slide`: no header, divider off, and (by default)
+/// no logo or page number — just the body. Useful for full-bleed images or
+/// transition screens.
 ///
-/// By default the slide counter is frozen, so the slide is unnumbered and
-/// does not advance the count. Set `count: true` to keep it in the numbered
-/// sequence and show the page number (e.g. a full-bleed figure that should
-/// still count as a slide).
+/// By default the slide counter is frozen (unnumbered, does not advance). Set
+/// `count: true` to keep it in the numbered sequence; the page number then
+/// shows too (set `page-number: false` to suppress it). Toggle `show-logo: true`
+/// to keep the BIPS logo on an otherwise minimal slide.
 ///
-/// Pass a `composer` (e.g. `composer: (1fr, 1fr)`) with multiple trailing
-/// content blocks for a full-bleed multi-pane layout — Touying arranges the
-/// panes and animations split correctly across them. In that mode
-/// `content-align` is ignored (the composer owns the layout).
-#let empty-slide(count: false, content-align: none, ..args) = {
-  let named = args.named()
-  let base-config = utils.merge-dicts(
-    config-common(freeze-slide-counter: not count),
-    config-page(background: bips-background(show-logo: false)),
-    named.at("config", default: (:)),
-  )
-  let repeat = named.at("repeat", default: auto)
-  let composer = named.at("composer", default: auto)
-  let user-setting = named.at("setting", default: body => body)
-
-  if composer == auto {
-    // Single-body mode (the common case): page number + content-align wrap.
-    let body = args.pos().at(0, default: none)
-    slide(config: base-config, repeat: repeat, setting: user-setting)[
-      #if count { _page-number() }
-      #_aligned(content-align, body)
-    ]
-  } else {
-    // Multi-pane mode: forward all bodies to the composer. The page number is
-    // injected via setting so it isn't laid out as one of the panes.
-    slide(
-      config: base-config,
-      repeat: repeat,
-      composer: composer,
-      setting: body => {
-        if count { _page-number() }
-        user-setting(body)
-      },
-      ..args.pos(),
-    )
-  }
-}
+/// Pass a `composer` (e.g. `composer: (1fr, 1fr)`) with multiple trailing blocks
+/// for a full-bleed multi-pane layout; in that mode `content-align` is ignored.
+#let empty-slide(
+  count: false,
+  show-logo: false,
+  page-number: auto, // auto = follow `count` (number shows iff counted)
+  content-align: none,
+  ..args,
+) = base-slide(
+  show-logo: show-logo,
+  page-number: if page-number == auto { count } else { page-number },
+  show-line: false,
+  count: count,
+  content-align: content-align,
+  ..args,
+)
 
 // ===================================================================
 // LAYOUT AND COLOR UTILITIES
