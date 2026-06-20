@@ -14,7 +14,7 @@ BIPS Typst presentation template for 16:9 institutional presentations using Typs
 
 ### Build and Test
 - `just all` - Compile all 5 gallery demos
-- `just test` - Run tytanic test suite (11 compile-only feature tests + 1 template test)
+- `just test` - Run tytanic test suite (13 compile-only feature tests + 1 template test)
 - `just test-verbose` - Run tests with verbose output
 - `just clean` - Remove all generated PDFs
 - `typst compile file.typ` - Compile single file
@@ -95,7 +95,7 @@ The `bips-theme()` function accepts size override parameters (`base-size`, `slid
 
 1. **Module level**: `_bips-sizes` state is initialized with module-level defaults
 2. **`bips-theme()`**: Calls `_bips-sizes.update(...)` with effective values (respecting user overrides)
-3. **`bips-slide()`**: Reads via `context _bips-sizes.get()` in the title area and page number `place()`
+3. **`base-slide()`**: Reads via `context _bips-sizes.get()` in the title area and page number `place()` (`bips-slide()` delegates here)
 
 **Heading sizes** use a different approach — em-based defaults in global `show heading` rules inside `bips-theme()`. This means headings scale proportionally when `base-size` changes, without needing the state bridge. Explicit pt overrides via `heading-*-size` take precedence.
 
@@ -107,7 +107,7 @@ All slide types should follow consistent patterns:
 
 - **`config:` parameter**: Used for page-level overrides and counter freeze. Use `utils.merge-dicts()` to combine multiple configs (e.g., `utils.merge-dicts(config-common(freeze-slide-counter: true), config-page(background: none))`).
 - **`setting:` callback**: Used by `title-slide` for `set align(center)` and content layout. The callback receives `body` and must return it. **Do NOT use `set page()` inside `setting:` — it causes ghost blank pages in Touying 0.7.0. Use `config: config-page(...)` instead.**
-- **Direct content**: `bips-slide` passes body directly to Touying's `slide[]` so `#pause` markers are visible to Touying's content splitter.
+- **Direct content**: `base-slide` passes body directly to Touying's `slide[]` so `#pause` markers are visible to Touying's content splitter (`bips-slide` delegates to it).
 
 ## Animation Compatibility
 
@@ -187,7 +187,7 @@ Release checklist (publish to Typst first, then tag + GitHub release):
 1. Bump version in `typst.toml`
 2. Update all versioned `@preview/bypst:` and `@local/bypst:` imports (see Version references below)
 3. Move `CHANGELOG.md` `[Unreleased]` items under a new `[X.Y.Z]` heading and update the compare links at the bottom
-4. Verify: `just test` (12/12), `just format-check`, and compile the gallery (`just all`)
+4. Verify: `just test` (14/14), `just format-check`, and compile the gallery (`just all`)
 5. Commit the release changes
 6. **Publish to Typst first**: `tyler build . --no-bump --publish` (needs GitHub auth; `--no-bump` keeps the version set in step 1). This opens/updates the `typst/packages` PR.
 7. Wait for the `typst/packages` PR checks. If `typst-package-check` flags anything (e.g. an outdated dep-version warning), fix it, commit, and re-run step 6 (tyler force-recreates the `bypst-<version>` branch, updating the same PR).
