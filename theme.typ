@@ -569,66 +569,6 @@
 // Content Slides
 // -------------------------------------------------------------------
 
-#let bips-slide(
-  title: none,
-  subtitle: none,
-  // Content alignment (e.g. center, center + horizon, horizon)
-  content-align: none,
-  // Optional font size overrides for this slide
-  title-size: none,
-  subtitle-size: none,
-  text-size: none,
-  code-block-scale: none,
-  code-inline-scale: none,
-  // Show the gradient separator line under the title (set false to hide it
-  // while keeping the slide counter running, e.g. for full-bleed graphics)
-  show-line: true,
-  ..args,
-  body,
-) = {
-  slide(..args)[
-    // Page number (see _page-number helper for the counter-timing rationale)
-    #_page-number()
-    // Apply slide-specific styling overrides
-    #show raw.where(block: true): set text(
-      size: pick-first(code-block-scale, font-scale-code-block) * 1em,
-    )
-    #show raw.where(block: false): set text(
-      size: pick-first(code-inline-scale, font-scale-code-inline) * 1em,
-    )
-
-    // Helper to wrap body with optional alignment and text size
-    #let render-body(body) = {
-      let styled = if text-size != none { text(size: text-size)[#body] } else {
-        body
-      }
-      _aligned(content-align, styled)
-    }
-
-    // Title area reads state-based sizes via context (inside _title-area).
-    // IMPORTANT: body/render-body must stay OUTSIDE context to preserve
-    // Touying's ability to split content at #pause boundaries.
-    #if title != none or subtitle != none {
-      // _title-area includes the divider (at a constant position).
-      _title-area(
-        title,
-        subtitle,
-        show-line: show-line,
-        title-size: title-size,
-        subtitle-size: subtitle-size,
-      )
-
-      // Small gap below the divider so the body separates cleanly (kept
-      // conservative to avoid wasting vertical space).
-      v(1.3em)
-
-      render-body(body)
-    } else {
-      render-body(body)
-    }
-  ]
-}
-
 /// The flexible base content slide: title/subtitle live in a native Touying
 /// header block (the divider is the header's bottom edge), over a fully native
 /// body. Every BIPS chrome component is independently toggleable. `bips-slide`
@@ -751,6 +691,36 @@
     )
   }
 }
+
+/// Standard BIPS content slide: title/subtitle header, logo, page number, and
+/// gradient divider, over a native Touying body. A preset over `base-slide`
+/// with all chrome enabled. Signature is unchanged from earlier versions.
+#let bips-slide(
+  title: none,
+  subtitle: none,
+  content-align: none,
+  title-size: none,
+  subtitle-size: none,
+  text-size: none,
+  code-block-scale: none,
+  code-inline-scale: none,
+  show-line: true,
+  ..args,
+) = base-slide(
+  title: title,
+  subtitle: subtitle,
+  show-logo: true,
+  page-number: true,
+  show-line: show-line,
+  count: true,
+  content-align: content-align,
+  title-size: title-size,
+  subtitle-size: subtitle-size,
+  text-size: text-size,
+  code-block-scale: code-block-scale,
+  code-inline-scale: code-inline-scale,
+  ..args,
+)
 
 // -------------------------------------------------------------------
 // Title Slide
