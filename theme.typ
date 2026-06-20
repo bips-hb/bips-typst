@@ -62,8 +62,10 @@
 #let font-color-slide-title = bips-blue
 #let font-weight-slide-title = 600
 
-// Height of the title area (keeps gradient line at consistent position)
-#let slide-title-area-height = 2cm
+// Height of the title area (keeps the divider at a consistent position).
+// Tuned with _title-divider-gap so the divider meets the logo's lower edge:
+// 1.55cm top margin + 1.6cm + 0.35cm gap = 3.5cm = logo bottom (3cm @ dy 0.5cm).
+#let slide-title-area-height = 1.6cm
 
 #let font-size-slide-subtitle = 20pt
 #let font-color-slide-subtitle = bips-blue
@@ -156,20 +158,113 @@
   title-align: left,
 ))
 
+/// The page number, horizontally centered under the logo. The logo is 3cm wide
+/// placed at dx -0.5cm, so a 3cm box right-aligned at the same dx spans the
+/// logo's width; centering the number within it puts it under the logo's middle.
+#let _page-number-content() = box(width: 3cm)[
+  // h(1fr) on both sides centers within the fixed-width box (align(center)
+  // does not center inline box content).
+  #h(1fr)
+  #context text(
+    size: _bips-sizes.get().page-number,
+    fill: font-color-page-number,
+    weight: font-weight-page-number,
+  )[#utils.slide-counter.display()]
+  #h(1fr)
+]
+
 /// Page number element for slide content.
 /// MUST be placed inside the slide CONTENT (not background/header) so the
 /// slide counter is read after Touying's page-preamble steps it, giving
 /// correct numbering across #pause states. `place()` positions it absolutely
 /// without affecting content flow. See CLAUDE.md for the full rationale.
+// dx aligns the number box (in the content frame, inset by the 1.75cm right
+// margin) with the logo (in the page frame, 0.5cm from the right edge):
+// 1.75cm - 0.5cm = 1.25cm. So the number centers under the logo.
 #let _page-number() = place(
   top + right,
-  dx: -0.5cm,
-  dy: 2.7cm,
-  context text(
-    size: _bips-sizes.get().page-number,
-    fill: font-color-page-number,
-    weight: font-weight-page-number,
-  )[#utils.slide-counter.display()],
+  dx: 1.25cm,
+  dy: 2.2cm,
+  _page-number-content(),
+)
+
+/// The BIPS gradient divider line (grey fading to white). Shared by bips-slide
+/// (under the title) and plain-slide's header (as its bottom edge).
+#let _divider-line() = rect(
+  width: 85%,
+  height: 0.75pt,
+  fill: gradient.linear(bips-text-gray, white, angle: 0deg),
+)
+
+// Vertical gap between the title area's lower edge and the divider line.
+// Explicit (not the default ~1.2em block gap) so the divider lands at the
+// logo's lower edge while leaving the subtitle some breathing room.
+#let _title-divider-gap = 0.35cm
+
+/// The fixed-height title area (title and/or subtitle) plus the divider line,
+/// styled in BIPS blue. Shared by bips-slide (rendered in content) and
+/// plain-slide (in the header). Reads sizes/alignment from `_bips-sizes`
+/// state, so it must run in `context`.
+#let _title-area(
+  title,
+  subtitle,
+  show-line: true,
+  title-size: none,
+  subtitle-size: none,
+) = (
+  context {
+    let sizes = _bips-sizes.get()
+    let h-align = sizes.title-align
+    box(height: slide-title-area-height, width: 100%)[
+      // Fix text size so block spacing doesn't scale with base-size
+      #set text(size: font-size-base)
+      #if title != none and subtitle != none {
+        // Both title and subtitle - bottom-aligned in the fixed area
+        align(bottom + h-align)[
+          #block(width: 90%)[
+            #text(
+              size: pick-first(title-size, sizes.slide-title),
+              weight: font-weight-slide-title,
+              fill: font-color-slide-title,
+            )[#title]
+          ]
+          #v(0.15em)
+          #block(width: 90%)[
+            #text(
+              size: pick-first(subtitle-size, sizes.slide-subtitle),
+              weight: font-weight-slide-subtitle,
+              fill: font-color-slide-subtitle,
+            )[#subtitle]
+          ]
+        ]
+      } else if title != none {
+        // Title only - vertically centered in the title area (slightly larger).
+        // Centering keeps a single title balanced in the header rather than
+        // sitting low against the divider. (The both case bottom-aligns so the
+        // title+subtitle stack reads as a unit above the divider.)
+        align(horizon + h-align)[
+          #text(
+            size: pick-first(title-size, sizes.slide-title-only),
+            weight: font-weight-slide-title,
+            fill: font-color-slide-title,
+          )[#title]
+        ]
+      } else if subtitle != none {
+        // Subtitle only - vertically centered in the title area
+        align(horizon + h-align)[
+          #text(
+            size: pick-first(subtitle-size, sizes.slide-subtitle),
+            weight: font-weight-slide-subtitle,
+            fill: font-color-slide-subtitle,
+          )[#subtitle]
+        ]
+      }
+    ]
+    // Divider hugs the title box (small explicit gap, not the default block gap)
+    if show-line {
+      block(above: _title-divider-gap, below: 0pt, _divider-line())
+    }
+  }
 )
 
 /// State for the logo image, settable via bips-theme(logo: ...).
@@ -205,10 +300,12 @@
     context {
       let logo = _bips-logo.get()
       if logo != none {
+        // Inset toward the top-right corner (matches the BIPS beamer template).
+        // The title area height is tuned so the divider meets the logo's edge.
         place(
           top + right,
-          dx: -1cm,
-          dy: 1cm,
+          dx: -0.5cm,
+          dy: 0.5cm,
           box(width: 3cm, logo),
         )
       }
@@ -489,79 +586,118 @@
       _aligned(content-align, styled)
     }
 
-    // Title area is wrapped in context to read state-based sizes.
+    // Title area reads state-based sizes via context (inside _title-area).
     // IMPORTANT: body/render-body must stay OUTSIDE context to preserve
     // Touying's ability to split content at #pause boundaries.
     #if title != none or subtitle != none {
-      // Fixed-height title area keeps gradient line at same position
-      // regardless of whether subtitle is present
-      context {
-        let sizes = _bips-sizes.get()
-        let h-align = sizes.title-align
-        box(height: slide-title-area-height, width: 100%)[
-          // Fix text size so block spacing doesn't scale with base-size
-          #set text(size: font-size-base)
-          #if title != none and subtitle != none {
-            // Both title and subtitle - bottom-aligned in the fixed area
-            align(bottom + h-align)[
-              #block(width: 90%)[
-                #text(
-                  size: pick-first(title-size, sizes.slide-title),
-                  weight: font-weight-slide-title,
-                  fill: font-color-slide-title,
-                )[#title]
-              ]
-              #v(-0.25em)
-              #block(width: 90%)[
-                #text(
-                  size: pick-first(subtitle-size, sizes.slide-subtitle),
-                  weight: font-weight-slide-subtitle,
-                  fill: font-color-slide-subtitle,
-                )[#subtitle]
-              ]
-            ]
-          } else if title != none {
-            // Title only - centered vertically, slightly larger
-            align(horizon + h-align)[
-              #text(
-                size: pick-first(title-size, sizes.slide-title-only),
-                weight: font-weight-slide-title,
-                fill: font-color-slide-title,
-              )[#title]
-            ]
-          } else if subtitle != none {
-            // Subtitle only - centered vertically
-            align(horizon + h-align)[
-              #text(
-                size: pick-first(subtitle-size, sizes.slide-subtitle),
-                weight: font-weight-slide-subtitle,
-                fill: font-color-slide-subtitle,
-              )[#subtitle]
-            ]
-          }
-        ]
-      }
+      // _title-area includes the divider (at a constant position).
+      _title-area(
+        title,
+        subtitle,
+        show-line: show-line,
+        title-size: title-size,
+        subtitle-size: subtitle-size,
+      )
 
-      // Gradient line after title/subtitle - always at same position
-      if show-line {
-        rect(
-          width: 85%,
-          height: 0.75pt,
-          fill: gradient.linear(
-            bips-text-gray,
-            white,
-            angle: 0deg,
-          ),
-        )
-      }
-
-      v(1em)
+      // Small gap below the divider so the body separates cleanly (kept
+      // conservative to avoid wasting vertical space).
+      v(1.3em)
 
       render-body(body)
     } else {
       render-body(body)
     }
   ]
+}
+
+/// A content slide whose title/subtitle live in a proper header block — the
+/// divider is the header's bottom edge (so it actually divides), the logo sits
+/// top-right (from the theme background), and the page number top-right. Unlike
+/// `bips-slide`, the body is native Touying content, so `#pause`, `composer`
+/// (multi-pane), and multiple body blocks all work directly. Use it for layout
+/// flexibility beyond `bips-slide`'s single-stream body.
+///
+/// With no `title`/`subtitle` the header is omitted (body fills from the top,
+/// `show-line` has no effect). Slide-level `config`/`repeat`/`composer`/
+/// `setting` overrides are forwarded like the other slide types.
+#let plain-slide(
+  title: none,
+  subtitle: none,
+  title-size: none,
+  subtitle-size: none,
+  show-line: true,
+  content-align: none,
+  ..args,
+) = {
+  let named = args.named()
+  let user-config = named.at("config", default: (:))
+  let repeat = named.at("repeat", default: auto)
+  let composer = named.at("composer", default: auto)
+  let user-setting = named.at("setting", default: body => body)
+  let has-header = title != none or subtitle != none
+
+  // The header content is bottom-anchored against the body, so its last
+  // element sits at the body's top edge (the top margin). Putting `body-gap`
+  // last places the divider that far above the body — i.e. at the constant
+  // divider position (base margin + title area + gap = flush with the logo).
+  let body-gap = 0.8cm
+  let top-margin = (
+    1.55cm + slide-title-area-height + _title-divider-gap + body-gap
+  )
+
+  let header(self) = {
+    // Page number centered under the logo, placed flow-free. Header frame top
+    // = page top, so dy is the absolute distance from the top edge.
+    place(top + right, dx: 1.25cm, dy: 3.75cm, _page-number-content())
+    _title-area(
+      title,
+      subtitle,
+      show-line: show-line,
+      title-size: title-size,
+      subtitle-size: subtitle-size,
+    )
+    v(body-gap)
+  }
+
+  // Per-slide config: keep the theme background (logo) and add the header.
+  // zero-margin-header: false so the header respects the content margins.
+  let config = if has-header {
+    utils.merge-dicts(
+      config-common(zero-margin-header: false),
+      config-page(
+        margin: (top: top-margin, bottom: 1.55cm, left: 1.55cm, right: 1.75cm),
+        header-ascent: 0pt,
+        header: header,
+      ),
+      user-config,
+    )
+  } else {
+    user-config
+  }
+
+  // With no header the page number goes in the content (place is flow-free).
+  let chrome = if not has-header { _page-number() }
+
+  if composer == auto {
+    let body = args.pos().at(0, default: none)
+    slide(config: config, repeat: repeat, setting: user-setting)[
+      #chrome
+      #_aligned(content-align, body)
+    ]
+  } else {
+    // Multi-pane mode: forward all bodies to the composer (content-align is
+    // ignored — the composer owns the layout).
+    slide(
+      config: config,
+      repeat: repeat,
+      composer: composer,
+      setting: body => {
+        chrome
+        user-setting(body)
+      },
+      ..args.pos(),
+    )
+  }
 }
 
 // -------------------------------------------------------------------
