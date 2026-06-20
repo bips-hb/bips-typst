@@ -65,11 +65,12 @@ Then use the local import instead:
 | Function | Purpose |
 |---|---|
 | `#title-slide()` | Opening slide with author, institute, date |
-| `#bips-slide()` | Content slide with optional title/subtitle |
+| `#bips-slide()` | Content slide with optional title/subtitle (preset over `base-slide`) |
 | `#section-slide()` | Section divider |
 | `#thanks-slide()` | Closing slide with contact info and optional QR code |
 | `#bibliography-slide[]` | References |
-| `#empty-slide[]` | Blank slide without branding |
+| `#empty-slide[]` | Minimal slide without branding (preset over `base-slide`) |
+| `#base-slide()` | Flexible base slide with all chrome toggles; use when `bips-slide`/`empty-slide` presets don't cover your layout |
 
 ### Content slide options
 
@@ -178,7 +179,7 @@ The theme re-exports Touying's animation functions:
 #alternatives[Version A][Version B] // swap content
 ```
 
-**Note**: Do not use `#pause` inside `#two-columns` / `#three-columns`. Use `#uncover()` or `#only()` instead.
+**Note**: `#pause` works inside `#two-columns` / `#three-columns` on Touying 0.7.3; reveals follow document flow order across cells. `#uncover()` and `#only()` remain useful for index-driven reveals without consuming a pause step.
 
 ## Global Customization
 
