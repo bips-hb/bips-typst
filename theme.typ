@@ -188,8 +188,8 @@
   _page-number-content(),
 )
 
-/// The BIPS gradient divider line (grey fading to white). Shared by bips-slide
-/// (under the title) and plain-slide's header (as its bottom edge).
+/// The BIPS gradient divider line (grey fading to white). Used by base-slide's
+/// header (as its bottom edge), which all content-slide presets route through.
 #let _divider-line() = rect(
   width: 85%,
   height: 0.75pt,
