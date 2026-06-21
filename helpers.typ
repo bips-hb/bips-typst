@@ -19,26 +19,15 @@
   return none
 }
 
-/// State used to pass computed sizes from bips-theme() to slide functions.
-/// Initialized with module-level defaults; updated by bips-theme() with
-/// effective values that account for base-size scaling and explicit overrides.
-#let _bips-sizes = state("bips-sizes", (
-  slide-title: font-size-slide-title,
-  slide-title-only: font-size-slide-title-only,
-  slide-subtitle: font-size-slide-subtitle,
-  page-number: font-size-page-number,
-  title-align: left,
-))
-
 /// The page number, horizontally centered under the logo. The logo is 3cm wide
 /// placed at dx -0.5cm, so a 3cm box right-aligned at the same dx spans the
 /// logo's width; centering the number within it puts it under the logo's middle.
-#let _page-number-content() = box(width: 3cm)[
+#let _page-number-content(size: font-size-page-number) = box(width: 3cm)[
   // h(1fr) on both sides centers within the fixed-width box (align(center)
   // does not center inline box content).
   #h(1fr)
   #context text(
-    size: _bips-sizes.get().page-number,
+    size: size,
     fill: font-color-page-number,
     weight: font-weight-page-number,
   )[#utils.slide-counter.display()]
@@ -53,11 +42,11 @@
 // dx aligns the number box (in the content frame, inset by the 1.75cm right
 // margin) with the logo (in the page frame, 0.5cm from the right edge):
 // 1.75cm - 0.5cm = 1.25cm. So the number centers under the logo.
-#let _page-number() = place(
+#let _page-number(size: font-size-page-number) = place(
   top + right,
   dx: 1.25cm,
   dy: 2.2cm,
-  _page-number-content(),
+  _page-number-content(size: size),
 )
 
 /// The BIPS gradient divider line (grey fading to white). Used by base-slide's
@@ -75,7 +64,8 @@
 
 /// The fixed-height title area (title and/or subtitle) plus the divider line,
 /// styled in BIPS blue. Shared by all header-block slides via `base-slide`.
-/// Reads sizes/alignment from `_bips-sizes` state, so it runs in `context`.
+/// Sizes and alignment are passed explicitly (resolved from self.store by the
+/// caller) — no context/state access here.
 ///
 /// Safeguard: if the title/subtitle would overflow the fixed box height, both
 /// are scaled down by a single factor (preserving proportions, down to a 0.55
@@ -83,84 +73,83 @@
 #let _title-area(
   title,
   subtitle,
-  show-line: true,
   title-size: none,
+  title-only-size: none,
   subtitle-size: none,
-) = (
-  context {
-    let sizes = _bips-sizes.get()
-    let h-align = sizes.title-align
-    // ponytail: linear floor on shrink; titles longer than ~1.8x the box just
-    // overflow upward (away from the body), divider still static.
-    let min-factor = 0.55
+  align: left,
+  show-line: true,
+) = {
+  let h-align = align
+  // ponytail: linear floor on shrink; titles longer than ~1.8x the box just
+  // overflow upward (away from the body), divider still static.
+  let min-factor = 0.55
 
-    // Build the inner stack at scale factor `f`.
-    let render(f) = {
-      if title != none and subtitle != none {
-        // Explicit gap between title and subtitle, plus a lift off the divider
-        // so the bottom-aligned header breathes instead of hugging the line
-        // (the title rises more than the subtitle, filling the space above).
-        set block(spacing: 0.6em)
-        block(width: 90%)[
-          #text(
-            size: pick-first(title-size, sizes.slide-title) * f,
-            weight: font-weight-slide-title,
-            fill: font-color-slide-title,
-          )[#title]
-        ]
-        block(width: 90%)[
-          #text(
-            size: pick-first(subtitle-size, sizes.slide-subtitle) * f,
-            weight: font-weight-slide-subtitle,
-            fill: font-color-slide-subtitle,
-          )[#subtitle]
-        ]
-        v(0.18cm)
-      } else if title != none {
-        text(
-          size: pick-first(title-size, sizes.slide-title-only) * f,
+  // Build the inner stack at scale factor `f`.
+  let render(f) = {
+    if title != none and subtitle != none {
+      // Explicit gap between title and subtitle, plus a lift off the divider
+      // so the bottom-aligned header breathes instead of hugging the line
+      // (the title rises more than the subtitle, filling the space above).
+      set block(spacing: 0.6em)
+      block(width: 90%)[
+        #text(
+          size: title-size * f,
           weight: font-weight-slide-title,
           fill: font-color-slide-title,
         )[#title]
-      } else if subtitle != none {
-        text(
-          size: pick-first(subtitle-size, sizes.slide-subtitle) * f,
+      ]
+      block(width: 90%)[
+        #text(
+          size: subtitle-size * f,
           weight: font-weight-slide-subtitle,
           fill: font-color-slide-subtitle,
         )[#subtitle]
-      }
-    }
-
-    // Both -> bottom (stack reads as a unit above the divider); single -> horizon.
-    let v-align = if title != none and subtitle != none { bottom } else {
-      horizon
-    }
-
-    layout(region => {
-      // Measure the natural height with the same base text size used below,
-      // then compute the shrink factor needed to fit the fixed box.
-      let natural = measure(
-        box(width: region.width)[
-          #set text(size: font-size-base)
-          #render(1.0)
-        ],
-      ).height
-      let f = if natural > slide-title-area-height {
-        calc.max(min-factor, slide-title-area-height / natural)
-      } else { 1.0 }
-      box(height: slide-title-area-height, width: 100%)[
-        // Fix text size so block spacing (em units) doesn't scale with base-size
-        #set text(size: font-size-base)
-        #align(v-align + h-align)[#render(f)]
       ]
-    })
-
-    // Divider hugs the title box (small explicit gap, not the default block gap)
-    if show-line {
-      block(above: _title-divider-gap, below: 0pt, _divider-line())
+      v(0.18cm)
+    } else if title != none {
+      text(
+        size: title-only-size * f,
+        weight: font-weight-slide-title,
+        fill: font-color-slide-title,
+      )[#title]
+    } else if subtitle != none {
+      text(
+        size: subtitle-size * f,
+        weight: font-weight-slide-subtitle,
+        fill: font-color-slide-subtitle,
+      )[#subtitle]
     }
   }
-)
+
+  // Both -> bottom (stack reads as a unit above the divider); single -> horizon.
+  let v-align = if title != none and subtitle != none { bottom } else {
+    horizon
+  }
+
+  layout(region => {
+    // Measure the natural height with the same base text size used below,
+    // then compute the shrink factor needed to fit the fixed box.
+    let natural = measure(
+      box(width: region.width)[
+        #set text(size: font-size-base)
+        #render(1.0)
+      ],
+    ).height
+    let f = if natural > slide-title-area-height {
+      calc.max(min-factor, slide-title-area-height / natural)
+    } else { 1.0 }
+    box(height: slide-title-area-height, width: 100%)[
+      // Fix text size so block spacing (em units) doesn't scale with base-size
+      #set text(size: font-size-base)
+      #std.align(v-align + h-align)[#render(f)]
+    ]
+  })
+
+  // Divider hugs the title box (small explicit gap, not the default block gap)
+  if show-line {
+    block(above: _title-divider-gap, below: 0pt, _divider-line())
+  }
+}
 
 /// State for the logo image, settable via bips-theme(logo: ...).
 /// Default is the bundled placeholder; users should replace with their own.

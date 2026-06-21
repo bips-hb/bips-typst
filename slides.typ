@@ -43,7 +43,7 @@
   code-block-scale: none,
   code-inline-scale: none,
   ..args,
-) = {
+) = touying-slide-wrapper(self => {
   let named = args.named()
   let user-config = named.at("config", default: (:))
   let repeat = named.at("repeat", default: auto)
@@ -51,32 +51,39 @@
   let user-setting = named.at("setting", default: body => body)
   let has-header = title != none or subtitle != none
 
-  // The header content is bottom-anchored against the body, so putting body-gap
-  // last places the divider that far above the body — at the constant divider
-  // position (base margin + title area + gap = flush with the logo).
   let body-gap = 0.8cm
   let top-margin = (
     1.55cm + slide-title-area-height + _title-divider-gap + body-gap
   )
 
+  // Resolve chrome sizes once from the theme store.
+  let pn-size = self.store.page-number
+  let the-title-size = pick-first(title-size, self.store.slide-title)
+  let the-title-only-size = pick-first(title-size, self.store.slide-title-only)
+  let the-subtitle-size = pick-first(subtitle-size, self.store.slide-subtitle)
+  let the-align = self.store.title-align
+
   let header(self) = {
-    // Page number centered under the logo, placed flow-free.
     if page-number {
-      place(top + right, dx: 1.25cm, dy: 3.75cm, _page-number-content())
+      place(
+        top + right,
+        dx: 1.25cm,
+        dy: 3.75cm,
+        _page-number-content(size: pn-size),
+      )
     }
     _title-area(
       title,
       subtitle,
+      title-size: the-title-size,
+      title-only-size: the-title-only-size,
+      subtitle-size: the-subtitle-size,
+      align: the-align,
       show-line: show-line,
-      title-size: title-size,
-      subtitle-size: subtitle-size,
     )
     v(body-gap)
   }
 
-  // Per-slide chrome: logo background (show-logo authoritative per slide) and
-  // counter participation. bips-background(show-logo: false) renders nothing,
-  // suppressing the global theme logo for this slide.
   let chrome-config = utils.merge-dicts(
     config-common(freeze-slide-counter: not count),
     config-page(background: bips-background(show-logo: show-logo)),
@@ -97,8 +104,9 @@
     utils.merge-dicts(chrome-config, user-config)
   }
 
-  // With no header the page number goes in the content (place is flow-free).
-  let content-number = if not has-header and page-number { _page-number() }
+  let content-number = if not has-header and page-number {
+    _page-number(size: pn-size)
+  }
 
   let render-body(body) = {
     let styled = if text-size != none { text(size: text-size)[#body] } else {
@@ -109,7 +117,12 @@
 
   if composer == auto {
     let body = args.pos().at(0, default: none)
-    slide(config: config, repeat: repeat, setting: user-setting)[
+    touying-slide(
+      self: self,
+      config: config,
+      repeat: repeat,
+      setting: user-setting,
+    )[
       #content-number
       #show raw.where(block: true): set text(
         size: pick-first(code-block-scale, font-scale-code-block) * 1em,
@@ -120,9 +133,8 @@
       #render-body(body)
     ]
   } else {
-    // Multi-pane mode: forward all bodies to the composer (content-align and
-    // body-level code-scale are ignored — the composer owns the layout).
-    slide(
+    touying-slide(
+      self: self,
       config: config,
       repeat: repeat,
       composer: composer,
@@ -133,7 +145,7 @@
       ..args.pos(),
     )
   }
-}
+})
 
 /// Standard BIPS content slide: title/subtitle header, logo, page number, and
 /// gradient divider, over a native Touying body. A preset over `base-slide`

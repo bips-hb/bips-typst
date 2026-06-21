@@ -99,18 +99,7 @@
     size: pick-first(heading-3-size, 1em),
     weight: heading-weight-3,
     fill: heading-color-3,
-  ) // Publish effective sizes via state so slide functions can read them.
-  // Sizes that aren't overridden explicitly use the module-level defaults,
-  // which means they don't auto-scale with base-size. Use em-based values
-  // in the state to get proportional scaling where appropriate.
-  _bips-sizes.update((
-    slide-title: pick-first(slide-title-size, font-size-slide-title),
-    slide-title-only: font-size-slide-title-only,
-    slide-subtitle: pick-first(slide-subtitle-size, font-size-slide-subtitle),
-    page-number: pick-first(page-number-size, font-size-page-number),
-    title-align: title-align,
-  ))
-  // Update logo state: auto = bundled placeholder, none = no logo, image() = custom
+  ) // Update logo state: auto = bundled placeholder, none = no logo, image() = custom
   if logo != auto {
     _bips-logo.update(logo)
   }
@@ -186,6 +175,13 @@
   // Use Touying's infrastructure with BIPS customizations
   touying-slides(
     config-common(handout: effective-handout),
+    config-store(
+      slide-title: pick-first(slide-title-size, font-size-slide-title),
+      slide-title-only: font-size-slide-title-only,
+      slide-subtitle: pick-first(slide-subtitle-size, font-size-slide-subtitle),
+      page-number: pick-first(page-number-size, font-size-page-number),
+      title-align: title-align,
+    ),
     config-page(
       ..utils.page-args-from-aspect-ratio(aspect-ratio),
       margin: (top: 1.55cm, bottom: 1.55cm, left: 1.55cm, right: 1.75cm),
