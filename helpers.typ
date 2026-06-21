@@ -27,10 +27,6 @@
   slide-title-only: font-size-slide-title-only,
   slide-subtitle: font-size-slide-subtitle,
   page-number: font-size-page-number,
-  small: font-size-small,
-  tiny: font-size-tiny,
-  large: font-size-large,
-  huge: font-size-huge,
   title-align: left,
 ))
 
@@ -175,17 +171,17 @@
 /// so one `config-info(...)` populates both PDF metadata and the title slide.
 #let _bips-info = state("bips-info", (:))
 
-/// Render content at a smaller size (scales with base-size)
-#let small(body) = context text(size: _bips-sizes.get().small)[#body]
+/// Render content at a smaller size (em-relative, scales with surrounding text)
+#let small(body) = text(size: font-em-small * 1em)[#body]
 
-/// Render content at the smallest size (scales with base-size)
-#let tiny(body) = context text(size: _bips-sizes.get().tiny)[#body]
+/// Render content at the smallest size (em-relative)
+#let tiny(body) = text(size: font-em-tiny * 1em)[#body]
 
-/// Render content at a larger size (scales with base-size)
-#let large(body) = context text(size: _bips-sizes.get().large)[#body]
+/// Render content at a larger size (em-relative)
+#let large(body) = text(size: font-em-large * 1em)[#body]
 
-/// Render content at the largest size (scales with base-size)
-#let huge(body) = context text(size: _bips-sizes.get().huge)[#body]
+/// Render content at the largest size (em-relative)
+#let huge(body) = text(size: font-em-huge * 1em)[#body]
 
 // ===================================================================
 // BACKGROUND UTILITY FUNCTIONS

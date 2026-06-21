@@ -41,6 +41,14 @@
 #let font-size-large = 22pt
 #let font-size-huge = 26pt
 
+// Em ratios for the size helpers (small/tiny/large/huge), derived from the
+// pt sizes above so there is a single source. Used em-relative so the helpers
+// scale automatically with base-size and any surrounding text size.
+#let font-em-small = font-size-small / font-size-base
+#let font-em-tiny = font-size-tiny / font-size-base
+#let font-em-large = font-size-large / font-size-base
+#let font-em-huge = font-size-huge / font-size-base
+
 // Heading styling (sizes are em-based in show rules, so they scale with base-size)
 // h1: 1.11em, h2: 1em, h3: 1em (h3 distinguished by color, not size)
 #let heading-color-1 = bips-blue

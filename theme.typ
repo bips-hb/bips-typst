@@ -44,10 +44,6 @@
   heading-1-size: none,
   heading-2-size: none,
   heading-3-size: none,
-  small-size: none,
-  tiny-size: none,
-  large-size: none,
-  huge-size: none,
   page-number-size: none,
   code-block-scale: none,
   code-inline-scale: none,
@@ -112,10 +108,6 @@
     slide-title-only: font-size-slide-title-only,
     slide-subtitle: pick-first(slide-subtitle-size, font-size-slide-subtitle),
     page-number: pick-first(page-number-size, font-size-page-number),
-    small: pick-first(small-size, font-size-small),
-    tiny: pick-first(tiny-size, font-size-tiny),
-    large: pick-first(large-size, font-size-large),
-    huge: pick-first(huge-size, font-size-huge),
     title-align: title-align,
   ))
   // Update logo state: auto = bundled placeholder, none = no logo, image() = custom
