@@ -225,6 +225,10 @@
     // Build the inner stack at scale factor `f`.
     let render(f) = {
       if title != none and subtitle != none {
+        // Explicit gap between title and subtitle, plus a lift off the divider
+        // so the bottom-aligned header breathes instead of hugging the line
+        // (the title rises more than the subtitle, filling the space above).
+        set block(spacing: 0.6em)
         block(width: 90%)[
           #text(
             size: pick-first(title-size, sizes.slide-title) * f,
@@ -232,7 +236,6 @@
             fill: font-color-slide-title,
           )[#title]
         ]
-        v(0.15em)
         block(width: 90%)[
           #text(
             size: pick-first(subtitle-size, sizes.slide-subtitle) * f,
@@ -240,6 +243,7 @@
             fill: font-color-slide-subtitle,
           )[#subtitle]
         ]
+        v(0.18cm)
       } else if title != none {
         text(
           size: pick-first(title-size, sizes.slide-title-only) * f,
