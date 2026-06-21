@@ -10,11 +10,9 @@
 // (config, helpers, slides, extras) and defines the bips-theme() function.
 // ===================================================================
 
-// Import order matters: `slides.typ` must come LAST. Touying exports an
-// `empty-slide`, and the other modules transitively re-export it (they
-// `#import touying: *`). `slides.typ` defines bypst's own `empty-slide`
-// (and the other slide types), so importing it last ensures bypst's
-// definitions win over touying's via `*`-import shadowing.
+// Submodules use NAMED touying imports, so they no longer re-export touying's
+// own `title-slide`/`empty-slide`. bypst's slide definitions are therefore the
+// only ones in scope here and import order is not significant.
 #import "config.typ": *
 #import "helpers.typ": *
 #import "extras.typ": *
