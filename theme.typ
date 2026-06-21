@@ -99,10 +99,8 @@
     size: pick-first(heading-3-size, 1em),
     weight: heading-weight-3,
     fill: heading-color-3,
-  ) // Update logo state: auto = bundled placeholder, none = no logo, image() = custom
-  if logo != auto {
-    _bips-logo.update(logo)
-  }
+  )
+  let effective-logo = if logo == auto { default-logo } else { logo }
   // Emphasis (_text_) in BIPS blue (color only, no italic)
   show emph: it => text(
     fill: font-color-emphasis,
@@ -171,11 +169,12 @@
       slide-subtitle: pick-first(slide-subtitle-size, font-size-slide-subtitle),
       page-number: pick-first(page-number-size, font-size-page-number),
       title-align: title-align,
+      logo: effective-logo,
     ),
     config-page(
       ..utils.page-args-from-aspect-ratio(aspect-ratio),
       margin: (top: 1.55cm, bottom: 1.55cm, left: 1.55cm, right: 1.75cm),
-      background: bips-background(show-logo: true),
+      background: bips-background(logo: effective-logo, show-logo: true),
     ),
     // User-supplied config dicts override the above via Touying's deep merge.
     ..args.pos(),

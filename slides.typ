@@ -86,7 +86,10 @@
 
   let chrome-config = utils.merge-dicts(
     config-common(freeze-slide-counter: not count),
-    config-page(background: bips-background(show-logo: show-logo)),
+    config-page(background: bips-background(
+      logo: self.store.logo,
+      show-logo: show-logo,
+    )),
   )
 
   let config = if has-header {
@@ -304,29 +307,28 @@
 
 #let section-slide(
   section-title,
-  show-logo: true, // Show BIPS logo by default (institutional default)
-  // Optional secondary content (centered, below the title) as a trailing
-  // block, plus any slide() overrides (config/repeat/composer/setting).
+  show-logo: true,
   ..args,
-) = {
-  // Treat an empty content block (`[]`) the same as no body, so
-  // `#section-slide("foo")` and `#section-slide("foo")[]` render identically.
+) = touying-slide-wrapper(self => {
   let body = args.pos().at(0, default: none)
   if body == [] { body = none }
   let o = _slide-overrides(args)
-  slide(
+  touying-slide(
+    self: self,
     config: utils.merge-dicts(
       config-common(freeze-slide-counter: true),
-      config-page(background: bips-background(show-logo: show-logo)),
+      config-page(background: bips-background(
+        logo: self.store.logo,
+        show-logo: show-logo,
+      )),
       o.config,
     ),
     repeat: o.repeat,
     setting: o.setting,
   )[
-    // Invisible heading for PDF outline/bookmarks
     #place(hide[#heading(level: 1, outlined: true)[#section-title]])
 
-    #align(center + horizon)[
+    #std.align(center + horizon)[
       #text(
         size: font-size-section-slide,
         weight: font-weight-section-slide,
@@ -338,7 +340,7 @@
       }
     ]
   ]
-}
+})
 
 // -------------------------------------------------------------------
 // Bibliography Slide
@@ -407,11 +409,13 @@
   thanks-text: "Thank you for your attention!",
   contact-author: "",
   email: "",
-  qr-url: none, // Optional: URL to generate QR code for (replaces website URL)
-  ..args, // slide() overrides (config/repeat/composer/setting)
-) = {
+  qr-url: none,
+  ..args,
+) = touying-slide-wrapper(self => {
   let o = _slide-overrides(args)
-  slide(
+  let logo = self.store.logo
+  touying-slide(
+    self: self,
     config: utils.merge-dicts(
       config-common(freeze-slide-counter: true),
       config-page(background: none),
@@ -420,33 +424,26 @@
     repeat: o.repeat,
     setting: o.setting,
   )[
-    // 3-row grid layout: thanks text, QR/website, contact+logo
     #grid(
       rows: (1fr, 1fr, auto),
       row-gutter: 2em,
       [
-        // Row 1: Thanks message (centered, taking up available space)
-        #align(center + horizon)[
+        #std.align(center + horizon)[
           #text(
             size: font-size-thanks-slide-main,
             weight: font-weight-thanks-slide-main,
             fill: font-color-thanks-slide-main,
-          )[
-            #thanks-text
-          ]
+          )[#thanks-text]
         ]
       ],
       [
-        // Row 2: QR code or website (centered)
-        #align(center + bottom)[
+        #std.align(center + bottom)[
           #if qr-url != none [
-            // Show QR code when URL is provided
             #qrcode(qr-url, width: 4cm, debug: false, quiet-zone: 0, colors: (
               white,
               bips-blue,
             ))
           ] else [
-            // Show website URL as before
             #text(
               size: font-size-thanks-slide-website,
               weight: font-weight-thanks-slide-website,
@@ -458,13 +455,12 @@
         ]
       ],
       [
-        // Row 3: Contact information and logo
         #grid(
           columns: (1fr, 1fr),
           align: (right, left),
           gutter: 2em,
           [
-            #align(right)[
+            #std.align(right)[
               #text(
                 size: font-size-thanks-slide-contact,
                 weight: font-weight-thanks-slide-contact,
@@ -486,18 +482,15 @@
             ]
           ],
           [
-            #align(left)[
-              #context {
-                let logo = _bips-logo.get()
-                if logo != none { box(width: 5.5cm, logo) }
-              }
+            #std.align(left)[
+              #if logo != none { box(width: 5.5cm, logo) }
             ]
           ],
         )
       ],
     )
   ]
-}
+})
 
 // -------------------------------------------------------------------
 // Empty Slide

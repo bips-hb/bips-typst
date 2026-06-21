@@ -151,9 +151,8 @@
   }
 }
 
-/// State for the logo image, settable via bips-theme(logo: ...).
-/// Default is the bundled placeholder; users should replace with their own.
-#let _bips-logo = state("bips-logo", image("logo.png"))
+/// The bundled placeholder logo. Users override via bips-theme(logo: image(...)).
+#let default-logo = image("logo.png")
 
 /// Render content at a smaller size (em-relative, scales with surrounding text)
 #let small(body) = text(size: font-em-small * 1em)[#body]
@@ -174,21 +173,9 @@
 /// Create background with logo in top-right corner.
 /// Page numbers are handled separately via Touying's header system
 /// to ensure correct numbering across #pause subslides.
-#let bips-background(show-logo: true) = {
-  if show-logo {
-    context {
-      let logo = _bips-logo.get()
-      if logo != none {
-        // Inset toward the top-right corner (matches the BIPS beamer template).
-        // The title area height is tuned so the divider meets the logo's edge.
-        place(
-          top + right,
-          dx: -0.5cm,
-          dy: 0.5cm,
-          box(width: 3cm, logo),
-        )
-      }
-    }
+#let bips-background(logo: none, show-logo: true) = {
+  if show-logo and logo != none {
+    place(top + right, dx: -0.5cm, dy: 0.5cm, box(width: 3cm, logo))
   }
 }
 
