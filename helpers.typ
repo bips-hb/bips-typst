@@ -155,11 +155,6 @@
 /// Default is the bundled placeholder; users should replace with their own.
 #let _bips-logo = state("bips-logo", image("logo.png"))
 
-/// State holding the raw `config-info(...)` values passed to bips-theme().
-/// title-slide() reads this as a fallback for fields not passed explicitly,
-/// so one `config-info(...)` populates both PDF metadata and the title slide.
-#let _bips-info = state("bips-info", (:))
-
 /// Render content at a smaller size (em-relative, scales with surrounding text)
 #let small(body) = text(size: font-em-small * 1em)[#body]
 

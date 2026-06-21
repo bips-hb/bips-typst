@@ -162,17 +162,7 @@
   show raw.where(block: true): set text(size: effective-code-block-scale * 1em)
   show raw.where(block: false): set text(
     size: effective-code-inline-scale * 1em,
-  ) // Stash any config-info(...) values so title-slide() can use them as
-  // defaults. config-info(...) returns `(info: (...))` with raw content,
-  // before Touying wraps the values for its own pipeline.
-  let info = (:)
-  for cfg in args.pos() {
-    if type(cfg) == dictionary and "info" in cfg {
-      info += cfg.info
-    }
-  }
-  _bips-info.update(info)
-  // Use Touying's infrastructure with BIPS customizations
+  ) // Use Touying's infrastructure with BIPS customizations
   touying-slides(
     config-common(handout: effective-handout),
     config-store(

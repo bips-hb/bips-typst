@@ -185,168 +185,118 @@
   title: none,
   subtitle: none,
   author: none,
-  authors: none, // Alternative: array of authors for multi-affiliation support
+  authors: none,
   institute: none,
-  institutes: none, // Alternative: array of institutes for multi-affiliation support
+  institutes: none,
   date: none,
   occasion: none,
-  // Optional font size overrides
   title-size: none,
   subtitle-size: none,
   author-size: none,
   institute-size: none,
   date-size: none,
-  // slide() overrides (config/repeat/composer). `setting` is owned by the
-  // title slide layout and is not forwarded.
   ..args,
-) = {
+) = touying-slide-wrapper(self => {
   let o = _slide-overrides(args)
-  slide(
+  let info = self.info
+  let title = pick-first(title, info.at("title", default: none))
+  let subtitle = pick-first(subtitle, info.at("subtitle", default: none))
+  let author = pick-first(author, info.at("author", default: none))
+  let date = pick-first(date, info.at("date", default: none))
+  let institute = pick-first(institute, info.at("institution", default: none))
+
+  let body = {
+    v(1fr)
+
+    if title != none {
+      block(width: 85%, text(
+        size: pick-first(title-size, font-size-title-slide-main),
+        weight: font-weight-title-slide-main,
+        fill: font-color-title-slide-main,
+      )[#title])
+    }
+
+    v(0.5fr)
+
+    if subtitle != none {
+      block(width: 85%, text(
+        size: pick-first(subtitle-size, font-size-title-slide-subtitle),
+        weight: font-weight-title-slide-subtitle,
+        fill: font-color-title-slide-subtitle,
+      )[#subtitle])
+    }
+
+    v(1fr)
+
+    if authors != none {
+      block(text(
+        size: pick-first(author-size, font-size-title-slide-author),
+        weight: font-weight-title-slide-author,
+        fill: font-color-title-slide-author,
+      )[#authors.join([#h(1em)])])
+    } else if author != none {
+      block(text(
+        size: pick-first(author-size, font-size-title-slide-author),
+        weight: font-weight-title-slide-author,
+        fill: font-color-title-slide-author,
+      )[#author])
+    }
+
+    v(1fr)
+
+    if institutes != none {
+      block(text(
+        size: pick-first(institute-size, font-size-title-slide-institute),
+        weight: font-weight-title-slide-institute,
+        fill: font-color-title-slide-institute,
+      )[
+        #for (i, inst) in institutes.enumerate() [
+          #super[#(i + 1)] #inst
+          #if i < institutes.len() - 1 [\ ]
+        ]
+      ])
+    } else if institute != none {
+      block(text(
+        size: pick-first(institute-size, font-size-title-slide-institute),
+        weight: font-weight-title-slide-institute,
+        fill: font-color-title-slide-institute,
+      )[#institute])
+    }
+
+    v(1fr)
+
+    if date != none {
+      block(text(
+        size: pick-first(date-size, font-size-title-slide-date),
+        weight: font-weight-title-slide-date,
+        fill: font-color-title-slide-date,
+      )[#date])
+    }
+
+    if occasion != none {
+      block(text(
+        size: pick-first(date-size, font-size-title-slide-date),
+        weight: font-weight-title-slide-date,
+        fill: font-color-title-slide-date,
+      )[#occasion])
+    }
+  }
+
+  touying-slide(
+    self: self,
     config: utils.merge-dicts(
       config-common(freeze-slide-counter: true),
       o.config,
     ),
     repeat: o.repeat,
     setting: body => {
-      set align(center)
-      // Fix text size so block spacing (1.2em) doesn't scale with base-size
+      set std.align(center)
       set text(size: font-size-base)
-
-      // Fall back to the theme's config-info(...) for any field not passed
-      // explicitly, so PDF metadata and the title slide share one source.
-      // Title slides have no #pause, so wrapping in context is safe here.
-      context {
-        let info = _bips-info.get()
-        let title = pick-first(title, info.at("title", default: none))
-        let subtitle = pick-first(subtitle, info.at("subtitle", default: none))
-        let author = pick-first(author, info.at("author", default: none))
-        let date = pick-first(date, info.at("date", default: none))
-        let institute = pick-first(institute, info.at(
-          "institution",
-          default: none,
-        ))
-
-        v(1fr)
-
-        // Title (width constrained to prevent overlap with logo in top-right)
-        if title != none {
-          block(
-            width: 85%,
-            text(
-              size: pick-first(title-size, font-size-title-slide-main),
-              weight: font-weight-title-slide-main,
-              fill: font-color-title-slide-main,
-            )[
-              #title
-            ],
-          )
-        }
-
-        v(0.5fr)
-
-        // Subtitle
-        if subtitle != none {
-          block(
-            width: 85%,
-            text(
-              size: pick-first(subtitle-size, font-size-title-slide-subtitle),
-              weight: font-weight-title-slide-subtitle,
-              fill: font-color-title-slide-subtitle,
-            )[
-              #subtitle
-            ],
-          )
-        }
-
-        v(1fr)
-
-        // Author(s) - support both single and multiple authors
-        if authors != none {
-          // Multiple authors format
-          block(
-            text(
-              size: pick-first(author-size, font-size-title-slide-author),
-              weight: font-weight-title-slide-author,
-              fill: font-color-title-slide-author,
-            )[
-              // #authors.join(linebreak())
-              #authors.join([#h(1em)])
-            ],
-          )
-        } else if author != none {
-          // Single author format (backward compatibility)
-          block(
-            text(
-              size: pick-first(author-size, font-size-title-slide-author),
-              weight: font-weight-title-slide-author,
-              fill: font-color-title-slide-author,
-            )[
-              #author
-            ],
-          )
-        }
-
-        v(1fr)
-
-        // Institute(s) - support both single and multiple institutes
-        if institutes != none {
-          // Multiple institutes format with numbering
-          block(
-            text(
-              size: pick-first(institute-size, font-size-title-slide-institute),
-              weight: font-weight-title-slide-institute,
-              fill: font-color-title-slide-institute,
-            )[
-              #for (i, inst) in institutes.enumerate() [
-                #super[#(i + 1)] #inst
-                #if i < institutes.len() - 1 [\ ]
-              ]
-            ],
-          )
-        } else if institute != none {
-          // Single institute format (backward compatibility)
-          block(
-            text(
-              size: pick-first(institute-size, font-size-title-slide-institute),
-              weight: font-weight-title-slide-institute,
-              fill: font-color-title-slide-institute,
-            )[
-              #institute
-            ],
-          )
-        }
-
-        v(1fr)
-
-        // Date
-        if date != none {
-          block(
-            text(
-              size: pick-first(date-size, font-size-title-slide-date),
-              weight: font-weight-title-slide-date,
-              fill: font-color-title-slide-date,
-            )[
-              #date
-            ],
-          )
-        }
-
-        // Occasion
-        if occasion != none {
-          block(
-            text(
-              size: pick-first(date-size, font-size-title-slide-date),
-              weight: font-weight-title-slide-date,
-              fill: font-color-title-slide-date,
-            )[
-              #occasion
-            ],
-          )
-        }
-      }
+      body
     },
-  )[]
-}
+    body,
+  )
+})
 
 // -------------------------------------------------------------------
 // Section Slide
