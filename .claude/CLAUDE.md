@@ -38,16 +38,16 @@ BIPS Typst presentation template for 16:9 institutional presentations using Typs
 
 The theme is split into focused modules. `theme.typ` is the orchestrator: it imports and re-exports the submodules and defines `bips-theme()`.
 
-- **theme.typ** - Entrypoint/orchestrator: `#import`s the submodules (re-exporting them), defines the `bips-theme()` show-rule function. **Import order matters here:** `slides.typ` must be imported LAST, because Touying exports its own `empty-slide` (and the other modules transitively re-export it via `#import touying: *`); importing `slides.typ` last makes bypst's slide definitions win via `*`-import shadowing.
+- **theme.typ** - Entrypoint/orchestrator: `#import`s the submodules (re-exporting them), defines the `bips-theme()` show-rule function. Submodules use named Touying imports (not `#import touying: *`), so import order is not significant.
 - **config.typ** - Branding/tuning constants (colors, fonts, sizes, spacing). No dependencies.
-- **helpers.typ** - Internal plumbing: state bridge, page number, gradient divider, `_title-area` (with shrink-to-fit), `bips-background`, `_aligned`, `_slide-overrides`, and the `small`/`tiny`/`large`/`huge` text helpers.
+- **helpers.typ** - Internal plumbing: page number, gradient divider, `_title-area` (with shrink-to-fit), `bips-background`, `_aligned`, `_slide-overrides`, and the `small`/`tiny`/`large`/`huge` text helpers (em-relative, scale with `base-size`).
 - **slides.typ** - All slide types: `base-slide` (flexible base) plus presets (`bips-slide`, `empty-slide`) and special slides (`title-slide`, `section-slide`, `thanks-slide`, `bibliography-slide`).
 - **extras.typ** - Public layout/color utilities (color helpers, `inst`, columns, `callout`, `compact`, `vfill`/`hfill`).
 - **bypst.typ** - Package entrypoint, re-exports theme.typ and additional Touying utilities
 - **bips-logo.png** - Institutional logo asset
 - **typst.toml** - Package metadata
 
-Dependency DAG: `config` → `helpers` → `slides`; `extras` → `config`; `theme` imports all and adds `bips-theme()`. No cycles. The submodules use `#import touying: *` (so Touying names, incl. its `empty-slide`, are re-exported transitively); the import-order rule in `theme.typ` (slides last) is what makes bypst's slide definitions win over Touying's.
+Dependency DAG: `config` → `helpers` → `slides`; `extras` → `config`; `theme` imports all and adds `bips-theme()`. No cycles. Submodules use named Touying imports, so they no longer re-export Touying's own `title-slide`/`empty-slide` and import order in `theme.typ` is not significant.
 
 ### Dependencies
 - touying:0.7.3 (presentation framework)
@@ -98,17 +98,13 @@ The page number `place()` is at the start of `base-slide`'s content block (befor
 - `template/` - Typst Universe package templates (`basic.typ`, `complete.typ`)
 - `debug/` - Ad-hoc debugging files (gitignored; create as needed, clean up when done)
 
-### Size Override Architecture (State Bridge Pattern)
+### Size Override Architecture
 
-The `bips-theme()` function accepts size override parameters (`base-size`, `slide-title-size`, etc.) but `bips-slide()` is a separate function that can't access those local variables. The solution is a Typst `state()` dictionary:
+The `bips-theme()` function accepts size override parameters (`base-size`, `slide-title-size`, etc.). These are published into Touying's `config-store(...)` and read by slide wrappers via `self.store` — no hand-rolled `state()` bridges are used. The three state bridges from earlier releases (`_bips-sizes`, `_bips-info`, `_bips-logo`) were removed in 0.4.0.
 
-1. **Module level**: `_bips-sizes` state is initialized with module-level defaults
-2. **`bips-theme()`**: Calls `_bips-sizes.update(...)` with effective values (respecting user overrides)
-3. **`base-slide()`**: Reads via `context _bips-sizes.get()` in the title area and page number `place()` (`bips-slide()` delegates here)
+The `small`/`tiny`/`large`/`huge` text helpers are em-relative (not fixed pt), so they scale automatically when `base-size` changes. The `small-size`, `tiny-size`, `large-size`, and `huge-size` parameters on `bips-theme()` were removed in 0.4.0; use `base-size` to scale all helpers together, or wrap content in an explicit `text(size: ...)`.
 
-**Heading sizes** use a different approach — em-based defaults in global `show heading` rules inside `bips-theme()`. This means headings scale proportionally when `base-size` changes, without needing the state bridge. Explicit pt overrides via `heading-*-size` take precedence.
-
-**Key constraint**: The `context` block that reads state must ONLY wrap the title area and page number, never the slide body. See Animation Compatibility below.
+**Heading sizes** use em-based defaults in global `show heading` rules inside `bips-theme()`, scaling proportionally with `base-size`. Explicit pt overrides via `heading-*-size` take precedence.
 
 ### Slide Structure Patterns
 
@@ -123,7 +119,7 @@ All slide types should follow consistent patterns:
 These rules were learned from debugging Touying interaction issues:
 
 1. **Do not use `context` or `query()` in `show` rules.** Complex show rules that query page state interfere with Touying's animation system, creating spurious blank pages between `#pause` states. Use simple `set` rules instead.
-2. **CRITICAL: Never wrap slide body content in a `context` block.** Touying splits content at `#pause` markers during its processing phase, but `context` is opaque — Touying cannot see `#pause` inside it. This causes all animation splitting to silently fail (all content appears on one page). Only wrap non-body elements (title area, page number) in `context`.
+2. **Do not wrap user slide body content in a `context` block.** Touying splits content at `#pause` markers during its processing phase, but `context` is opaque — Touying cannot see `#pause` inside it, causing animation splitting to silently fail (all content appears on one page). Note: bypst's own chrome (title area, page number, logo) reads `self.store` and does not use `context` around the slide body, so this constraint applies only to user-authored content inside `bips-slide[]` / `empty-slide[]` etc.
 3. **`#pause` works inside `two-columns`/`three-columns`** on Touying 0.7.3 (verified: one pause → 2 subslides, no extra blank pages; reveals follow document flow order across the cells). This was broken in 0.6.1 (the source of the old "don't pause in columns" rule) and is fixed. `#uncover()`/`#only()` remain useful when you want index-driven reveals without consuming a pause step.
 4. **Verify animations by page count.** Expected pages = base slides + number of `#pause` commands. If the count is roughly double, animation interference is occurring. If the count equals the number of base slides (no extra pages for pauses), `context` is likely swallowing pause markers.
 

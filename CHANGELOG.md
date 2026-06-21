@@ -19,6 +19,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 - `bips-slide()` is now a preset over `base-slide()` (native-body model). Its public signature is unchanged, but the body is now native Touying content, so `#pause`, `composer`, and multi-block bodies work directly in `bips-slide`. Overlong titles now shrink to fit the header box so the divider line stays at a static position
 - Slide header alignment polished: the logo sits closer to the top-right corner (0.5cm inset, matching the BIPS beamer template) and the gradient divider line now lands flush with the logo's lower edge. The page number is centered under the logo, just below it (clear of the content area), with a small conservative gap separating the divider from the body. The title and subtitle are spaced to read as a balanced unit (the title-to-subtitle gap matched against the subtitle-to-divider gap); a lone title is vertically centered in the header area while a title+subtitle stack is bottom-aligned above the divider.
+- Internals refactored to idiomatic Touying: all slide functions are now `touying-slide-wrapper` functions reading `self.store`/`self.info` instead of hand-rolled module `state()` bridges (`_bips-sizes`, `_bips-info`, `_bips-logo`). No change to the public API beyond the removals below.
+- `small`/`tiny`/`large`/`huge` text helpers are now em-relative, so they scale with `base-size` and any surrounding text size.
+- Submodules use named Touying imports; bypst no longer re-exports Touying's own `title-slide`/`empty-slide`, removing the previous import-order requirement.
+
+### Removed
+- `bips-theme` parameters `small-size`, `tiny-size`, `large-size`, `huge-size` (the size helpers are now em-relative; use `base-size` to scale, or wrap content in an explicit `text(size: ...)`).
 
 ### Fixed
 - Enum markers no longer shift horizontally when a list is revealed item-by-item with `#pause`. Fira Sans uses proportional figures, so the marker gutter (right-aligned by Typst's default `number-align: end`) widened as `2.`/`3.` appeared, nudging `1.` rightward across reveal steps; enum text now uses tabular figures (`number-width: "tabular"`) to keep the gutter a fixed width
