@@ -9,8 +9,7 @@ BIPS Typst presentation template for 16:9 institutional presentations using Typs
 ## Development Commands
 
 ### Package Management
-- `just install` - Install package locally for development (run after cloning or modifying the theme)
-- `just uninstall` - Remove local package installation
+- `just install` - Install/refresh the local package for development (run after cloning or modifying the theme). Overwrites any existing same-version install, so no separate uninstall step is needed (verified with tyler 0.10.3).
 
 ### Build and Test
 - `just all` - Compile all 6 gallery demos (and the speaker-notes pdfpc sidecar + inline-notes preview)

@@ -79,3 +79,35 @@ install:
 # Clean all generated PDFs
 clean:
     rm -f *.pdf gallery/*.pdf tests/*.pdf gallery/*.pdfpc
+
+# --- Release ---
+
+# Pre-release gate: tests + format-check + all gallery demos compile (no install needed)
+release-check:
+    just test
+    just format-check
+    just all
+    @echo "✅ release-check passed"
+
+# Set the package version everywhere (typst.toml + import refs). Usage: just set-version 0.5.0
+set-version VERSION:
+    perl -i -pe 's/^version = "[^"]*"/version = "{{VERSION}}"/' typst.toml
+    perl -i -pe 's{bypst:\d+\.\d+\.\d+}{bypst:{{VERSION}}}g' README.md gallery/README.md template/basic.typ template/complete.typ
+    @echo 'Version set to {{VERSION}} — verify: grep -rn "bypst:" README.md gallery/README.md template/ ; grep "^version" typst.toml'
+
+# Publish to Typst Universe (opens/updates the typst/packages PR). Needs tyler >=0.10 + GitHub auth.
+publish:
+    tyler build . --no-bump --publish
+
+# Print the ordered release checklist (human-judgment steps stay manual).
+release:
+    @echo "Release checklist (publish to Typst Universe first, then tag):"
+    @echo "  1. just set-version X.Y.Z   — bump typst.toml + all import refs"
+    @echo "  2. Edit CHANGELOG.md: move [Unreleased] -> [X.Y.Z] - DATE, update compare links"
+    @echo "  3. just release-check       — tests + format-check + gallery all green"
+    @echo "  4. Commit the release changes, then merge to main"
+    @echo "  5. just publish             — tyler build --no-bump --publish (opens typst/packages PR)"
+    @echo "  6. Wait for the typst/packages PR checks; fix + re-run 'just publish' if flagged"
+    @echo "  7. Only once the published commit is final: tag + GitHub release"
+    @echo "       git tag -a vX.Y.Z -m 'Release vX.Y.Z' && git push origin vX.Y.Z"
+    @echo "       gh release create vX.Y.Z"
