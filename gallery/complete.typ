@@ -45,7 +45,7 @@
     [Alice Johnson#inst(1, 2)],
   ),
   institutes: (
-    "Leibniz Institute for Prevention Research and Epidemiology — BIPS",
+    bips-en,
     "University of Bremen",
   ),
   date: datetime.today().display(),
@@ -58,14 +58,14 @@
 
 // [Touying] `outline()` builds an agenda from the section slides — each
 // `section-slide` emits an outlined heading, so the table of contents stays
-// in sync automatically. `components.adaptive-columns(...)` flows a long
-// outline across multiple columns to fit the slide.
+// in sync automatically. (For a long outline that needs more than one column,
+// wrap it in `components.adaptive-columns(...)`.)
 // [BIPS] An agenda is conventionally unnumbered, so this uses `base-slide`
 // with `count: false` (does not advance the counter) and `page-number: false`
 // (no number, which would otherwise crowd the outline's right-aligned page
 // references). The logo stays on.
 #base-slide(title: "Outline", count: false, page-number: false)[
-  #components.adaptive-columns(outline(title: none, indent: 1em))
+  #outline(title: none, indent: 1em)
 ]
 
 // ===================================================================
