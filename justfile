@@ -25,7 +25,23 @@ all:
         fi
         echo ""
     done
-    
+
+    # Speaker-notes deck: build the pdfpc presenter artifacts. The 16:9 PDF is
+    # compiled in the loop above; here we add the .pdfpc sidecar pdfpc reads, and
+    # an inline-notes preview (notes beside each slide) for quick verification.
+    echo "📝 Speaker notes: pdfpc sidecar + inline-notes preview..."
+    if typst query --root . gallery/speaker-notes.typ --field value --one "<pdfpc-file>" > gallery/speaker-notes.pdfpc; then
+        echo "   ✅ gallery/speaker-notes.pdfpc  (try it: pdfpc gallery/speaker-notes.pdf)"
+    else
+        echo "   ❌ pdfpc sidecar export failed"; ((failed++))
+    fi
+    if typst compile --root . --input notes=true gallery/speaker-notes.typ gallery/speaker-notes-notes.pdf; then
+        echo "   ✅ gallery/speaker-notes-notes.pdf  (notes rendered inline)"
+    else
+        echo "   ❌ inline-notes preview failed"; ((failed++))
+    fi
+    echo ""
+
     total_end=$(gdate +%s%3N 2>/dev/null || date +%s%3N)
     total_duration=$((total_end - total_start))
     
@@ -62,4 +78,4 @@ install:
 
 # Clean all generated PDFs
 clean:
-    rm -f *.pdf gallery/*.pdf tests/*.pdf
+    rm -f *.pdf gallery/*.pdf tests/*.pdf gallery/*.pdfpc

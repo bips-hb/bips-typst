@@ -5,6 +5,7 @@ TODO.md
 
 # Typst build artifacts
 *.pdf
+*.pdfpc
 
 # Build output
 _site/
