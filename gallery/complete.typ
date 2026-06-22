@@ -26,6 +26,8 @@
     title: [Bypst: The BIPS Typst Theme],
     author: [BIPS],
   ),
+  // [Touying] enable-pdfpc exports speaker notes (see the "Speaker Notes" slide).
+  config-common(enable-pdfpc: true),
 )
 
 // ===================================================================
@@ -59,7 +61,11 @@
 // `section-slide` emits an outlined heading, so the table of contents stays
 // in sync automatically. `components.adaptive-columns(...)` flows a long
 // outline across multiple columns to fit the slide.
-#bips-slide(title: "Outline")[
+// [BIPS] An agenda is conventionally unnumbered, so this uses `base-slide`
+// with `count: false` (does not advance the counter) and `page-number: false`
+// (no number, which would otherwise crowd the outline's right-aligned page
+// references). The logo stays on.
+#base-slide(title: "Outline", count: false, page-number: false)[
   #components.adaptive-columns(outline(title: none, indent: 1em))
 ]
 
@@ -190,10 +196,10 @@
 ]
 
 // [BIPS] `show-line: false` hides the gradient separator under the title.
-// Useful for full-bleed or transparent graphics where the line would be
-// distracting. The slide counter keeps running, so page numbers stay
-// sequential.
-#bips-slide(title: "Full-Bleed Graphic", show-line: false)[
+// Useful for transparent graphics or logos where the line would be
+// distracting. Logo and page number stay on; the counter keeps running.
+// (For a truly chrome-free full-bleed image, use `empty-slide` — see below.)
+#bips-slide(title: "Hidden Divider Line", show-line: false)[
   #align(center + horizon)[
     #image("/logo.png", height: 70%)
   ]
@@ -352,14 +358,23 @@
 ]
 
 // [Touying] Speaker notes via pdfpc — `#pdfpc.speaker-note("...")` attaches
-// presenter-only notes that never appear on the slide. They surface in the
-// pdfpc presenter view, or set `config-common(show-notes-on-second-screen: right)`
-// on the theme to show them on a second screen.
+// presenter-only notes that never appear on the slide itself.
 #bips-slide(
   title: "Speaker Notes",
   subtitle: "Touying: presenter-only notes via pdfpc",
+  text-size: 16pt,
 )[
-  This slide carries a hidden speaker note for the presenter.
+  This slide carries a speaker note, attached with
+  `#pdfpc.speaker-note("...")`. Notes export only when the theme is set with
+  `config-common(enable-pdfpc: true)` (as this deck is).
+
+  *To read the notes:*
+  - *Presenter view* — export a sidecar, then open the PDF in
+    #link("https://pdfpc.github.io/")[pdfpc]:
+    #small[`typst query --root . slides.typ --field value --one "<pdfpc-file>" > slides.pdfpc`]
+  - *Inline preview* — add `config-common(show-notes-on-second-screen: right)`
+    to the theme to render the notes beside each slide in the PDF.
+
   #pdfpc.speaker-note(
     "Remind the audience that these notes stay in the presenter view.",
   )
@@ -416,10 +431,12 @@
   Useful for full-bleed images or transition screens.
 ]
 
-// [BIPS] `count: true` keeps an empty slide in the numbered sequence and
-// shows its page number. Good for a full-bleed figure that should still
-// count as a slide (the logo and title separator stay hidden).
-#empty-slide(count: true)[
+// [BIPS] `count: true` keeps an empty slide in the numbered sequence and shows
+// its page number. Pair it with `show-logo: true` so the number sits under the
+// logo as on content slides (a counted full-bleed figure that keeps the
+// branding; the title separator stays hidden). Drop `show-logo: true` for a
+// number with no logo, or omit `count` entirely for a fully chrome-free slide.
+#empty-slide(count: true, show-logo: true)[
   #align(center + horizon)[#image("/logo.png", height: 75%)]
 ]
 
