@@ -149,16 +149,42 @@
 
 // [Touying] `composer:` splits the slide body into native Touying panes — an
 // alternative to two-columns/grid when you want Touying's column layout
-// directly. The trailing content blocks map to the tracks you pass.
-// See https://touying-typ.github.io/docs/tutorials/layout
-#bips-slide(title: "Composer Panes", composer: (1fr, 1fr))[
-  *Left pane*
+// directly, with arbitrary track ratios. The trailing content blocks map to
+// the tracks you pass. See https://touying-typ.github.io/docs/tutorials/layout
+#bips-slide(title: "Composer Panes", composer: (2fr, 1fr))[
+  *Wide pane (2fr)*
 
-  Defined with `composer: (1fr, 1fr)` plus two trailing content blocks.
+  Defined with `composer: (2fr, 1fr)` plus two trailing content blocks, so this
+  pane is twice the width of the next.
 ][
-  *Right pane*
+  *Narrow pane (1fr)*
 
   Each block fills one track; widths follow the ratios you pass.
+]
+
+// [Touying] `components.adaptive-columns` auto-flows a single long block into as
+// many balanced columns as fit — unlike `two-columns`/`three-columns`, where you
+// place content into a fixed number of columns yourself. Useful for long lists,
+// glossaries, or a long agenda that would overflow one column.
+#bips-slide(title: "Adaptive Columns")[
+  #components.adaptive-columns[
+    - Bias
+    - Variance
+    - Overfitting
+    - Underfitting
+    - Regularization
+    - Cross-validation
+    - Residuals
+    - Collinearity
+    - Heteroscedasticity
+    - Interaction
+    - Confounding
+    - Likelihood
+    - Deviance
+    - Link function
+    - Offset
+    - Bootstrap
+  ]
 ]
 
 // [BIPS] Callout blocks — styled boxes for notes, tips, warnings, etc.
