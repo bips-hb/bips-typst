@@ -70,7 +70,7 @@ Dependency DAG: `config` → `helpers` → `slides`; `extras` → `config`; `the
 - `inst()` - Author affiliation superscripts
 - `vfill` - Vertical fill shorthand
 - `compact[]` - Tighter list/enum spacing for dense layouts
-- `bips_en`, `bips_de` - Institutional name shortcuts
+- `bips-en`, `bips-de` - Institutional name shortcuts
 
 ### Slide Counter and Page Number System
 
@@ -111,8 +111,8 @@ The `small`/`tiny`/`large`/`huge` text helpers are em-relative (not fixed pt), s
 All slide types should follow consistent patterns:
 
 - **`config:` parameter**: Used for page-level overrides and counter freeze. Use `utils.merge-dicts()` to combine multiple configs (e.g., `utils.merge-dicts(config-common(freeze-slide-counter: true), config-page(background: none))`).
-- **`setting:` callback**: Used by `title-slide` for `set align(center)` and content layout. The callback receives `body` and must return it. **Do NOT use `set page()` inside `setting:` — it causes ghost blank pages in Touying 0.7.0. Use `config: config-page(...)` instead.**
-- **Direct content**: `base-slide` passes body directly to Touying's `slide[]` so `#pause` markers are visible to Touying's content splitter (`bips-slide` delegates to it).
+- **`setting:` callback**: Used by `title-slide` for `set align(center)` and content layout. The callback receives `body` and must return it. **Do NOT use `set page()` inside `setting:` — it causes ghost blank pages in Touying 0.7.x. Use `config: config-page(...)` instead.**
+- **Direct content**: `base-slide` is a `touying-slide-wrapper` that passes the body directly to `touying-slide(self: self, ...)` (never wrapped in `context`), so `#pause` markers stay visible to Touying's content splitter (`bips-slide` and `empty-slide` delegate to it).
 
 ## Animation Compatibility
 
@@ -128,7 +128,7 @@ These rules were learned from debugging Touying interaction issues:
 - Custom theme documentation: https://touying-typ.github.io/docs/tutorials/build-your-own-theme
 - Look up Typst and Touying documentation online when needed; don't assume API details from memory.
 
-### Touying Rendering Pipeline (v0.7.0)
+### Touying Rendering Pipeline (v0.7.x)
 
 Understanding the render order is critical for correct counter behavior:
 
@@ -139,14 +139,14 @@ Understanding the render order is critical for correct counter behavior:
    c. `set page(header: preamble + header, footer: footer)` is applied
    d. Content is rendered via `setting-fn(subslide-preamble + content)`
 
-**Key files in touying source** (installed at `~/Library/Caches/typst/packages/preview/touying/0.7.0/`):
+**Key files in touying source** (installed at `~/Library/Caches/typst/packages/preview/touying/0.7.3/`):
 - `src/core.typ`: Subslide loop, counter stepping, `_get-header-footer`, `_get-negative-pad`
 - `src/configs.typ`: `config-page`, `config-common` definitions
 - `themes/metropolis.typ`: Reference for how built-in themes handle header/footer/counter
 
-### Touying 0.7.0 Migration Notes
+### Touying 0.7.x Notes (carried over from the 0.6.1 → 0.7.0 migration)
 
-**Breaking changes from 0.6.1:**
+**Breaking changes from 0.6.1 (still in effect on 0.7.3):**
 - `set page()` inside `setting:` callbacks now causes ghost blank pages after the slide. Use `config: config-page(...)` instead.
 - `config:` parameter was silently ignored in 0.6.1 — now works correctly. This means `freeze-slide-counter` and page overrides via `config:` are actually applied.
 - Aspect ratio: use `..utils.page-args-from-aspect-ratio(aspect-ratio)` instead of `paper: "presentation-" + aspect-ratio` in `config-page()`.
@@ -178,7 +178,7 @@ Understanding the render order is critical for correct counter behavior:
 
 **Packaging guidelines**: https://github.com/typst/packages/blob/main/docs/README.md
 
-Releases are built and published with **tyler** (the same tool `just install` uses). `tyler build . --publish` assembles the clean bundle into `dist/` (applying the `[tool.tyler] ignore` list in `typst.toml`), clones `typst/packages`, creates a `bypst-<version>` branch, copies the bundle to `packages/preview/bypst/<version>`, and opens the PR. This replaces the old manual sparse-checkout method.
+Releases are built and published with **tyler** (the same tool `just install` uses); **use tyler >= 0.10.0** (`bun install -g @mkpoli/tyler@latest`). `tyler build . --publish` assembles the clean bundle into `dist/` (applying the `[tool.tyler] ignore` list in `typst.toml`), clones `typst/packages`, creates a `bypst-<version>` branch, copies the bundle to `packages/preview/bypst/<version>`, and opens the PR. This replaces the old manual sparse-checkout method.
 
 Before release, verify compliance with the Typst packaging guidelines:
 - README.md has examples and shows the current version number
@@ -200,7 +200,7 @@ Release checklist (publish to Typst first, then tag + GitHub release):
 
 Tagging last avoids re-tagging HEAD every time a publish round-trip needs another commit. The `typst-package-check` "failure" with 0 errors / N warnings is non-blocking (warnings are suggestions; a human still reviews), but dep-version warnings are worth clearing before the final tag.
 
-**Known tyler bug (v0.7.2):** the template-thumbnail check crashes with `TypeError: The "list" argument must be ... ArrayBuffer ...` because tyler passes a file path to its bundled `image-size` v2, which now requires a `Uint8Array`. It fires on `check`, `build`, and `publish`, but not on `just install` (which uses `--no-check`), and it is independent of the actual thumbnail. Fix: upgrade tyler (`bun install -g @mkpoli/tyler@latest`; latest is ≥0.10.x). Fallback if not upgrading: add `--no-check` to skip validation locally (the `typst/packages` CI re-validates on the PR). Note tyler runs under node (`#!/usr/bin/env node`), so the active node version matters.
+**tyler version:** use tyler >= 0.10.0 (0.10.3 verified). tyler runs under node (`#!/usr/bin/env node`), so the active node version matters. *Historical:* tyler 0.7.2 had a template-thumbnail check crash (`TypeError: The "list" argument must be ... ArrayBuffer ...`) on `check`/`build`/`publish`, fixed in 0.10.x; if you ever hit it on an old tyler, upgrade, or pass `--no-check` to skip local validation (the `typst/packages` CI re-validates on the PR).
 
 **Packaging gotcha:** glob `**` does not match dotfiles, and a bare `.DS_Store` pattern only matches the top level. Keep both `.DS_Store` and `**/.DS_Store` in `[tool.tyler] ignore` so nested `.DS_Store` files stay out of the bundle. Anything gitignored but present on disk (e.g. `presentations/`) must also be listed in `[tool.tyler] ignore` and `[package] exclude`, or it ships.
 
