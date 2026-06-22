@@ -147,19 +147,21 @@
   ]
 ]
 
-// [Touying] `composer:` splits the slide body into native Touying panes — an
-// alternative to two-columns/grid when you want Touying's column layout
-// directly, with arbitrary track ratios. The trailing content blocks map to
-// the tracks you pass. See https://touying-typ.github.io/docs/tutorials/layout
+// [Touying] `composer:` is Touying's native way to split a whole slide into
+// panes — the trailing content blocks become the panes. Both this and
+// `two-columns(columns: ...)` take arbitrary widths, so the choice is about
+// mechanism, not capability: `composer` is convenient when the entire slide is
+// multi-pane, while `two-columns`/`three-columns` are grid helpers you can nest
+// anywhere inside a body. See https://touying-typ.github.io/docs/tutorials/layout
 #bips-slide(title: "Composer Panes", composer: (2fr, 1fr))[
   *Wide pane (2fr)*
 
-  Defined with `composer: (2fr, 1fr)` plus two trailing content blocks, so this
-  pane is twice the width of the next.
+  The whole slide body is split by `composer: (2fr, 1fr)`; the two trailing
+  content blocks fill the two tracks.
 ][
   *Narrow pane (1fr)*
 
-  Each block fills one track; widths follow the ratios you pass.
+  Convenient when the entire slide is multi-pane, with no helper call in the body.
 ]
 
 // [Touying] `components.adaptive-columns` auto-flows a single long block into as
