@@ -5,7 +5,7 @@ A 16:9 presentation template for [BIPS](https://www.leibniz-bips.de/) using [Typ
 ## Quick Start
 
 ```typst
-#import "@preview/bypst:0.3.0": *
+#import "@preview/bypst:0.4.0": *
 #show: bips-theme
 
 #title-slide(
@@ -38,7 +38,7 @@ A 16:9 presentation template for [BIPS](https://www.leibniz-bips.de/) using [Typ
 The theme is available from the [Typst package registry](https://typst.app/universe/package/bypst), just import it like any other package:
 
 ```typst
-#import "@preview/bypst:0.3.0": *
+#import "@preview/bypst:0.4.0": *
 ```
 
 Please note that the official BIPS logo is not bundled with the package to avoid licensing concerns.
@@ -57,7 +57,7 @@ just install
 Then use the local import instead:
 
 ```typst
-#import "@local/bypst:0.3.0": *
+#import "@local/bypst:0.4.0": *
 ```
 
 ## Slide Types
@@ -65,11 +65,12 @@ Then use the local import instead:
 | Function | Purpose |
 |---|---|
 | `#title-slide()` | Opening slide with author, institute, date |
-| `#bips-slide()` | Content slide with optional title/subtitle |
+| `#bips-slide()` | Content slide with optional title/subtitle (preset over `base-slide`) |
 | `#section-slide()` | Section divider |
 | `#thanks-slide()` | Closing slide with contact info and optional QR code |
 | `#bibliography-slide[]` | References |
-| `#empty-slide[]` | Blank slide without branding |
+| `#empty-slide[]` | Minimal slide without branding (preset over `base-slide`) |
+| `#base-slide()` | Flexible base slide with all chrome toggles; use when `bips-slide`/`empty-slide` presets don't cover your layout |
 
 ### Content slide options
 
@@ -125,7 +126,7 @@ Then use the local import instead:
 ### Color helpers
 
 ```typst
-#blue[text]  #orange[text]  #green[text]  #gray[text]
+#blue[text]  #orange[text]  #green[text]  #gray[text]  #logo-blue[text]
 ```
 
 ### Callout boxes
@@ -154,10 +155,13 @@ Adjustable: `#compact(spacing: 0.2em, leading: 0.2em)[...]`
 
 For lighter adjustments, `#set list(spacing: 0.4em)` works as a local override.
 
-### Vertical fill
+### Vertical and horizontal fill
+
+For when you want to fill space until the lower or rightmost end of the current slide (or slide column, grid cell, etc.).
 
 ```typst
 #vfill  // shorthand for v(1fr)
+#hfill  // shorthand for h(1fr)
 ```
 
 ### Institutional names
@@ -178,7 +182,17 @@ The theme re-exports Touying's animation functions:
 #alternatives[Version A][Version B] // swap content
 ```
 
-**Note**: Do not use `#pause` inside `#two-columns` / `#three-columns`. Use `#uncover()` or `#only()` instead.
+`#pause` works inside `#two-columns` and `#three-columns`; reveals follow document flow order across cells. `#uncover()` and `#only()` are useful for index-driven reveals without consuming a pause step.
+
+### Handout mode
+
+Handout mode collapses every pause step to a single page per slide, producing one page per logical slide. Enable it from the command line without editing the source:
+
+```sh
+typst compile --input handout=true slides.typ
+```
+
+Or set it on the theme directly with `bips-theme.with(handout: true)`.
 
 ## Global Customization
 
@@ -212,8 +226,6 @@ The actual BIPS logo (`bips-logo.png`) is available in the [GitHub repository](h
   heading-1-size: 22pt,
   heading-2-size: 20pt,
   heading-3-size: 18pt,
-  small-size: 16pt,
-  tiny-size: 14pt,
   page-number-size: 16pt,
   code-block-scale: 0.9,
   code-inline-scale: 1,
@@ -238,6 +250,7 @@ The `gallery/` directory contains example presentations:
 - `bibliography.typ` — citations and references
 - `aspect-ratio.typ` — 4:3 format
 - `lecture-demo.typ` — realistic 100-slide scale test
+- `speaker-notes.typ` — presenter notes (pdfpc export and inline preview)
 
 ## Development
 
@@ -254,8 +267,12 @@ After editing theme files, run `just install` before compiling.
 
 ```txt
 bypst.typ        # package entrypoint
-theme.typ        # theme implementation
-logo.png         # placeholder logo (replace with your own)
+theme.typ        # orchestrator (imports config/helpers/slides/extras)
+config.typ       # branding constants (colors, fonts, sizes)
+helpers.typ      # internal plumbing (title area, page number, background)
+slides.typ       # slide types
+extras.typ       # public layout/color utilities
+bips-logo.png    # placeholder logo (replace with your own)
 typst.toml       # package metadata
 template/        # Typst Universe templates
 gallery/         # example presentations

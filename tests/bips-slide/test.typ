@@ -69,3 +69,11 @@
   Display math:
   $ hat(theta)_n = 1/n sum_(i=1)^n X_i $
 ]
+
+// Long title must not push the divider down (shrink-to-fit safeguard).
+#bips-slide(
+  title: "A very long slide title that would otherwise wrap onto two or three lines and overflow the fixed header box height quite badly indeed",
+  subtitle: "with a subtitle underneath as well",
+)[
+  The divider should sit at the same height as on a short-title slide.
+]

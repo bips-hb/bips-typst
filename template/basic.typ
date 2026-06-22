@@ -1,6 +1,6 @@
 // To use with a local installation (after `just install`):
-// #import "@local/bypst:0.3.0": *
-#import "@preview/bypst:0.3.0": *
+// #import "@local/bypst:0.4.0": *
+#import "@preview/bypst:0.4.0": *
 
 #show: bips-theme
 
@@ -22,12 +22,23 @@
 
 #section-slide("Results")
 
-#bips-slide(title: "Main Findings")[
+// `composer:` splits the whole slide into panes — the trailing content blocks
+// become the panes (here a narrow 1fr and a wider 2fr). Column helpers like
+// `two-columns` can be nested inside a pane.
+#bips-slide(title: "Main Findings", composer: (1fr, 2fr))[
+  - First finding
+  - Second finding
+  - Third finding
+][
+  A wider pane with room for more detail.
+
   #two-columns[
-    Left column content
+    A nested two-column layout.
   ][
-    Right column content
+    #blue[The nested right column.]
   ]
+
+  Text continues below the nested columns.
 ]
 
 #thanks-slide(

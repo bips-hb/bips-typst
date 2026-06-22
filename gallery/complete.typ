@@ -15,7 +15,19 @@
 
 // [BIPS] Apply the BIPS theme with default settings.
 // Optional overrides: base-size, slide-title-size, heading-*-size, etc.
-#show: bips-theme
+// [Touying] Any Touying config dict (config-info, config-common, config-page)
+// passed here is forwarded to Touying. config-info() sets the PDF document
+// metadata and provides defaults for title-slide() fields not passed
+// explicitly. config-common() exposes knobs like pdfpc / presenter notes.
+// [BIPS] Handout mode collapses all #pause steps to one page per slide:
+// compile with `typst compile --input handout=true`, or set handout: true here.
+#show: bips-theme.with(
+  config-info(
+    title: [Bypst: The BIPS Typst Theme],
+    author: [BIPS],
+  ),
+)
+// (Speaker notes have their own demo: see gallery/speaker-notes.typ.)
 
 // ===================================================================
 // TITLE SLIDE
@@ -33,7 +45,7 @@
     [Alice Johnson#inst(1, 2)],
   ),
   institutes: (
-    "Leibniz Institute for Prevention Research and Epidemiology — BIPS",
+    bips-en,
     "University of Bremen",
   ),
   date: datetime.today().display(),
@@ -41,12 +53,32 @@
 )
 
 // ===================================================================
+// AGENDA / OUTLINE
+// ===================================================================
+
+// [Touying] `outline()` builds an agenda from the section slides — each
+// `section-slide` emits an outlined heading, so the table of contents stays
+// in sync automatically. (For a long outline that needs more than one column,
+// wrap it in `components.adaptive-columns(...)`.)
+// [BIPS] An agenda is conventionally unnumbered, so this uses `base-slide`
+// with `count: false` (does not advance the counter) and `page-number: false`
+// (no number, which would otherwise crowd the outline's right-aligned page
+// references). The logo stays on.
+#base-slide(title: "Outline", count: false, page-number: false)[
+  #outline(title: none, indent: 1em)
+]
+
+// ===================================================================
 // SLIDE TYPES
 // ===================================================================
 
 // [BIPS] Section slides create visual dividers. They don't consume a
 // slide number and appear in the PDF outline for navigation.
-#section-slide[Slide Types]
+// Optional trailing content appears centered below the title (the title
+// alone is the PDF outline entry) — handy for a short paper title or subtitle.
+#section-slide("Slide Types")[
+  #small[The building blocks of a BIPS presentation]
+]
 
 // [BIPS] Content slide with title and subtitle — the workhorse slide type.
 // Text formatting is auto-styled by the theme:
@@ -68,7 +100,11 @@
 // [BIPS] Content slide with title only (no subtitle) — renders slightly larger.
 #bips-slide(title: "Color Utilities & Headings")[
   // [BIPS] Color helper functions for inline coloring:
-  #blue[`#blue[]`], #orange[`#orange[]`], #green[`#green[]`], #gray[`#gray[]`]
+  #blue[`#blue[]`], #orange[`#orange[]`], #green[`#green[]`], #gray[`#gray[]`], #logo-blue[`#logo-blue[]`]
+  // [Typst] These demo headings are excluded from the agenda/outline() with a
+  // scoped `set heading(outlined: false)` so they don't pollute the table of
+  // contents (they only exist here to show heading styling).
+  #set heading(outlined: false)
   = Heading level 1
   == Heading level 2
   // [BIPS] Headings are styled in BIPS blue at all levels:
@@ -111,6 +147,48 @@
   ]
 ]
 
+// [Touying] `composer:` is Touying's native way to split a whole slide into
+// panes — the trailing content blocks become the panes. Both this and
+// `two-columns(columns: ...)` take arbitrary widths, so the choice is about
+// mechanism, not capability: `composer` is convenient when the entire slide is
+// multi-pane, while `two-columns`/`three-columns` are grid helpers you can nest
+// anywhere inside a body. See https://touying-typ.github.io/docs/tutorials/layout
+#bips-slide(title: "Composer Panes", composer: (2fr, 1fr))[
+  *Wide pane (2fr)*
+
+  The whole slide body is split by `composer: (2fr, 1fr)`; the two trailing
+  content blocks fill the two tracks.
+][
+  *Narrow pane (1fr)*
+
+  Convenient when the entire slide is multi-pane, with no helper call in the body.
+]
+
+// [Touying] `components.adaptive-columns` auto-flows a single long block into as
+// many balanced columns as fit — unlike `two-columns`/`three-columns`, where you
+// place content into a fixed number of columns yourself. Useful for long lists,
+// glossaries, or a long agenda that would overflow one column.
+#bips-slide(title: "Adaptive Columns")[
+  #components.adaptive-columns[
+    - Bias
+    - Variance
+    - Overfitting
+    - Underfitting
+    - Regularization
+    - Cross-validation
+    - Residuals
+    - Collinearity
+    - Heteroscedasticity
+    - Interaction
+    - Confounding
+    - Likelihood
+    - Deviance
+    - Link function
+    - Offset
+    - Bootstrap
+  ]
+]
+
 // [BIPS] Callout blocks — styled boxes for notes, tips, warnings, etc.
 #bips-slide(title: "Callout Blocks")[
   #callout(type: "note")[Default note — icon appears inline with content.]
@@ -145,10 +223,10 @@
 ]
 
 // [BIPS] `show-line: false` hides the gradient separator under the title.
-// Useful for full-bleed or transparent graphics where the line would be
-// distracting. The slide counter keeps running, so page numbers stay
-// sequential.
-#bips-slide(title: "Full-Bleed Graphic", show-line: false)[
+// Useful for transparent graphics or logos where the line would be
+// distracting. Logo and page number stay on; the counter keeps running.
+// (For a truly chrome-free full-bleed image, use `empty-slide` — see below.)
+#bips-slide(title: "Hidden Divider Line", show-line: false)[
   #align(center + horizon)[
     #image("/logo.png", height: 70%)
   ]
@@ -350,19 +428,21 @@
 
 // [BIPS] Empty slide — no logo, no page number, no branding.
 // Useful for full-bleed images, transitions, or special layouts.
-#empty-slide[
-  #align(center + horizon)[
-    _This is an empty slide_ — no logo, no page number.
+// `content-align` centers content without a manual `#align` wrapper.
+#empty-slide(content-align: center + horizon)[
+  _This is an empty slide_ — no logo, no page number.
 
-    Useful for full-bleed images or transition screens.
-  ]
+  Useful for full-bleed images or transition screens.
 ]
 
-// [BIPS] `count: true` keeps an empty slide in the numbered sequence and
-// shows its page number. Good for a full-bleed figure that should still
-// count as a slide (the logo and title separator stay hidden).
-#empty-slide(count: true)[
-  #align(center + horizon)[#image("/logo.png", height: 75%)]
+// [BIPS] A full-frame image that should still occupy a slide number.
+// `count: true` advances the counter (so the slides before and after stay
+// sequential and the audience infers this slide's number), while
+// `page-number: false` hides the number that the edge-to-edge image would
+// otherwise cover. `show-logo: false` keeps it truly full-frame. `count` and
+// `page-number` are independent toggles, so any combination is possible.
+#empty-slide(count: true, page-number: false, show-logo: false)[
+  #align(center + horizon)[#image("/logo.png", height: 90%)]
 ]
 
 // [BIPS] Thanks/contact slide with QR code.

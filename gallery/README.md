@@ -11,6 +11,7 @@ Ready-to-use examples showcasing different features of the bypst theme.
 | `bibliography.typ` | Citations and reference management with `.bib` files |
 | `aspect-ratio.typ` | Using 4:3 format instead of the default 16:9 |
 | `lecture-demo.typ` | Realistic 100-slide lecture for scale testing |
+| `speaker-notes.typ` | Speaker notes via pdfpc — presenter console plus an inline-notes preview |
 
 ## Quick Start
 
@@ -28,6 +29,6 @@ just all
 ## Creating Your Own
 
 1. Copy `basic.typ` as your starting point
-2. Import the theme: `#import "@local/bypst:0.3.0": *`
+2. Import the theme: `#import "@local/bypst:0.4.0": *`
 3. Refer to `complete.typ` for feature examples
 4. Compile and present!

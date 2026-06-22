@@ -436,7 +436,7 @@
 
 ]
 
-#bips-slide(title: "ANOVA as Regression", text-size: 15pt)[
+#bips-slide(title: "ANOVA as Regression", text-size: 13pt)[
   === One-Way ANOVA
   Compare means across groups using dummy variables
 
@@ -514,7 +514,7 @@
   ]
 ]
 
-#bips-slide(title: "Poisson Regression")[
+#bips-slide(title: "Poisson Regression", text-size: 13pt)[
   === Count Data
   - $y_i ~ "Poisson"(lambda_i)$
   - $ln(lambda_i) = bold(x)_i^top bold(beta)$ (log link)
@@ -615,7 +615,7 @@
 
 #section-slide("Practical Applications")
 
-#bips-slide(title: "Clinical Research Example", text-size: 14pt)[
+#bips-slide(title: "Clinical Research Example", text-size: 13pt)[
   === Research Question
   Factors affecting blood pressure in hypertensive patients
 
@@ -662,7 +662,7 @@
   ]
 ]
 
-#bips-slide(title: "Public Health Surveillance", text-size: 15pt)[
+#bips-slide(title: "Public Health Surveillance", text-size: 13pt)[
   === Disease Monitoring
   Track infectious disease incidence over time
 
@@ -681,7 +681,7 @@
   - Time trend identifies long-term changes
 ]
 
-#bips-slide(title: "Environmental Health Study")[
+#bips-slide(title: "Environmental Health Study", text-size: 13pt)[
   === Air Pollution and Mortality
   Daily time series analysis in urban area
 
@@ -836,7 +836,7 @@
 
 #section-slide("Case Study Walkthrough")
 
-#bips-slide(title: "Research Question", text-size: 15pt)[
+#bips-slide(title: "Research Question", text-size: 13pt)[
   === Study Objective
   Identify factors associated with childhood obesity in a school-based sample
 
@@ -899,7 +899,7 @@
   Remove non-significant predictors and add quadratic terms for screen time
 ]
 
-#bips-slide(title: "Final Results and Interpretation", text-size: 15pt)[
+#bips-slide(title: "Final Results and Interpretation", text-size: 13pt)[
   #table(
     columns: 5,
     [*Predictor*], [*Coefficient*], [*SE*], [*95% CI*], [*p-value*],
@@ -919,7 +919,7 @@
 
 #section-slide("Looking Forward")
 
-#bips-slide(title: "Advanced Methods", text-size: 15pt)[
+#bips-slide(title: "Advanced Methods", text-size: 13pt)[
   === Machine Learning Integration
   - *Ensemble methods*: Random forests, gradient boosting
   - *Neural networks*: Deep learning for complex patterns
