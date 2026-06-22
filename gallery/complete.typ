@@ -19,6 +19,8 @@
 // passed here is forwarded to Touying. config-info() sets the PDF document
 // metadata and provides defaults for title-slide() fields not passed
 // explicitly. config-common() exposes knobs like pdfpc / presenter notes.
+// [BIPS] Handout mode collapses all #pause steps to one page per slide:
+// compile with `typst compile --input handout=true`, or set handout: true here.
 #show: bips-theme.with(
   config-info(
     title: [Bypst: The BIPS Typst Theme],
@@ -81,7 +83,7 @@
 // [BIPS] Content slide with title only (no subtitle) — renders slightly larger.
 #bips-slide(title: "Color Utilities & Headings")[
   // [BIPS] Color helper functions for inline coloring:
-  #blue[`#blue[]`], #orange[`#orange[]`], #green[`#green[]`], #gray[`#gray[]`]
+  #blue[`#blue[]`], #orange[`#orange[]`], #green[`#green[]`], #gray[`#gray[]`], #logo-blue[`#logo-blue[]`]
   = Heading level 1
   == Heading level 2
   // [BIPS] Headings are styled in BIPS blue at all levels:
@@ -122,6 +124,20 @@
   ][
     #green[Column C]
   ]
+]
+
+// [Touying] `composer:` splits the slide body into native Touying panes — an
+// alternative to two-columns/grid when you want Touying's column layout
+// directly. The trailing content blocks map to the tracks you pass.
+// See https://touying-typ.github.io/docs/tutorials/layout
+#bips-slide(title: "Composer Panes", composer: (1fr, 1fr))[
+  *Left pane*
+
+  Defined with `composer: (1fr, 1fr)` plus two trailing content blocks.
+][
+  *Right pane*
+
+  Each block fills one track; widths follow the ratios you pass.
 ]
 
 // [BIPS] Callout blocks — styled boxes for notes, tips, warnings, etc.

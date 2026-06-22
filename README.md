@@ -126,7 +126,7 @@ Then use the local import instead:
 ### Color helpers
 
 ```typst
-#blue[text]  #orange[text]  #green[text]  #gray[text]
+#blue[text]  #orange[text]  #green[text]  #gray[text]  #logo-blue[text]
 ```
 
 ### Callout boxes
@@ -182,7 +182,17 @@ The theme re-exports Touying's animation functions:
 #alternatives[Version A][Version B] // swap content
 ```
 
-**Note**: `#pause` works inside `#two-columns` / `#three-columns` on Touying 0.7.3; reveals follow document flow order across cells. `#uncover()` and `#only()` remain useful for index-driven reveals without consuming a pause step.
+`#pause` works inside `#two-columns` and `#three-columns`; reveals follow document flow order across cells. `#uncover()` and `#only()` are useful for index-driven reveals without consuming a pause step.
+
+### Handout mode
+
+Handout mode collapses every pause step to a single page per slide, producing one page per logical slide. Enable it from the command line without editing the source:
+
+```sh
+typst compile --input handout=true slides.typ
+```
+
+Or set it on the theme directly with `bips-theme.with(handout: true)`.
 
 ## Global Customization
 
@@ -216,8 +226,6 @@ The actual BIPS logo (`bips-logo.png`) is available in the [GitHub repository](h
   heading-1-size: 22pt,
   heading-2-size: 20pt,
   heading-3-size: 18pt,
-  small-size: 16pt,
-  tiny-size: 14pt,
   page-number-size: 16pt,
   code-block-scale: 0.9,
   code-inline-scale: 1,
@@ -258,8 +266,12 @@ After editing theme files, run `just install` before compiling.
 
 ```txt
 bypst.typ        # package entrypoint
-theme.typ        # theme implementation
-logo.png         # placeholder logo (replace with your own)
+theme.typ        # orchestrator (imports config/helpers/slides/extras)
+config.typ       # branding constants (colors, fonts, sizes)
+helpers.typ      # internal plumbing (title area, page number, background)
+slides.typ       # slide types
+extras.typ       # public layout/color utilities
+bips-logo.png    # placeholder logo (replace with your own)
 typst.toml       # package metadata
 template/        # Typst Universe templates
 gallery/         # example presentations

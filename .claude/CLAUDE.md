@@ -125,7 +125,7 @@ These rules were learned from debugging Touying interaction issues:
 
 ## Touying Framework Reference
 
-- Custom theme documentation: https://touying-typ.github.io/docs/build-your-own-theme
+- Custom theme documentation: https://touying-typ.github.io/docs/tutorials/build-your-own-theme
 - Look up Typst and Touying documentation online when needed; don't assume API details from memory.
 
 ### Touying Rendering Pipeline (v0.7.0)
