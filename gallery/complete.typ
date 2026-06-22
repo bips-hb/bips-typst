@@ -52,6 +52,18 @@
 )
 
 // ===================================================================
+// AGENDA / OUTLINE
+// ===================================================================
+
+// [Touying] `outline()` builds an agenda from the section slides — each
+// `section-slide` emits an outlined heading, so the table of contents stays
+// in sync automatically. `components.adaptive-columns(...)` flows a long
+// outline across multiple columns to fit the slide.
+#bips-slide(title: "Outline")[
+  #components.adaptive-columns(outline(title: none, indent: 1em))
+]
+
+// ===================================================================
 // SLIDE TYPES
 // ===================================================================
 
@@ -84,6 +96,10 @@
 #bips-slide(title: "Color Utilities & Headings")[
   // [BIPS] Color helper functions for inline coloring:
   #blue[`#blue[]`], #orange[`#orange[]`], #green[`#green[]`], #gray[`#gray[]`], #logo-blue[`#logo-blue[]`]
+  // [Typst] These demo headings are excluded from the agenda/outline() with a
+  // scoped `set heading(outlined: false)` so they don't pollute the table of
+  // contents (they only exist here to show heading styling).
+  #set heading(outlined: false)
   = Heading level 1
   == Heading level 2
   // [BIPS] Headings are styled in BIPS blue at all levels:
@@ -333,6 +349,20 @@
 
   #pause
   Therefore, the vertex is at $x = -2$.
+]
+
+// [Touying] Speaker notes via pdfpc — `#pdfpc.speaker-note("...")` attaches
+// presenter-only notes that never appear on the slide. They surface in the
+// pdfpc presenter view, or set `config-common(show-notes-on-second-screen: right)`
+// on the theme to show them on a second screen.
+#bips-slide(
+  title: "Speaker Notes",
+  subtitle: "Touying: presenter-only notes via pdfpc",
+)[
+  This slide carries a hidden speaker note for the presenter.
+  #pdfpc.speaker-note(
+    "Remind the audience that these notes stay in the presenter view.",
+  )
 ]
 
 // ===================================================================
