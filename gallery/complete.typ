@@ -26,9 +26,8 @@
     title: [Bypst: The BIPS Typst Theme],
     author: [BIPS],
   ),
-  // [Touying] enable-pdfpc exports speaker notes (see the "Speaker Notes" slide).
-  config-common(enable-pdfpc: true),
 )
+// (Speaker notes have their own demo: see gallery/speaker-notes.typ.)
 
 // ===================================================================
 // TITLE SLIDE
@@ -357,29 +356,6 @@
   Therefore, the vertex is at $x = -2$.
 ]
 
-// [Touying] Speaker notes via pdfpc — `#pdfpc.speaker-note("...")` attaches
-// presenter-only notes that never appear on the slide itself.
-#bips-slide(
-  title: "Speaker Notes",
-  subtitle: "Touying: presenter-only notes via pdfpc",
-  text-size: 16pt,
-)[
-  This slide carries a speaker note, attached with
-  `#pdfpc.speaker-note("...")`. Notes export only when the theme is set with
-  `config-common(enable-pdfpc: true)` (as this deck is).
-
-  *To read the notes:*
-  - *Presenter view* — export a sidecar, then open the PDF in
-    #link("https://pdfpc.github.io/")[pdfpc]:
-    #small[`typst query --root . slides.typ --field value --one "<pdfpc-file>" > slides.pdfpc`]
-  - *Inline preview* — add `config-common(show-notes-on-second-screen: right)`
-    to the theme to render the notes beside each slide in the PDF.
-
-  #pdfpc.speaker-note(
-    "Remind the audience that these notes stay in the presenter view.",
-  )
-]
-
 // ===================================================================
 // CUSTOMIZATION
 // ===================================================================
@@ -431,13 +407,14 @@
   Useful for full-bleed images or transition screens.
 ]
 
-// [BIPS] `count: true` keeps an empty slide in the numbered sequence and shows
-// its page number. Pair it with `show-logo: true` so the number sits under the
-// logo as on content slides (a counted full-bleed figure that keeps the
-// branding; the title separator stays hidden). Drop `show-logo: true` for a
-// number with no logo, or omit `count` entirely for a fully chrome-free slide.
-#empty-slide(count: true, show-logo: true)[
-  #align(center + horizon)[#image("/logo.png", height: 75%)]
+// [BIPS] A full-frame image that should still occupy a slide number.
+// `count: true` advances the counter (so the slides before and after stay
+// sequential and the audience infers this slide's number), while
+// `page-number: false` hides the number that the edge-to-edge image would
+// otherwise cover. `show-logo: false` keeps it truly full-frame. `count` and
+// `page-number` are independent toggles, so any combination is possible.
+#empty-slide(count: true, page-number: false, show-logo: false)[
+  #align(center + horizon)[#image("/logo.png", height: 90%)]
 ]
 
 // [BIPS] Thanks/contact slide with QR code.
