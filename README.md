@@ -250,6 +250,7 @@ The `gallery/` directory contains example presentations:
 - `bibliography.typ` — citations and references
 - `aspect-ratio.typ` — 4:3 format
 - `lecture-demo.typ` — realistic 100-slide scale test
+- `speaker-notes.typ` — presenter notes (pdfpc export and inline preview)
 
 ## Development
 

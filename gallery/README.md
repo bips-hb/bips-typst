@@ -11,6 +11,7 @@ Ready-to-use examples showcasing different features of the bypst theme.
 | `bibliography.typ` | Citations and reference management with `.bib` files |
 | `aspect-ratio.typ` | Using 4:3 format instead of the default 16:9 |
 | `lecture-demo.typ` | Realistic 100-slide lecture for scale testing |
+| `speaker-notes.typ` | Speaker notes via pdfpc — presenter console plus an inline-notes preview |
 
 ## Quick Start
 

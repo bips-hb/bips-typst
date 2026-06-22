@@ -13,7 +13,7 @@ BIPS Typst presentation template for 16:9 institutional presentations using Typs
 - `just uninstall` - Remove local package installation
 
 ### Build and Test
-- `just all` - Compile all 5 gallery demos
+- `just all` - Compile all 6 gallery demos (and the speaker-notes pdfpc sidecar + inline-notes preview)
 - `just test` - Run tytanic test suite (13 compile-only feature tests + 1 template test)
 - `just test-verbose` - Run tests with verbose output
 - `just clean` - Remove all generated PDFs
@@ -91,7 +91,7 @@ The page number `place()` is at the start of `base-slide`'s content block (befor
 
 ## File Organization
 
-- `gallery/` - 5 example presentations: `basic.typ` (starter template), `complete.typ` (full showcase), `bibliography.typ` (citations), `lecture-demo.typ` (realistic scale test), `aspect-ratio.typ` (4:3 format)
+- `gallery/` - 6 example presentations: `basic.typ` (starter template), `complete.typ` (full showcase), `bibliography.typ` (citations), `lecture-demo.typ` (realistic scale test), `aspect-ratio.typ` (4:3 format), `speaker-notes.typ` (pdfpc presenter notes)
 - `tests/` - Tytanic test suite with compile-only tests for each theme feature
   - `tests/<name>/test.typ` - Individual test files (one per feature)
   - `tests/test-suite.typ` - Legacy monolithic test file (kept for reference)
