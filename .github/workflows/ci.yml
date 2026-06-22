@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  # Formatting + the tytanic test suite. tytanic bundles its own Typst, so these
+  # checks are independent of the system Typst version.
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: extractions/setup-just@v3
+
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+
+      # tt (tytanic) runs the test suite; typstyle checks formatting.
+      - name: Install tytanic and typstyle
+        run: cargo install --locked tytanic typstyle
+
+      - name: Check formatting
+        run: just format-check
+
+      - name: Run tests
+        run: just test
+
+  # Compile every gallery demo on the minimum supported Typst (matches
+  # typst.toml `compiler`) and on the latest, so feature/version regressions
+  # (e.g. the bibliography bytes API, added in Typst 0.13) surface here.
+  gallery:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        typst-version: ["0.13.0", "latest"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: typst-community/setup-typst@v5
+        with:
+          typst-version: ${{ matrix.typst-version }}
+
+      - uses: extractions/setup-just@v3
+
+      - name: Compile gallery
+        run: just all

@@ -15,7 +15,7 @@ keywords = [
   "Leibniz Institute for Prevention Research and Epidemiology",
 ]
 categories = ["presentation"]
-compiler = "0.12.0"
+compiler = "0.13.0"
 exclude = [
   "gallery/",
   "tests/",
