@@ -287,6 +287,9 @@
     }
   }
 
+  // title-slide owns its layout, so only config/repeat are forwarded from
+  // ..args; `setting` is intentionally not forwarded (it sets the centered
+  // layout below). section-slide/thanks-slide do forward o.setting.
   touying-slide(
     self: self,
     config: utils.merge-dicts(

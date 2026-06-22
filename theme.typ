@@ -158,7 +158,10 @@
   show raw.where(block: true): set text(size: effective-code-block-scale * 1em)
   show raw.where(block: false): set text(
     size: effective-code-inline-scale * 1em,
-  ) // Use Touying's infrastructure with BIPS customizations
+  )
+  // Use Touying's infrastructure with BIPS customizations. config-info(...)
+  // dicts in ..args.pos() flow into self.info natively (read by title-slide);
+  // config-store(...) publishes sizes/align/logo into self.store for the slides.
   touying-slides(
     config-common(handout: effective-handout),
     config-store(
