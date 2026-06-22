@@ -155,10 +155,13 @@ Adjustable: `#compact(spacing: 0.2em, leading: 0.2em)[...]`
 
 For lighter adjustments, `#set list(spacing: 0.4em)` works as a local override.
 
-### Vertical fill
+### Vertical and horizontal fill
+
+For when you want to fill space until the lower or rightmost end of the current slide (or slide column, grid cell, etc.).
 
 ```typst
 #vfill  // shorthand for v(1fr)
+#hfill  // shorthand for h(1fr)
 ```
 
 ### Institutional names

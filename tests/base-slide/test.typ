@@ -16,7 +16,10 @@
 #base-slide(title: "No number", page-number: false)[Body without a page number.]
 
 // divider off
-#base-slide(title: "No divider", show-line: false)[Body without the divider line.]
+#base-slide(
+  title: "No divider",
+  show-line: false,
+)[Body without the divider line.]
 
 // counter frozen (not counted) — number hidden too
 #base-slide(title: "Uncounted", count: false, page-number: false)[
@@ -30,6 +33,10 @@
 #base-slide(title: "Two panes", composer: (1fr, 1fr))[left][right]
 
 // content-align + text-size override
-#base-slide(title: "Centered small", content-align: center + horizon, text-size: 14pt)[
+#base-slide(
+  title: "Centered small",
+  content-align: center + horizon,
+  text-size: 14pt,
+)[
   Smaller, centered body.
 ]
