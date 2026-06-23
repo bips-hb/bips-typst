@@ -1,5 +1,5 @@
-// Re-export the main theme file from the lib directory
-#import "theme.typ": *
+// Re-export the theme implementation from src/
+#import "src/theme.typ": *
 
 // Note: Basic Touying functions like `pause` and `slide` are already available
 // through theme.typ's `#import "@preview/touying:0.7.3": *`

@@ -266,13 +266,15 @@ After editing theme files, run `just install` before compiling.
 ### Project Structure
 
 ```txt
-bypst.typ        # package entrypoint
-theme.typ        # orchestrator (imports config/helpers/slides/extras)
-config.typ       # branding constants (colors, fonts, sizes)
-helpers.typ      # internal plumbing (title area, page number, background)
-slides.typ       # slide types
-extras.typ       # public layout/color utilities
-bips-logo.png    # placeholder logo (replace with your own)
+bypst.typ        # package entrypoint (re-exports src/theme.typ)
+src/
+  theme.typ      # orchestrator (imports config/helpers/slides/extras)
+  config.typ     # branding constants (colors, fonts, sizes)
+  helpers.typ    # internal plumbing (title area, page number, background)
+  slides.typ     # slide types
+  extras.typ     # public layout/color utilities
+logo.png         # bundled placeholder logo (override via bips-theme(logo: ...))
+bips-logo.png    # the real BIPS logo (not shipped in the package)
 typst.toml       # package metadata
 template/        # Typst Universe templates
 gallery/         # example presentations

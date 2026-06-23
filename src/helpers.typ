@@ -152,7 +152,9 @@
 }
 
 /// The bundled placeholder logo. Users override via bips-theme(logo: image(...)).
-#let default-logo = image("logo.png")
+/// Package-root-absolute path (`/logo.png`) so it resolves regardless of this
+/// file's location under src/.
+#let default-logo = image("/logo.png")
 
 /// Render content at a smaller size (em-relative, scales with surrounding text)
 #let small(body) = text(size: font-em-small * 1em)[#body]

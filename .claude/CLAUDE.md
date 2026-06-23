@@ -35,18 +35,19 @@ BIPS Typst presentation template for 16:9 institutional presentations using Typs
 
 ### Core Files
 
-The theme is split into focused modules. `theme.typ` is the orchestrator: it imports and re-exports the submodules and defines `bips-theme()`.
+The package entrypoint `bypst.typ` lives at the repo root; the theme implementation lives in `src/`, with `src/theme.typ` as the orchestrator that imports and re-exports the submodules and defines `bips-theme()`.
 
-- **theme.typ** - Entrypoint/orchestrator: `#import`s the submodules (re-exporting them), defines the `bips-theme()` show-rule function. Submodules use named Touying imports (not `#import touying: *`), so import order is not significant.
-- **config.typ** - Branding/tuning constants (colors, fonts, sizes, spacing). No dependencies.
-- **helpers.typ** - Internal plumbing: page number, gradient divider, `_title-area` (with shrink-to-fit), `bips-background`, `_aligned`, `_slide-overrides`, and the `small`/`tiny`/`large`/`huge` text helpers (em-relative, scale with `base-size`).
-- **slides.typ** - All slide types: `base-slide` (flexible base) plus presets (`bips-slide`, `empty-slide`) and special slides (`title-slide`, `section-slide`, `thanks-slide`, `bibliography-slide`).
-- **extras.typ** - Public layout/color utilities (color helpers, `inst`, columns, `callout`, `compact`, `vfill`/`hfill`).
-- **bypst.typ** - Package entrypoint, re-exports theme.typ and additional Touying utilities
-- **bips-logo.png** - Institutional logo asset
-- **typst.toml** - Package metadata
+- **bypst.typ** (root) - Package entrypoint (`typst.toml` `entrypoint`): re-exports `src/theme.typ` plus a few extra Touying utilities for users. Gallery/tests import this via `../bypst.typ` / `/bypst.typ`.
+- **src/theme.typ** - Orchestrator: `#import`s the submodules (re-exporting them), defines the `bips-theme()` show-rule function. Submodules use named Touying imports (not `#import touying: *`), so import order is not significant.
+- **src/config.typ** - Branding/tuning constants (colors, fonts, sizes, spacing). No dependencies.
+- **src/helpers.typ** - Internal plumbing: page number, gradient divider, `_title-area` (with shrink-to-fit), `bips-background`, `_aligned`, `_slide-overrides`, and the `small`/`tiny`/`large`/`huge` text helpers (em-relative, scale with `base-size`). References the bundled logo as `image("/logo.png")` (package-root absolute, so it resolves regardless of the file's location under `src/`).
+- **src/slides.typ** - All slide types: `base-slide` (flexible base) plus presets (`bips-slide`, `empty-slide`) and special slides (`title-slide`, `section-slide`, `thanks-slide`, `bibliography-slide`).
+- **src/extras.typ** - Public layout/color utilities (color helpers, `inst`, columns, `callout`, `compact`, `vfill`/`hfill`).
+- **logo.png** (root) - Bundled placeholder logo (shipped in the package; referenced as `/logo.png`).
+- **bips-logo.png** (root) - The real institutional logo (excluded from the published package via `typst.toml`).
+- **typst.toml** (root) - Package metadata; `entrypoint = "bypst.typ"`.
 
-Dependency DAG: `config` → `helpers` → `slides`; `extras` → `config`; `theme` imports all and adds `bips-theme()`. No cycles. Submodules use named Touying imports, so they no longer re-export Touying's own `title-slide`/`empty-slide` and import order in `theme.typ` is not significant.
+Dependency DAG (all under `src/`): `config` → `helpers` → `slides`; `extras` → `config`; `theme` imports all and adds `bips-theme()`. No cycles. Submodules use named Touying imports, so they no longer re-export Touying's own `title-slide`/`empty-slide` and import order in `theme.typ` is not significant.
 
 ### Dependencies
 - touying:0.7.3 (presentation framework)
