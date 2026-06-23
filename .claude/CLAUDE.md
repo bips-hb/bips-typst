@@ -50,7 +50,7 @@ The package entrypoint `bypst.typ` lives at the repo root; the theme implementat
 Dependency DAG (all under `src/`): `config` → `helpers` → `slides`; `extras` → `config`; `theme` imports all and adds `bips-theme()`. No cycles. Submodules use named Touying imports, so they no longer re-export Touying's own `title-slide`/`empty-slide` and import order in `theme.typ` is not significant.
 
 ### Dependencies
-- touying:0.7.3 (presentation framework)
+- touying:0.7.4 (presentation framework)
 - codetastic:0.2.2 (QR code generation for thanks slides)
 
 ### Slide Functions
@@ -120,7 +120,7 @@ These rules were learned from debugging Touying interaction issues:
 
 1. **Do not use `context` or `query()` in `show` rules.** Complex show rules that query page state interfere with Touying's animation system, creating spurious blank pages between `#pause` states. Use simple `set` rules instead.
 2. **Do not wrap user slide body content in a `context` block.** Touying splits content at `#pause` markers during its processing phase, but `context` is opaque — Touying cannot see `#pause` inside it, causing animation splitting to silently fail (all content appears on one page). Note: bypst's own chrome (title area, page number, logo) reads `self.store` and does not use `context` around the slide body, so this constraint applies only to user-authored content inside `bips-slide[]` / `empty-slide[]` etc.
-3. **`#pause` works inside `two-columns`/`three-columns`** on Touying 0.7.3 (verified: one pause → 2 subslides, no extra blank pages; reveals follow document flow order across the cells). This was broken in 0.6.1 (the source of the old "don't pause in columns" rule) and is fixed. `#uncover()`/`#only()` remain useful when you want index-driven reveals without consuming a pause step.
+3. **`#pause` works inside `two-columns`/`three-columns`** on Touying 0.7.4 (verified: one pause → 2 subslides, no extra blank pages; reveals follow document flow order across the cells). This was broken in 0.6.1 (the source of the old "don't pause in columns" rule) and is fixed. `#uncover()`/`#only()` remain useful when you want index-driven reveals without consuming a pause step.
 4. **Verify animations by page count.** Expected pages = base slides + number of `#pause` commands. If the count is roughly double, animation interference is occurring. If the count equals the number of base slides (no extra pages for pauses), `context` is likely swallowing pause markers.
 
 ## Touying Framework Reference
@@ -139,14 +139,14 @@ Understanding the render order is critical for correct counter behavior:
    c. `set page(header: preamble + header, footer: footer)` is applied
    d. Content is rendered via `setting-fn(subslide-preamble + content)`
 
-**Key files in touying source** (installed at `~/Library/Caches/typst/packages/preview/touying/0.7.3/`):
+**Key files in touying source** (installed at `~/Library/Caches/typst/packages/preview/touying/0.7.4/`):
 - `src/core.typ`: Subslide loop, counter stepping, `_get-header-footer`, `_get-negative-pad`
 - `src/configs.typ`: `config-page`, `config-common` definitions
 - `themes/metropolis.typ`: Reference for how built-in themes handle header/footer/counter
 
 ### Touying 0.7.x Notes (carried over from the 0.6.1 → 0.7.0 migration)
 
-**Breaking changes from 0.6.1 (still in effect on 0.7.3):**
+**Breaking changes from 0.6.1 (still in effect on 0.7.4):**
 - `set page()` inside `setting:` callbacks now causes ghost blank pages after the slide. Use `config: config-page(...)` instead.
 - `config:` parameter was silently ignored in 0.6.1 — now works correctly. This means `freeze-slide-counter` and page overrides via `config:` are actually applied.
 - Aspect ratio: use `..utils.page-args-from-aspect-ratio(aspect-ratio)` instead of `paper: "presentation-" + aspect-ratio` in `config-page()`.
