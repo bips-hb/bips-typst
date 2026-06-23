@@ -2,7 +2,7 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
+## 0.4.0
 
 ### Added
 - `base-slide()` — the flexible base content slide: title/subtitle in a native Touying header block over a native body, with every BIPS chrome component independently toggleable (`show-logo`, `page-number`, `show-line`, `count`). `bips-slide` and `empty-slide` are presets over it. Use `base-slide` directly when you need a chrome combination the presets don't cover
