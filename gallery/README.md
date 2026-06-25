@@ -13,6 +13,7 @@ Ready-to-use examples showcasing different features of the bypst theme.
 | `lecture-demo.typ` | Realistic 100-slide lecture for scale testing |
 | `speaker-notes.typ` | Speaker notes via pdfpc — presenter console plus an inline-notes preview |
 | `typst-basics.typ` | Native Typst features: quotes, term lists, tables, figures, footnotes, code, links, refs |
+| `diagrams.typ` | Drawing and diagrams with CeTZ and Fletcher (TikZ-style) |
 
 ## Quick Start
 

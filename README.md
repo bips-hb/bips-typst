@@ -252,6 +252,7 @@ The `gallery/` directory contains example presentations:
 - `lecture-demo.typ` — realistic 100-slide scale test
 - `speaker-notes.typ` — presenter notes (pdfpc export and inline preview)
 - `typst-basics.typ` — native Typst features (quotes, tables, figures, footnotes, code, links, refs)
+- `diagrams.typ` — drawing and diagrams with CeTZ and Fletcher (TikZ-style)
 
 ## Development
 
