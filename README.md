@@ -251,6 +251,7 @@ The `gallery/` directory contains example presentations:
 - `aspect-ratio.typ` — 4:3 format
 - `lecture-demo.typ` — realistic 100-slide scale test
 - `speaker-notes.typ` — presenter notes (pdfpc export and inline preview)
+- `typst-basics.typ` — native Typst features (quotes, tables, figures, footnotes, code, links, refs)
 
 ## Development
 

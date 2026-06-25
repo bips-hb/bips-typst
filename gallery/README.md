@@ -12,6 +12,7 @@ Ready-to-use examples showcasing different features of the bypst theme.
 | `aspect-ratio.typ` | Using 4:3 format instead of the default 16:9 |
 | `lecture-demo.typ` | Realistic 100-slide lecture for scale testing |
 | `speaker-notes.typ` | Speaker notes via pdfpc — presenter console plus an inline-notes preview |
+| `typst-basics.typ` | Native Typst features: quotes, term lists, tables, figures, footnotes, code, links, refs |
 
 ## Quick Start
 
