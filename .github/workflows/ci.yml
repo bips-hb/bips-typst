@@ -36,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        typst-version: ["0.13.0", "latest"]
+        typst-version: ["0.14.0", "latest"]
     steps:
       - uses: actions/checkout@v4
 

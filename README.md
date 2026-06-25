@@ -295,7 +295,7 @@ For the best results, install the Fira fonts. Override with the `font:`, `code-f
 
 ## Requirements
 
-- Typst >= 0.13.0
+- Typst >= 0.14.0
 - Dependencies: touying 0.7.4, codetastic 0.2.2 (resolved automatically)
 
 ## License
