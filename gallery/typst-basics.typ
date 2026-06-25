@@ -65,6 +65,8 @@
     [Random forest], [0.86], [0.11],
     [XGBoost], [0.88], [0.10],
   )
+
+  #small[`fill: (_, row) => ...` zebra rows; `align: (left, right, right)`; `stroke: none`]
 ]
 
 // [Typst] Figures carry captions and can be cross-referenced with @label.
@@ -115,7 +117,7 @@
   The sample mean @eq-mean averages the observations.
 ]
 
-// [Typst] Enum and list styling: custom numbering and markers.
+// [Typst] Enum and list styling: custom numbering and markers (styling controls, not basic list syntax).
 #bips-slide(title: "List and enum styling")[
   #set enum(numbering: "1.a)")
   + First
@@ -128,6 +130,8 @@
   ][
     per nesting level
   ]
+
+  #small[`#set enum(numbering: "1.a)")` and `#list(marker: (...))` — styling controls for numbering format and per-level markers]
 ]
 
 #thanks-slide(
