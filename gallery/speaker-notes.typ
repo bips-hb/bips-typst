@@ -69,6 +69,6 @@
   #link("https://pdfpc.github.io/")[pdfpc] is a presenter console (current slide,
   next slide, notes, timer). Export the sidecar with:
 
-  #small[`typst query --root . slides.typ --field value --one "<pdfpc-file>" > slides.pdfpc`]
+  #small[`typst eval --root . --in slides.typ 'query(<pdfpc-file>).first().value' > slides.pdfpc`]
 ]
 #speaker-note[The sidecar carries these notes; pdfpc loads them next to the slides.]

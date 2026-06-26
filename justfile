@@ -30,7 +30,7 @@ all:
     # compiled in the loop above; here we add the .pdfpc sidecar pdfpc reads, and
     # an inline-notes preview (notes beside each slide) for quick verification.
     echo "📝 Speaker notes: pdfpc sidecar + inline-notes preview..."
-    if typst query --root . gallery/speaker-notes.typ --field value --one "<pdfpc-file>" > gallery/speaker-notes.pdfpc; then
+    if typst eval --root . --in gallery/speaker-notes.typ 'query(<pdfpc-file>).first().value' > gallery/speaker-notes.pdfpc; then
         echo "   ✅ gallery/speaker-notes.pdfpc  (try it: pdfpc gallery/speaker-notes.pdf)"
     else
         echo "   ❌ pdfpc sidecar export failed"; ((failed++))

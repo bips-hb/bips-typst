@@ -161,6 +161,19 @@
   ]
 }
 
+
+/// Convenience wrapper: note callout
+#let callout-note(title: none, body) = callout(type: "note", title: title, body)
+
+/// Convenience wrapper: tip callout
+#let callout-tip(title: none, body) = callout(type: "tip", title: title, body)
+
+/// Convenience wrapper: warning callout
+#let callout-warning(title: none, body) = callout(type: "warning", title: title, body)
+
+/// Convenience wrapper: important callout
+#let callout-important(title: none, body) = callout(type: "important", title: title, body)
+
 // -------------------------------------------------------------------
 // Miscellaneous Helpers
 // -------------------------------------------------------------------
