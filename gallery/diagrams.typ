@@ -89,10 +89,12 @@
       node((0, 1), [Decision], shape: fletcher.shapes.diamond),
       edge("-|>", [yes]),
       node((0, 2), [End], corner-radius: 2pt),
+      edge((0, 1), (1, 1), "-|>", [no]),
+      node((1, 1), [Revise], corner-radius: 2pt),
     )
   ]
 
-  #small[`node(..)` + `edge("-|>")` for arrows; `shape: fletcher.shapes.diamond` for decisions.]
+  #small[`shape: fletcher.shapes.diamond` for decisions; two outgoing edges for yes/no branches.]
 ]
 
 // [Fletcher] A commutative diagram via the math-mode syntax.

@@ -30,7 +30,7 @@ jobs:
 
   # Compile every gallery demo on the minimum supported Typst (matches
   # typst.toml `compiler`) and on the latest, so feature/version regressions
-  # (e.g. the bibliography bytes API, added in Typst 0.13) surface here.
+  # surface here.
   gallery:
     runs-on: ubuntu-latest
     strategy:
