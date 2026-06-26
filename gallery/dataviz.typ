@@ -99,6 +99,8 @@
       height: 8cm,
     )
   ]
+
+  #small[`labels:` sets the title and axis labels; `theme: theme-minimal()` applies minimal styling.]
 ]
 
 // [gribouille] Summaries with error bars.
