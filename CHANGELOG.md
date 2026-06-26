@@ -4,9 +4,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- `#callout()` shorthands `#callout-note()`, `#callout-tip()`, `#callout-warning()`, and `#callout-important()` for the corresponding callout types (each forwards `title:` and the body to `callout(type: ...)`).
+
 ### Changed
 
 - Raised the minimum supported Typst version to 0.14.0.
+- Default `#callout()` (no `type:`) now renders as a neutral shaded box (light gray background, blue left accent, no icon) instead of mirroring the `note` styling.
+
 
 ## 0.4.0
 

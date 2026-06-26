@@ -190,18 +190,25 @@
 ]
 
 // [BIPS] Callout blocks — styled boxes for notes, tips, warnings, etc.
+// Left: per-type shorthands. Right: the general callout() with title: and a
+// custom icon: override.
 #bips-slide(title: "Callout Blocks")[
-  #callout(type: "note")[Default note — icon appears inline with content.]
+  #two-columns(gutter: 1.5em)[
+    #callout-note[`callout-note` shorthand]
+    #callout-tip[`callout-tip` shorthand]
+    #callout-warning[`callout-warning` shorthand]
+    #callout-important[`callout-important` shorthand]
+  ][
+    #callout[Default `callout()` is a neutral shaded box]
 
-  #callout(type: "tip", title: "Pro Tip")[
-    Use `title:` to add a header line to any callout type.
+    #callout(type: "tip", title: "Pro Tip")[
+      `title:` adds a header line
+    ]
+
+    #callout(type: "note", icon: emoji.rocket)[
+      `icon:` overrides the default per-type icon
+    ]
   ]
-
-  #callout(type: "warning")[Warnings use BIPS orange for high visibility.]
-
-  #callout(
-    type: "important",
-  )[Important callouts use red for critical information.]
 ]
 
 // [BIPS] Images and figures — standard Typst image inclusion.

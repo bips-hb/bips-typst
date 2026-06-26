@@ -64,7 +64,7 @@ Dependency DAG (all under `src/`): `config` → `helpers` → `slides`; `extras`
 
 ### Layout and Utility Functions
 - `two-columns[][]`, `three-columns[][][]` - Multi-column helpers (grid-based)
-- `callout(type)` - Styled blocks: note, tip, warning, important
+- `callout(type)` - Styled blocks: note, tip, warning, important; no `type:` (default) renders a neutral shaded box. Shorthands: `callout-note`, `callout-tip`, `callout-warning`, `callout-important`
 - `blue[]`, `orange[]`, `green[]`, `gray[]` - Color helpers
 - `small[]`, `tiny[]` - Text size utilities (scale with `base-size`)
 - `inst()` - Author affiliation superscripts
