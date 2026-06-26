@@ -11,9 +11,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: extractions/setup-just@v3
+      - uses: extractions/setup-just@v4
 
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
@@ -38,13 +38,13 @@ jobs:
       matrix:
         typst-version: ["0.14.0", "latest"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: typst-community/setup-typst@v5
         with:
           typst-version: ${{ matrix.typst-version }}
 
-      - uses: extractions/setup-just@v3
+      - uses: extractions/setup-just@v4
 
       - name: Compile gallery
         run: just all
