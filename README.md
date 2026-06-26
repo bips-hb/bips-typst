@@ -253,6 +253,7 @@ The `gallery/` directory contains example presentations:
 - `speaker-notes.typ` — presenter notes (pdfpc export and inline preview)
 - `typst-basics.typ` — native Typst features (quotes, tables, figures, footnotes, code, links, refs)
 - `diagrams.typ` — drawing and diagrams with CeTZ and Fletcher (TikZ-style)
+- `dataviz.typ` — ggplot2-style grammar-of-graphics plots with gribouille
 
 ## Development
 

@@ -14,6 +14,7 @@ Ready-to-use examples showcasing different features of the bypst theme.
 | `speaker-notes.typ` | Speaker notes via pdfpc — presenter console plus an inline-notes preview |
 | `typst-basics.typ` | Native Typst features: quotes, term lists, tables, figures, footnotes, code, links, refs |
 | `diagrams.typ` | Drawing and diagrams with CeTZ and Fletcher (TikZ-style) |
+| `dataviz.typ` | ggplot2-style grammar-of-graphics plots with gribouille |
 
 ## Quick Start
 
