@@ -10,7 +10,16 @@
 #import "../bypst.typ": *
 #import "@preview/gribouille:0.4.1": *
 
-#show: bips-theme
+// [Touying] Presentation info declared once via config-info(): sets the PDF
+// document metadata and feeds title-slide()'s fields below.
+#show: bips-theme.with(
+  config-info(
+    title: "Data Visualization",
+    subtitle: "ggplot2-style plots with gribouille",
+    author: "Your Name",
+    date: datetime.today().display(),
+  ),
+)
 
 // A small self-contained dataset (no external file reads).
 // Data shape: array of row dictionaries (one dict per observation).
@@ -23,13 +32,7 @@
   (species: "pine", girth: 16.0, height: 88),
 )
 
-#title-slide(
-  title: "Data Visualization",
-  subtitle: "ggplot2-style plots with gribouille",
-  author: "Your Name",
-  institute: bips-en,
-  date: datetime.today().display(),
-)
+#title-slide()
 
 // [gribouille] Minimal scatter: data + aesthetic mapping + a geom layer.
 // mapping: takes an aes() call; layers: takes a tuple of geom objects.

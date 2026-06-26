@@ -2,7 +2,14 @@
 // #import "@local/bypst:0.4.0": *
 #import "@preview/bypst:0.4.0": *
 
-#show: bips-theme
+// config-info() sets the PDF document metadata (title/author shown in viewers).
+// Multi-author title-slide layout (authors:/institutes:) is supplied directly.
+#show: bips-theme.with(
+  config-info(
+    title: "Complete BIPS Presentation Example",
+    author: "BIPS",
+  ),
+)
 
 #title-slide(
   title: "Complete BIPS Presentation Example",

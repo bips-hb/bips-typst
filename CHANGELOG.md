@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Raised the minimum supported Typst version to 0.14.0.
 - Default `#callout()` (no `type:`) now renders as a neutral shaded box (light gray background, blue left accent, no icon) instead of mirroring the `note` styling.
+- **Breaking:** `title-slide()` parameters `institute`/`institutes`/`institute-size` renamed to `institution`/`institutions`/`institution-size`, matching Touying's `config-info(institution: ...)` key (removing the institute-vs-institution ambiguity). Rectify by renaming the arguments at the call site.
+- `institution` now defaults to the BIPS English name (`bips-en`) for the whole document, since the theme is institution-specific; `title-slide()` shows it with no setup. Override via `config-info(institution: ...)` (e.g. `bips-de`) or the `title-slide(institution: ...)` argument.
 
 
 ## 0.4.0

@@ -11,15 +11,19 @@
 
 #import "../bypst.typ": *
 
-#show: bips-theme
-
-#title-slide(
-  title: "Typst Basics",
-  subtitle: "Native features for the LaTeX crowd",
-  author: "Your Name",
-  institute: bips-en,
-  date: datetime.today().display(),
+// [Touying] Declare presentation info once via config-info(): it populates the
+// PDF document metadata (title/author shown in viewers) AND title-slide() reads
+// these fields as fallbacks, so the title slide below needs no repeated args.
+#show: bips-theme.with(
+  config-info(
+    title: "Typst Basics",
+    subtitle: "Native features for the LaTeX crowd",
+    author: "Your Name",
+    date: datetime.today().display(),
+  ),
 )
+
+#title-slide()
 
 // [Typst] Block quotes carry an attribution.
 #bips-slide(title: "Quotes")[

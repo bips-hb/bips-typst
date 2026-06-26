@@ -13,15 +13,18 @@
 #import "@preview/cetz:0.4.1"
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 
-#show: bips-theme
-
-#title-slide(
-  title: "Diagrams in Typst",
-  subtitle: "CeTZ and Fletcher for the TikZ crowd",
-  author: "Your Name",
-  institute: bips-en,
-  date: datetime.today().display(),
+// [Touying] Presentation info declared once via config-info(): sets the PDF
+// document metadata and feeds title-slide()'s fields below.
+#show: bips-theme.with(
+  config-info(
+    title: "Diagrams in Typst",
+    subtitle: "CeTZ and Fletcher for the TikZ crowd",
+    author: "Your Name",
+    date: datetime.today().display(),
+  ),
 )
+
+#title-slide()
 
 #section-slide("CeTZ — drawing")
 

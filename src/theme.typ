@@ -164,6 +164,10 @@
   // config-store(...) publishes sizes/align/logo into self.store for the slides.
   touying-slides(
     config-common(handout: effective-handout),
+    // Default the document institution to the BIPS English name, since this is
+    // an institution-specific theme. User config-info(institution: ...) (or
+    // bips-de) deep-merges over this via ..args.pos() below.
+    config-info(institution: bips-en),
     config-store(
       slide-title: pick-first(slide-title-size, font-size-slide-title),
       slide-title-only: font-size-slide-title-only,

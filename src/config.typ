@@ -86,9 +86,9 @@
 #let font-color-title-slide-author = bips-blue
 #let font-weight-title-slide-author = 500
 
-#let font-size-title-slide-institute = 18pt
-#let font-color-title-slide-institute = bips-text-gray
-#let font-weight-title-slide-institute = "regular"
+#let font-size-title-slide-institution = 18pt
+#let font-color-title-slide-institution = bips-text-gray
+#let font-weight-title-slide-institution = "regular"
 
 #let font-size-title-slide-date = 16pt
 #let font-color-title-slide-date = bips-text-gray

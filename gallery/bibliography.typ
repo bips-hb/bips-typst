@@ -1,14 +1,17 @@
 #import "../bypst.typ": *
 
-#show: bips-theme
-
-#title-slide(
-  title: "Bibliography Slides",
-  subtitle: "Automated reference management",
-  author: "BIPS Research Team",
-  institute: bips-en,
-  date: datetime.today().display(),
+// [Touying] Presentation info declared once via config-info(): sets the PDF
+// document metadata and feeds title-slide()'s fields below.
+#show: bips-theme.with(
+  config-info(
+    title: "Bibliography Slides",
+    subtitle: "Automated reference management",
+    author: "BIPS Research Team",
+    date: datetime.today().display(),
+  ),
 )
+
+#title-slide()
 
 #bips-slide(title: "Citations in Presentations")[
   Academic presentations often require proper citations:

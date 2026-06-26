@@ -10,16 +10,16 @@
   date: "2026-01-01",
 )
 
-// Multiple authors with institutes
+// Multiple authors with institutions
 #title-slide(
   title: "Multi-Author Test",
-  subtitle: "Testing Institute Affiliations",
+  subtitle: "Testing Institution Affiliations",
   authors: (
     [Jane Doe#inst(1)],
     [John Smith#inst(2)],
     [Alice Johnson#inst(1, 2)],
   ),
-  institutes: (
+  institutions: (
     "Institute A",
     "Institute B",
   ),

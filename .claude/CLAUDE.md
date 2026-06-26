@@ -57,7 +57,7 @@ Dependency DAG (all under `src/`): `config` → `helpers` → `slides`; `extras`
 - `base-slide(title, subtitle, show-logo, page-number, show-line, count)` - Flexible base content slide with every BIPS chrome component independently toggleable; `bips-slide` and `empty-slide` are presets over it
 - `bips-slide(title, subtitle)` - Content slide preset: logo on, page-number on, line on, counted. Public signature unchanged from pre-refactor
 - `empty-slide[]` - Minimal slide preset: logo off, page-number off, line off, uncounted by default (set `count: true` or `show-logo: true` etc. to selectively add chrome)
-- `title-slide()` - Opening slide with multi-author/institute support
+- `title-slide()` - Opening slide with multi-author/institution support (`institution:`/`institutions:`; matches `config-info`'s `institution` key). Reads `title`/`subtitle`/`author`/`date`/`institution` from `config-info()` when not passed; `institution` defaults to `bips-en`
 - `section-slide()` - Section dividers with configurable logo
 - `thanks-slide()` - Contact slide with optional QR code
 - `bibliography-slide()` - Reference list

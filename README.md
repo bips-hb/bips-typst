@@ -6,15 +6,20 @@ A 16:9 presentation template for [BIPS](https://www.leibniz-bips.de/) using [Typ
 
 ```typst
 #import "@preview/bypst:0.4.0": *
-#show: bips-theme
 
-#title-slide(
-  title: "Your Presentation Title",
-  author: "Your Name",
-  institute: bips-en, // or bips-de
-  date: datetime.today().display(),
-  // logo: image("path/to/logo.png")
+// Declare presentation info once: config-info() sets the PDF document metadata
+// and title-slide() reads these fields, so they need not be repeated.
+#show: bips-theme.with(
+  config-info(
+    title: "Your Presentation Title",
+    author: "Your Name",
+    institution: bips-en, // or bips-de
+    date: datetime.today().display(),
+  ),
+  // logo: image("path/to/logo.png"),
 )
+
+#title-slide()
 
 #bips-slide(title: "Introduction")[
   - Bullet points

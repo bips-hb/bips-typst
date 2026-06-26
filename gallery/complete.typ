@@ -33,8 +33,8 @@
 // TITLE SLIDE
 // ===================================================================
 
-// [BIPS] Multi-author title slide with institute affiliations.
-// Use `author:` for a single author, or `authors:` + `institutes:` for
+// [BIPS] Multi-author title slide with institution affiliations.
+// Use `author:` for a single author, or `authors:` + `institutions:` for
 // multiple affiliations with superscript numbering via `inst()`.
 #title-slide(
   title: "Bypst: The BIPS Typst Theme",
@@ -44,7 +44,7 @@
     [John Smith#inst(2)],
     [Alice Johnson#inst(1, 2)],
   ),
-  institutes: (
+  institutions: (
     bips-en,
     "University of Bremen",
   ),
