@@ -52,6 +52,8 @@
       content((2, 1.7))[$(x_i, y_i)$]
     })
   ]
+
+  #small[`line(.., mark: (end: ">"))` for arrowheads; `content(pos)[..]` for text labels.]
 ]
 
 // [CeTZ] A small tree drawn from coordinates.
@@ -70,6 +72,8 @@
       n((1.5, -1.5))[R]
     })
   ]
+
+  #small[Local `let n(pos, body)` draw helper for nodes; `line()` edges connect coordinates.]
 ]
 
 #section-slide("Fletcher — nodes and arrows")
@@ -87,6 +91,8 @@
       node((0, 2), [End], corner-radius: 2pt),
     )
   ]
+
+  #small[`node(..)` + `edge("-|>")` for arrows; `shape: fletcher.shapes.diamond` for decisions.]
 ]
 
 // [Fletcher] A commutative diagram via the math-mode syntax.
@@ -114,6 +120,8 @@
       edge((2, 0), (0, 0), "-|>", [back], bend: 30deg),
     )
   ]
+
+  #small[`shape: circle` nodes; `edge(.., bend: 30deg, [label])` for curved labeled transitions.]
 ]
 
 #thanks-slide(
