@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Citation helpers wrapping `cite()`: `#citet()` (textual "Author (Year)"), `#citep()` (parenthetical), `#sideref()` (small, right-aligned side citation), and `#footcite()` (footnote-area citation). natbib-style convenience for the LaTeX crowd.
 - `#callout()` shorthands `#callout-note()`, `#callout-tip()`, `#callout-warning()`, and `#callout-important()` for the corresponding callout types (each forwards `title:` and the body to `callout(type: ...)`).
 
 ### Changed

@@ -46,6 +46,18 @@
   heading is disabled by default.
 ]
 
+// [BIPS] Citation helpers — natbib-style wrappers over Typst's `cite()`.
+#bips-slide(title: "Citation Helpers")[
+  Convenience wrappers over Typst's `cite()`, for the natbib crowd:
+
+  - `#citet(<label>)` — textual: #citet(<johnson2023>)
+  - `#citep(<label>)` — parenthetical: #citep(<smith2022>)
+  - `#footcite(<label>)` — footnote-area citation#footcite(<brown2024>)
+
+  `#sideref(<label>)` pushes a citation to the right edge at a smaller size,
+  for unobtrusive attribution: #sideref(<johnson2023>)
+]
+
 // Bibliography slide — `read()` so the path resolves in your document
 #bibliography-slide(
   title: "References",
