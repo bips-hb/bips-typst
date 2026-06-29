@@ -21,10 +21,17 @@
 // explicitly. config-common() exposes knobs like pdfpc / presenter notes.
 // [BIPS] Handout mode collapses all #pause steps to one page per slide:
 // compile with `typst compile --input handout=true`, or set handout: true here.
+// [Touying] config-info() declares the document info once: it sets the PDF
+// metadata (title/author shown in viewers) AND supplies title-slide()'s
+// fallback values for title/subtitle/author/date/institution. The title slide
+// below only adds what is layout-specific.
 #show: bips-theme.with(
   config-info(
-    title: [Bypst: The BIPS Typst Theme],
-    author: [BIPS],
+    title: "Bypst: The BIPS Typst Theme",
+    subtitle: "A Complete Feature Showcase",
+    author: "Jane Doe",
+    institution: bips-en,
+    date: datetime.today().display(),
   ),
 )
 // (Speaker notes have their own demo: see gallery/speaker-notes.typ.)
@@ -34,11 +41,10 @@
 // ===================================================================
 
 // [BIPS] Multi-author title slide with institution affiliations.
-// Use `author:` for a single author, or `authors:` + `institutions:` for
-// multiple affiliations with superscript numbering via `inst()`.
+// title/subtitle/date come from config-info() above; here we supply only the
+// author list and their institutions. Use a single `author:` for one author,
+// or `authors:` + `institutions:` for multiple affiliations numbered via `inst()`.
 #title-slide(
-  title: "Bypst: The BIPS Typst Theme",
-  subtitle: "A Complete Feature Showcase",
   authors: (
     [Jane Doe#inst(1)],
     [John Smith#inst(2)],
@@ -48,7 +54,6 @@
     bips-en,
     "University of Bremen",
   ),
-  date: datetime.today().display(),
   occasion: "The 27th Conference on Typst Presentations",
 )
 
