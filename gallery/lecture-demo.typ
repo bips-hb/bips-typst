@@ -1,6 +1,18 @@
 #import "../bypst.typ": *
 
-#show: bips-theme.with(base-size: 16pt)
+// [Touying] Presentation info declared once via config-info(): sets the PDF
+// document metadata and feeds title-slide()'s fields (occasion: is title-slide
+// only, so it stays on the call below).
+#show: bips-theme.with(
+  config-info(
+    title: "Fake Introduction to Statistical Modeling",
+    subtitle: "A Made Up Overview for Demo Purposes",
+    author: "Prof. Dr. Schlau",
+    institution: "Institute of Things and Stuff",
+    date: "Winter Semester 2024",
+  ),
+  base-size: 16pt,
+)
 
 // ============================================================================
 // INTRODUCTION TO STATISTICAL MODELING - LECTURE DEMO
@@ -9,14 +21,7 @@
 // This is a demonstration of a full-length lecture (100 slides) to test
 // compilation performance with the BIPS theme on realistic content volumes.
 
-#title-slide(
-  title: "Fake Introduction to Statistical Modeling",
-  subtitle: "A Made Up Overview for Demo Purposes",
-  author: "Prof. Dr. Schlau",
-  institute: "Institute of Things and Stuff",
-  date: "Winter Semester 2024",
-  occasion: "STAT 42 - Lecture 1",
-)
+#title-slide(occasion: "STAT 42 - Lecture 1")
 
 #section-slide("Course Overview")
 

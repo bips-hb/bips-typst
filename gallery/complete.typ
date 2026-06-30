@@ -21,10 +21,17 @@
 // explicitly. config-common() exposes knobs like pdfpc / presenter notes.
 // [BIPS] Handout mode collapses all #pause steps to one page per slide:
 // compile with `typst compile --input handout=true`, or set handout: true here.
+// [Touying] config-info() declares the document info once: it sets the PDF
+// metadata (title/author shown in viewers) AND supplies title-slide()'s
+// fallback values for title/subtitle/author/date/institution. The title slide
+// below only adds what is layout-specific.
 #show: bips-theme.with(
   config-info(
-    title: [Bypst: The BIPS Typst Theme],
-    author: [BIPS],
+    title: "Bypst: The BIPS Typst Theme",
+    subtitle: "A Complete Feature Showcase",
+    author: "Jane Doe",
+    institution: bips-en,
+    date: datetime.today().display(),
   ),
 )
 // (Speaker notes have their own demo: see gallery/speaker-notes.typ.)
@@ -33,22 +40,20 @@
 // TITLE SLIDE
 // ===================================================================
 
-// [BIPS] Multi-author title slide with institute affiliations.
-// Use `author:` for a single author, or `authors:` + `institutes:` for
-// multiple affiliations with superscript numbering via `inst()`.
+// [BIPS] Multi-author title slide with institution affiliations.
+// title/subtitle/date come from config-info() above; here we supply only the
+// author list and their institutions. Use a single `author:` for one author,
+// or `authors:` + `institutions:` for multiple affiliations numbered via `inst()`.
 #title-slide(
-  title: "Bypst: The BIPS Typst Theme",
-  subtitle: "A Complete Feature Showcase",
   authors: (
     [Jane Doe#inst(1)],
     [John Smith#inst(2)],
     [Alice Johnson#inst(1, 2)],
   ),
-  institutes: (
+  institutions: (
     bips-en,
     "University of Bremen",
   ),
-  date: datetime.today().display(),
   occasion: "The 27th Conference on Typst Presentations",
 )
 
@@ -190,18 +195,25 @@
 ]
 
 // [BIPS] Callout blocks — styled boxes for notes, tips, warnings, etc.
+// Left: per-type shorthands. Right: the general callout() with title: and a
+// custom icon: override.
 #bips-slide(title: "Callout Blocks")[
-  #callout(type: "note")[Default note — icon appears inline with content.]
+  #two-columns(gutter: 1.5em)[
+    #callout-note[`callout-note` shorthand]
+    #callout-tip[`callout-tip` shorthand]
+    #callout-warning[`callout-warning` shorthand]
+    #callout-important[`callout-important` shorthand]
+  ][
+    #callout[Default `callout()` is a neutral shaded box]
 
-  #callout(type: "tip", title: "Pro Tip")[
-    Use `title:` to add a header line to any callout type.
+    #callout(type: "tip", title: "Pro Tip")[
+      `title:` adds a header line
+    ]
+
+    #callout(type: "note", icon: emoji.rocket)[
+      `icon:` overrides the default per-type icon
+    ]
   ]
-
-  #callout(type: "warning")[Warnings use BIPS orange for high visibility.]
-
-  #callout(
-    type: "important",
-  )[Important callouts use red for critical information.]
 ]
 
 // [BIPS] Images and figures — standard Typst image inclusion.

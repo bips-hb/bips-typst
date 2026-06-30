@@ -5,16 +5,21 @@ A 16:9 presentation template for [BIPS](https://www.leibniz-bips.de/) using [Typ
 ## Quick Start
 
 ```typst
-#import "@preview/bypst:0.4.0": *
-#show: bips-theme
+#import "@preview/bypst:0.5.0": *
 
-#title-slide(
-  title: "Your Presentation Title",
-  author: "Your Name",
-  institute: bips-en, // or bips-de
-  date: datetime.today().display(),
-  // logo: image("path/to/logo.png")
+// Declare presentation info once: config-info() sets the PDF document metadata
+// and title-slide() reads these fields, so they need not be repeated.
+#show: bips-theme.with(
+  config-info(
+    title: "Your Presentation Title",
+    author: "Your Name",
+    institution: bips-en, // or bips-de
+    date: datetime.today().display(),
+  ),
+  // logo: image("path/to/logo.png"),
 )
+
+#title-slide()
 
 #bips-slide(title: "Introduction")[
   - Bullet points
@@ -38,7 +43,7 @@ A 16:9 presentation template for [BIPS](https://www.leibniz-bips.de/) using [Typ
 The theme is available from the [Typst package registry](https://typst.app/universe/package/bypst), just import it like any other package:
 
 ```typst
-#import "@preview/bypst:0.4.0": *
+#import "@preview/bypst:0.5.0": *
 ```
 
 Please note that the official BIPS logo is not bundled with the package to avoid licensing concerns.
@@ -57,14 +62,14 @@ just install
 Then use the local import instead:
 
 ```typst
-#import "@local/bypst:0.4.0": *
+#import "@local/bypst:0.5.0": *
 ```
 
 ## Slide Types
 
 | Function | Purpose |
 |---|---|
-| `#title-slide()` | Opening slide with author, institute, date |
+| `#title-slide()` | Opening slide with author, institution, date |
 | `#bips-slide()` | Content slide with optional title/subtitle (preset over `base-slide`) |
 | `#section-slide()` | Section divider |
 | `#thanks-slide()` | Closing slide with contact info and optional QR code |
@@ -96,7 +101,7 @@ Then use the local import instead:
     "Jane Doe" + inst(1,2),
     "John Smith" + inst(1),
   ),
-  institutes: (
+  institutions: (
     "BIPS",
     "University of Bremen",
   ),
@@ -132,11 +137,29 @@ Then use the local import instead:
 ### Callout boxes
 
 ```typst
+#callout[Plain shaded box]                  // no type: neutral default
 #callout(type: "note")[Information]
 #callout(type: "tip")[Helpful hint]
 #callout(type: "warning")[Caution]
 #callout(type: "important")[Critical]
 #callout(type: "tip", title: "Custom Title")[With a title]
+#callout(type: "note", icon: emoji.rocket)[Custom icon]
+```
+
+Per-type shorthands are available: `#callout-note[…]`, `#callout-tip[…]`,
+`#callout-warning[…]`, `#callout-important[…]` (each takes an optional `title:`).
+
+### Citations
+
+natbib-style convenience wrappers over Typst's `cite()`. They inherit the
+document's citation style and need a `bibliography()` somewhere in the document
+(exactly like bare `@label`).
+
+```typst
+#citet(<label>)   // textual: "Author (Year)"   (natbib \citet)
+#citep(<label>)   // parenthetical: "(Author, Year)"   (natbib \citep)
+#sideref(<label>) // small citation pushed to the right edge (form: "prose" for textual)
+text#footcite(<label>) // superscript marker + the citation in the footnote area
 ```
 
 ### Compact list spacing
@@ -229,6 +252,7 @@ The actual BIPS logo (`bips-logo.png`) is available in the [GitHub repository](h
   page-number-size: 16pt,
   code-block-scale: 0.9,
   code-inline-scale: 1,
+  footnote-scale: 0.8,        // footnote text as a fraction of base size
 )
 ```
 
@@ -251,6 +275,9 @@ The `gallery/` directory contains example presentations:
 - `aspect-ratio.typ` — 4:3 format
 - `lecture-demo.typ` — realistic 100-slide scale test
 - `speaker-notes.typ` — presenter notes (pdfpc export and inline preview)
+- `typst-basics.typ` — native Typst features (quotes, term lists, tables, figures, footnotes, code, links, refs)
+- `diagrams.typ` — drawing and diagrams with CeTZ and Fletcher (TikZ-style)
+- `dataviz.typ` — ggplot2-style grammar-of-graphics plots with gribouille
 
 ## Development
 
@@ -295,7 +322,7 @@ For the best results, install the Fira fonts. Override with the `font:`, `code-f
 
 ## Requirements
 
-- Typst >= 0.13.0
+- Typst >= 0.14.0
 - Dependencies: touying 0.7.4, codetastic 0.2.2 (resolved automatically)
 
 ## License

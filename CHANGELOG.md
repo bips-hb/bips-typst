@@ -2,6 +2,22 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.5.0]
+
+### Added
+
+- `footnote-scale` parameter on `bips-theme()` to size footnote text as a fraction of the base body size (default `0.8`, a small reduction from Typst's ~0.85 default). Scales with `base-size`; applies to all footnotes including `footcite`.
+- Citation helpers wrapping `cite()`: `#citet()` (textual "Author (Year)"), `#citep()` (parenthetical), `#sideref()` (small, right-aligned side citation), and `#footcite()` (footnote-area citation). natbib-style convenience for the LaTeX crowd.
+- `#callout()` shorthands `#callout-note()`, `#callout-tip()`, `#callout-warning()`, and `#callout-important()` for the corresponding callout types (each forwards `title:` and the body to `callout(type: ...)`).
+
+### Changed
+
+- Raised the minimum supported Typst version to 0.14.0.
+- Default `#callout()` (no `type:`) now renders as a neutral shaded box (light gray background, blue left accent, no icon) instead of mirroring the `note` styling.
+- **Breaking:** `title-slide()` parameters `institute`/`institutes`/`institute-size` renamed to `institution`/`institutions`/`institution-size`, matching Touying's `config-info(institution: ...)` key (removing the institute-vs-institution ambiguity). Rectify by renaming the arguments at the call site.
+- `institution` now defaults to the BIPS English name (`bips-en`) for the whole document, since the theme is institution-specific; `title-slide()` shows it with no setup. Override via `config-info(institution: ...)` (e.g. `bips-de`) or the `title-slide(institution: ...)` argument.
+
+
 ## 0.4.0
 
 ### Added
@@ -112,7 +128,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Gallery of example presentations
 - Test suite for validation
 
-[Unreleased]: https://github.com/bips-hb/bips-typst/compare/v0.3.0...HEAD
+[0.5.0]: https://github.com/bips-hb/bips-typst/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/bips-hb/bips-typst/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/bips-hb/bips-typst/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/bips-hb/bips-typst/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/bips-hb/bips-typst/compare/v0.1.0...v0.1.1

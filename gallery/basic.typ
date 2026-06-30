@@ -6,7 +6,7 @@
   title: "BIPS Theme Basic Example",
   subtitle: "Simple presentation structure",
   author: "Your Name",
-  institute: bips-en,
+  // institution defaults to the BIPS English name; pass institution: to override
   date: datetime.today().display(),
 )
 

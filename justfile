@@ -30,6 +30,9 @@ all:
     # compiled in the loop above; here we add the .pdfpc sidecar pdfpc reads, and
     # an inline-notes preview (notes beside each slide) for quick verification.
     echo "📝 Speaker notes: pdfpc sidecar + inline-notes preview..."
+    # `typst query` is deprecated in favor of `typst eval --in`, but `eval` was
+    # added after our 0.14.0 floor — `query` works on 0.14.0+, so keep it (it
+    # only warns on newer Typst). Switch to `eval` once the floor rises past it.
     if typst query --root . gallery/speaker-notes.typ --field value --one "<pdfpc-file>" > gallery/speaker-notes.pdfpc; then
         echo "   ✅ gallery/speaker-notes.pdfpc  (try it: pdfpc gallery/speaker-notes.pdf)"
     else

@@ -1,6 +1,6 @@
 [package]
 name = "bypst"
-version = "0.4.0"
+version = "0.5.0"
 entrypoint = "bypst.typ"
 authors = ["Lukas Burk <burk@leibniz-bips.de>"]
 license = "MIT"
@@ -15,7 +15,7 @@ keywords = [
   "Leibniz Institute for Prevention Research and Epidemiology",
 ]
 categories = ["presentation"]
-compiler = "0.13.0"
+compiler = "0.14.0"
 exclude = [
   "gallery/",
   "tests/",

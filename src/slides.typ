@@ -191,14 +191,14 @@
   subtitle: none,
   author: none,
   authors: none,
-  institute: none,
-  institutes: none,
+  institution: none,
+  institutions: none,
   date: none,
   occasion: none,
   title-size: none,
   subtitle-size: none,
   author-size: none,
-  institute-size: none,
+  institution-size: none,
   date-size: none,
   ..args,
 ) = touying-slide-wrapper(self => {
@@ -208,7 +208,7 @@
   let subtitle = pick-first(subtitle, info.at("subtitle", default: none))
   let author = pick-first(author, info.at("author", default: none))
   let date = pick-first(date, info.at("date", default: none))
-  let institute = pick-first(institute, info.at("institution", default: none))
+  let institution = pick-first(institution, info.at("institution", default: none))
 
   let body = {
     v(1fr)
@@ -249,23 +249,23 @@
 
     v(1fr)
 
-    if institutes != none {
+    if institutions != none {
       block(text(
-        size: pick-first(institute-size, font-size-title-slide-institute),
-        weight: font-weight-title-slide-institute,
-        fill: font-color-title-slide-institute,
+        size: pick-first(institution-size, font-size-title-slide-institution),
+        weight: font-weight-title-slide-institution,
+        fill: font-color-title-slide-institution,
       )[
-        #for (i, inst) in institutes.enumerate() [
+        #for (i, inst) in institutions.enumerate() [
           #super[#(i + 1)] #inst
-          #if i < institutes.len() - 1 [\ ]
+          #if i < institutions.len() - 1 [\ ]
         ]
       ])
-    } else if institute != none {
+    } else if institution != none {
       block(text(
-        size: pick-first(institute-size, font-size-title-slide-institute),
-        weight: font-weight-title-slide-institute,
-        fill: font-color-title-slide-institute,
-      )[#institute])
+        size: pick-first(institution-size, font-size-title-slide-institution),
+        weight: font-weight-title-slide-institution,
+        fill: font-color-title-slide-institution,
+      )[#institution])
     }
 
     v(1fr)

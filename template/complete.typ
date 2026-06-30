@@ -1,8 +1,15 @@
 // To use with a local installation (after `just install`):
-// #import "@local/bypst:0.4.0": *
-#import "@preview/bypst:0.4.0": *
+// #import "@local/bypst:0.5.0": *
+#import "@preview/bypst:0.5.0": *
 
-#show: bips-theme
+// config-info() sets the PDF document metadata (title/author shown in viewers).
+// Multi-author title-slide layout (authors:/institutions:) is supplied directly.
+#show: bips-theme.with(
+  config-info(
+    title: "Complete BIPS Presentation Example",
+    author: "BIPS",
+  ),
+)
 
 #title-slide(
   title: "Complete BIPS Presentation Example",
@@ -11,7 +18,7 @@
     [Jane Doe#inst(1, 2)],
     [John Smith#inst(1)],
   ),
-  institutes: (
+  institutions: (
     bips-en,
     "University of Bremen",
   ),

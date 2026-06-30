@@ -1,20 +1,20 @@
 #import "../bypst.typ": *
 
-#show: bips-theme.with(aspect-ratio: "4-3")
-
-// Title slide
-#title-slide(
-  title: "Bypst: The BIPS Typst Theme",
-  subtitle: "Now also in Retro 4:3!",
-  author: "Jane Doe & John Smith",
-  institute: bips-en,
-  date: datetime(
-    year: 2008,
-    month: 3,
-    day: 4,
-  ).display(),
-  occasion: "The 27th Conference on Typst Presentations",
+// [Touying] Presentation info declared once via config-info(): sets the PDF
+// document metadata and feeds title-slide()'s fields (occasion: is title-slide
+// only, so it stays on the call below).
+#show: bips-theme.with(
+  config-info(
+    title: "Bypst: The BIPS Typst Theme",
+    subtitle: "Now also in Retro 4:3!",
+    author: "Jane Doe & John Smith",
+    date: datetime(year: 2008, month: 3, day: 4).display(),
+  ),
+  aspect-ratio: "4-3",
 )
+
+// Title slide (title/subtitle/author/institution/date come from config-info)
+#title-slide(occasion: "The 27th Conference on Typst Presentations")
 
 // Regular content slides
 #bips-slide(title: "You can change layouts")[

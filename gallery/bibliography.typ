@@ -1,14 +1,17 @@
 #import "../bypst.typ": *
 
-#show: bips-theme
-
-#title-slide(
-  title: "Bibliography Slides",
-  subtitle: "Automated reference management",
-  author: "BIPS Research Team",
-  institute: bips-en,
-  date: datetime.today().display(),
+// [Touying] Presentation info declared once via config-info(): sets the PDF
+// document metadata and feeds title-slide()'s fields below.
+#show: bips-theme.with(
+  config-info(
+    title: "Bibliography Slides",
+    subtitle: "Automated reference management",
+    author: "BIPS Research Team",
+    date: datetime.today().display(),
+  ),
 )
+
+#title-slide()
 
 #bips-slide(title: "Citations in Presentations")[
   Academic presentations often require proper citations:
@@ -41,6 +44,23 @@
   ```
   The slide title is already `"References"`, so the bibliography's own
   heading is disabled by default.
+]
+
+// [BIPS] Citation helpers — natbib-style wrappers over Typst's `cite()`.
+#bips-slide(title: "Citation Helpers", text-size: 16pt)[
+  == Convenience wrappers over Typst's `cite()`, for the natbib crowd:
+  
+  - `#citet(<label>)`: textual: #citet(<johnson2023>)
+  - `#citep(<label>)`: parenthetical: #citep(<smith2022>)
+  
+  == Layout-specific helpers
+  
+  Each supporting passthrouygh of the `form` argument of typst's native `cite()` function:
+  
+  - `#footcite(<label>)`: footnote-area citation #footcite(<brown2024>)
+  - `#footcite(<label>, form: "full")`: Full citation #footcite(<brown2024>, form: "full")
+  - `#sideref(<label>)` pushes a citation to the right edge #sideref(<johnson2023>)
+
 ]
 
 // Bibliography slide — `read()` so the path resolves in your document
