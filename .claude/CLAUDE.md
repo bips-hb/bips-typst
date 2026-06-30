@@ -107,6 +107,8 @@ The `small`/`tiny`/`large`/`huge` text helpers are em-relative (not fixed pt), s
 
 **Heading sizes** use em-based defaults in global `show heading` rules inside `bips-theme()`, scaling proportionally with `base-size`. Explicit pt overrides via `heading-*-size` take precedence.
 
+**`footnote-scale`** (default `0.8`) sizes footnote entry text as `footnote-scale * effective-font-size-base` via `show footnote.entry: set text(size: ...)`. It multiplies the base *length* (not `1em`) on purpose: inside `footnote.entry`, `1em` is Typst's already-reduced footnote size (~0.85em), so `* 1em` would compound; multiplying the base length gives predictable "fraction of base" semantics (and so does not stack with the built-in reduction). Affects all footnotes, including `footcite` output.
+
 ### Slide Structure Patterns
 
 All slide types should follow consistent patterns:

@@ -121,6 +121,9 @@
 #let font-scale-code-inline = 1
 #let font-scale-code-block = 0.8
 
+// Footnote entry text size, as a fraction of the base body size
+#let font-scale-footnote = 0.8
+
 // List and enumeration spacing
 #let list-spacing = 0.6em
 #let enum-spacing = 0.6em

@@ -45,6 +45,7 @@
   page-number-size: none,
   code-block-scale: none,
   code-inline-scale: none,
+  footnote-scale: none,
   // Handout mode: collapse all pauses/uncover/only to final state,
   // emitting one page per slide (no incremental subslides).
   // `auto` (default) reads the `handout` CLI input flag
@@ -66,6 +67,10 @@
   let effective-code-inline-scale = pick-first(
     code-inline-scale,
     font-scale-code-inline,
+  )
+  let effective-footnote-scale = pick-first(
+    footnote-scale,
+    font-scale-footnote,
   ) // Resolve font families
   let effective-font = pick-first(font, font-family-text)
   let effective-code-font = pick-first(code-font, font-family-code)
@@ -158,6 +163,11 @@
   show raw.where(block: true): set text(size: effective-code-block-scale * 1em)
   show raw.where(block: false): set text(
     size: effective-code-inline-scale * 1em,
+  )
+  // Footnote entry text scaled relative to the base size (absolute length, so
+  // it does not compound with Typst's default footnote reduction).
+  show footnote.entry: set text(
+    size: effective-footnote-scale * effective-font-size-base,
   )
   // Use Touying's infrastructure with BIPS customizations. config-info(...)
   // dicts in ..args.pos() flow into self.info natively (read by title-slide);
