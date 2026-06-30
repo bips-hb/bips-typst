@@ -1,6 +1,6 @@
 [package]
 name = "bypst"
-version = "0.4.0"
+version = "0.5.0"
 entrypoint = "bypst.typ"
 authors = ["Lukas Burk <burk@leibniz-bips.de>"]
 license = "MIT"

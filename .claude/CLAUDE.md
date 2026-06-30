@@ -12,8 +12,8 @@ BIPS Typst presentation template for 16:9 institutional presentations using Typs
 - `just install` - Install/refresh the local package for development (run after cloning or modifying the theme). Overwrites any existing same-version install, so no separate uninstall step is needed (verified with tyler 0.10.3).
 
 ### Build and Test
-- `just all` - Compile all 6 gallery demos (and the speaker-notes pdfpc sidecar + inline-notes preview)
-- `just test` - Run tytanic test suite (13 compile-only feature tests + 1 template test)
+- `just all` - Compile all 9 gallery demos (and the speaker-notes pdfpc sidecar + inline-notes preview)
+- `just test` - Run tytanic test suite (compile-only feature tests + a template test)
 - `just test-verbose` - Run tests with verbose output
 - `just clean` - Remove all generated PDFs
 - `typst compile file.typ` - Compile single file
@@ -177,6 +177,34 @@ Understanding the render order is critical for correct counter behavior:
 - BIPS color palette: blue (primary), orange, green, gray
 - Math notation and academic formatting prioritized
 
+## Development Workflow (branch model)
+
+**`main` is ALWAYS the currently published release.** It matches
+`@preview/bypst:<version>` on Typst Universe exactly — same code, same README,
+same version number. Never develop on `main`.
+
+**All development happens on `dev`** (and short-lived feature branches off `dev`).
+`dev` represents the *upcoming* release: its `typst.toml` version and all
+`bypst:` import refs are already set to the next version (e.g. `0.5.0`), and its
+README/docs document the upcoming features.
+
+**README convention:** the README always documents the *current branch as if it
+were already published* — examples import `@preview/bypst:<version>` (never
+`@local`), and freely document the branch's features. The only `@local` mention
+is in the "Local development" install instructions. This means: on `dev` the
+README describes the next release using the next version number; when `dev`
+merges to `main` at release time, `main`'s README is already correct. No
+per-change "is this release-coupled?" juggling — just keep `dev`'s docs current
+and bump the version number.
+
+**Version:** set the whole-repo version with `just set-version X.Y.Z` (rewrites
+`typst.toml` + every `bypst:` import in README/gallery-README/templates). Do this
+on `dev` when development for a new version begins.
+
+**At release:** finalize `dev` → merge `dev` → `main` → publish to Typst from
+`main` → tag `main`. See the checklist below. After release, `main` == the new
+published version again; continue on `dev` (bump to the next version when ready).
+
 ## Publishing to Typst Universe
 
 **Packaging guidelines**: https://github.com/typst/packages/blob/main/docs/README.md
@@ -191,15 +219,16 @@ Before release, verify compliance with the Typst packaging guidelines:
   `tyler build . --no-bump --no-check --outdir /tmp/bypst-check && find /tmp/bypst-check -type f`
 - Package compiles without errors when imported via absolute path
 
-Release checklist (publish to Typst first, then tag + GitHub release):
-1. Bump version in `typst.toml`
-2. Update all versioned `@preview/bypst:` and `@local/bypst:` imports (see Version references below)
-3. Move `CHANGELOG.md` `[Unreleased]` items under a new `[X.Y.Z]` heading and update the compare links at the bottom
-4. Verify: `just test` (14/14), `just format-check`, and compile the gallery (`just all`)
-5. Commit the release changes
-6. **Publish to Typst first**: `tyler build . --no-bump --publish` (needs GitHub auth; `--no-bump` keeps the version set in step 1). This opens/updates the `typst/packages` PR.
-7. Wait for the `typst/packages` PR checks. If `typst-package-check` flags anything (e.g. an outdated dep-version warning), fix it, commit, and re-run step 6 (tyler force-recreates the `bypst-<version>` branch, updating the same PR).
-8. **Only once the published commit is final**: tag it and cut the GitHub release — `git tag -a vX.Y.Z -m "Release vX.Y.Z" && git push origin vX.Y.Z`, then `gh release create vX.Y.Z`.
+Release checklist (all version/import refs are already at the target version on
+`dev` via `just set-version`; publish to Typst first, then tag + GitHub release):
+1. On `dev`: confirm the version is set (`grep '^version' typst.toml`; `just set-version X.Y.Z` if not)
+2. On `dev`: the `CHANGELOG.md` section is already named `## [X.Y.Z]` (dev uses the version heading, not `[Unreleased]`). Add the release date to it; after tagging, update its compare link from `v<prev>...HEAD` to `v<prev>...vX.Y.Z`
+3. Verify on `dev`: `just release-check` (runs `just test`, `just format-check`, `just all`)
+4. **Merge `dev` → `main`** (`main` must end up identical to the release): `git switch main && git merge --ff-only dev` (or a merge commit). `main` is now the release candidate.
+5. **Publish to Typst first** (from `main`): `tyler build . --no-bump --publish` (needs GitHub auth; `--no-bump` keeps the set version). Opens/updates the `typst/packages` PR.
+6. Wait for the `typst/packages` PR checks. If `typst-package-check` flags anything (e.g. an outdated dep-version warning), fix it on `main` (and cherry-pick/merge back to `dev`), and re-run step 5 (tyler force-recreates the `bypst-<version>` branch, updating the same PR).
+7. **Only once the published commit is final**: tag `main` and cut the GitHub release — `git tag -a vX.Y.Z -m "Release vX.Y.Z" && git push origin vX.Y.Z`, then `gh release create vX.Y.Z`.
+8. Back on `dev`: when starting the next cycle, `just set-version <next>` and add a fresh `## [<next>]` CHANGELOG section + a `[<next>]: …compare/v<this>...HEAD` link at the bottom.
 
 Tagging last avoids re-tagging HEAD every time a publish round-trip needs another commit. The `typst-package-check` "failure" with 0 errors / N warnings is non-blocking (warnings are suggestions; a human still reviews), but dep-version warnings are worth clearing before the final tag.
 
@@ -207,6 +236,6 @@ Tagging last avoids re-tagging HEAD every time a publish round-trip needs anothe
 
 **Packaging gotcha:** glob `**` does not match dotfiles, and a bare `.DS_Store` pattern only matches the top level. Keep both `.DS_Store` and `**/.DS_Store` in `[tool.tyler] ignore` so nested `.DS_Store` files stay out of the bundle. Anything gitignored but present on disk (e.g. `presentations/`) must also be listed in `[tool.tyler] ignore` and `[package] exclude`, or it ships.
 
-**Version references**: Gallery and test files use relative/root imports (`#import "../bypst.typ": *` or `/bypst.typ`), so they don't need updating. Only these files contain versioned imports to bump: `typst.toml`, `README.md` (3 places), `gallery/README.md`, `template/basic.typ`, `template/complete.typ`. Use `grep -rn "bypst:0" .` to find them.
+**Version references**: bump everything with `just set-version X.Y.Z` (rewrites `typst.toml` version + every `bypst:` import in `README.md`, `gallery/README.md`, `template/basic.typ`, `template/complete.typ`). Gallery and test files use relative/root imports (`#import "../bypst.typ": *` or `/bypst.typ`), so they are version-agnostic and untouched. Verify with `grep -rn "bypst:" README.md gallery/README.md template/`.
 
 **Note**: Gallery/test files use `--root .` in the justfile to allow `/bypst.typ` imports. For standalone compilation outside the justfile, use `typst compile --root . gallery/foo.typ`.
