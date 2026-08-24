@@ -33,6 +33,7 @@
     institution: bips-en,
     date: datetime.today().display(),
   ),
+  progress-bar: true,
 )
 // (Speaker notes have their own demo: see gallery/speaker-notes.typ.)
 
@@ -433,6 +434,15 @@
       code-block-scale: 1, // Keep code block at 100% so it's not too small
     )[...]
   ```
+]
+
+#bips-slide(title: "Progress bar")[
+  Enable with `#bips-theme.with(progress-bar: true)`. The bar spans the bottom
+  edge and fills as the deck advances.
+
+  - Shown only on counted content slides
+  - Title, section and thanks slides stay clean
+  - Override per slide with `base-slide(progress-bar: false)`
 ]
 
 // [BIPS] Section slide without logo — `show-logo: false`.

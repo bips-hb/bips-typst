@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `footnote-scale` parameter on `bips-theme()` to size footnote text as a fraction of the base body size (default `0.8`, a small reduction from Typst's ~0.85 default). Scales with `base-size`; applies to all footnotes including `footcite`.
 - Citation helpers wrapping `cite()`: `#citet()` (textual "Author (Year)"), `#citep()` (parenthetical), `#sideref()` (small, right-aligned side citation), and `#footcite()` (footnote-area citation). natbib-style convenience for the LaTeX crowd.
 - `#callout()` shorthands `#callout-note()`, `#callout-tip()`, `#callout-warning()`, and `#callout-important()` for the corresponding callout types (each forwards `title:` and the body to `callout(type: ...)`).
+- `progress-bar` parameter on `bips-theme()` (default `false`) rendering a full-bleed BIPS-blue progress bar at the bottom page edge, filling as the deck advances. Shown only on counted content slides, so title, section, thanks, and uncounted `empty-slide`s stay clean. Override per slide with `base-slide(progress-bar: true/false)`.
 
 ### Changed
 

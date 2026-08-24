@@ -233,6 +233,18 @@ Set `logo: none` to hide the logo entirely.
 
 The actual BIPS logo (`bips-logo.png`) is available in the [GitHub repository](https://github.com/bips-hb/bips-typst) but is not included in the Typst package due to unclear redistribution licensing. Download it and place it next to your `.typ` file, then use `logo: image("bips-logo.png")`.
 
+### Progress bar
+
+An optional progress bar spans the bottom edge of the slide, filling as the deck advances:
+
+```typst
+#show: bips-theme.with(
+  progress-bar: true,
+)
+```
+
+It is off by default. The bar appears only on counted content slides, so title, section, thanks, and uncounted `empty-slide`s stay clean. Override it for an individual slide with `base-slide(progress-bar: false)`.
+
 ### Fonts and sizes
 
 ```typst
