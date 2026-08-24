@@ -38,6 +38,7 @@
   page-number: true,
   show-line: true,
   count: true,
+  progress-bar: auto,
   content-align: none,
   title-size: none,
   subtitle-size: none,
@@ -86,12 +87,32 @@
     v(body-gap)
   }
 
+  // `auto` follows the theme-level flag; an explicit bool on the slide wins.
+  // The bar is tied to `count`, so uncounted slides never show a stale ratio.
+  let show-progress = if progress-bar == auto {
+    self.store.progress-bar
+  } else {
+    progress-bar
+  }
+
+  let progress-footer(self) = block(
+    width: 100%,
+    height: progress-bar-height,
+    _progress-bar(),
+  )
+
   let chrome-config = utils.merge-dicts(
     config-common(freeze-slide-counter: not count),
     config-page(background: bips-background(
       logo: self.store.logo,
       show-logo: show-logo,
     )),
+    if show-progress and count {
+      config-page(
+        footer: progress-footer,
+        footer-descent: progress-bar-descent,
+      )
+    } else { (:) },
   )
 
   let config = if has-header {

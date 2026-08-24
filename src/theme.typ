@@ -51,6 +51,9 @@
   // `auto` (default) reads the `handout` CLI input flag
   // (`typst compile --input handout=true`); `true`/`false` override it.
   handout: auto,
+  // Opt-in deck progress bar: a full-bleed BIPS-blue bar at the bottom page
+  // edge, filling as the deck advances. Shown only on counted content slides.
+  progress-bar: false,
   // Extra Touying config dicts (e.g. config-info(...), config-common(...),
   // config-page(...)) forwarded to touying-slides(). They deep-merge after
   // the theme's own config, so user values override on conflict. This is how
@@ -185,6 +188,7 @@
       page-number: pick-first(page-number-size, font-size-page-number),
       title-align: title-align,
       logo: effective-logo,
+      progress-bar: progress-bar,
     ),
     config-page(
       ..utils.page-args-from-aspect-ratio(aspect-ratio),
