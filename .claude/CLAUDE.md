@@ -201,9 +201,12 @@ and bump the version number.
 `typst.toml` + every `bypst:` import in README/gallery-README/templates). Do this
 on `dev` when development for a new version begins.
 
-**At release:** finalize `dev` → merge `dev` → `main` → publish to Typst from
-`main` → tag `main`. See the checklist below. After release, `main` == the new
-published version again; continue on `dev` (bump to the next version when ready).
+**At release:** finalize `dev` → **squash-merge `dev` → `main`** (one commit per
+release) → publish to Typst from `main` → tag `main` → **create a fresh `dev`
+from `main`** for the next cycle (keeping the old `dev` as the granular-history
+archive). See the checklist below. After release, `main` == the new published
+version again. Squashing is safe here precisely because `dev` is recreated from
+`main` each cycle, so no long-lived branch diverges from the squash commit.
 
 ## Publishing to Typst Universe
 
@@ -224,11 +227,12 @@ Release checklist (all version/import refs are already at the target version on
 1. On `dev`: confirm the version is set (`grep '^version' typst.toml`; `just set-version X.Y.Z` if not)
 2. On `dev`: the `CHANGELOG.md` section is already named `## [X.Y.Z]` (dev uses the version heading, not `[Unreleased]`). Add the release date to it; after tagging, update its compare link from `v<prev>...HEAD` to `v<prev>...vX.Y.Z`
 3. Verify on `dev`: `just release-check` (runs `just test`, `just format-check`, `just all`)
-4. **Merge `dev` → `main`** (`main` must end up identical to the release): `git switch main && git merge --ff-only dev` (or a merge commit). `main` is now the release candidate.
+4. **Squash-merge `dev` → `main`** so `main` reads as one commit per release: `git switch main && git merge --squash dev && git commit -m "Release vX.Y.Z"`. (The recreate-dev-from-main step below means there is no long-lived `dev` to diverge, so the usual squash-divergence problem does not apply.) `main` is now the release candidate.
 5. **Publish to Typst first** (from `main`): `tyler build . --no-bump --publish` (needs GitHub auth; `--no-bump` keeps the set version). Opens/updates the `typst/packages` PR.
-6. Wait for the `typst/packages` PR checks. If `typst-package-check` flags anything (e.g. an outdated dep-version warning), fix it on `main` (and cherry-pick/merge back to `dev`), and re-run step 5 (tyler force-recreates the `bypst-<version>` branch, updating the same PR).
+6. Wait for the `typst/packages` PR checks. If `typst-package-check` flags anything (e.g. an outdated dep-version warning), fix it on `main`, amend the release commit, and re-run step 5 (tyler force-recreates the `bypst-<version>` branch, updating the same PR).
 7. **Only once the published commit is final**: tag `main` and cut the GitHub release — `git tag -a vX.Y.Z -m "Release vX.Y.Z" && git push origin vX.Y.Z`, then `gh release create vX.Y.Z`.
-8. Back on `dev`: when starting the next cycle, `just set-version <next>` and add a fresh `## [<next>]` CHANGELOG section + a `[<next>]: …compare/v<this>...HEAD` link at the bottom.
+8. **Create a fresh `dev` from `main`** (the squashed release is the new base; keep the old `dev` branch as the granular-history archive, do not hard-delete it): `git switch -c dev main && git push -u origin dev`.
+9. On the new `dev`, start the next cycle: `just set-version <next>`, add a fresh `## [<next>]` CHANGELOG section + a `[<next>]: …compare/v<this>...HEAD` link at the bottom.
 
 Tagging last avoids re-tagging HEAD every time a publish round-trip needs another commit. The `typst-package-check` "failure" with 0 errors / N warnings is non-blocking (warnings are suggestions; a human still reviews), but dep-version warnings are worth clearing before the final tag.
 
