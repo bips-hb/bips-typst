@@ -192,7 +192,12 @@
     ),
     config-page(
       ..utils.page-args-from-aspect-ratio(aspect-ratio),
-      margin: (top: 1.55cm, bottom: 1.55cm, left: 1.55cm, right: 1.75cm),
+      margin: (
+        top: 1.55cm,
+        bottom: page-margin-bottom,
+        left: 1.55cm,
+        right: 1.75cm,
+      ),
       background: bips-background(logo: effective-logo, show-logo: true),
     ),
     // User-supplied config dicts override the above via Touying's deep merge.

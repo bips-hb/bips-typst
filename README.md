@@ -243,7 +243,7 @@ An optional progress bar spans the bottom edge of the slide, filling as the deck
 )
 ```
 
-It is off by default. The bar appears only on counted content slides, so title, section, thanks, and uncounted `empty-slide`s stay clean. Override it for an individual slide with `base-slide(progress-bar: false)`.
+It is off by default. The bar appears only on counted content slides, so title, section, thanks, and uncounted `empty-slide`s stay clean. Override it for an individual slide with `bips-slide(progress-bar: false)` or `base-slide(progress-bar: false)`.
 
 ### Fonts and sizes
 

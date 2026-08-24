@@ -95,7 +95,9 @@
     progress-bar
   }
 
-  let progress-footer(self) = block(
+  // Plain content (not a function): utils.call-or-display accepts either, and
+  // this avoids a `self` param that would shadow the enclosing one unused.
+  let progress-footer = block(
     width: 100%,
     height: progress-bar-height,
     _progress-bar(),
@@ -120,7 +122,12 @@
       chrome-config,
       config-common(zero-margin-header: false),
       config-page(
-        margin: (top: top-margin, bottom: 1.55cm, left: 1.55cm, right: 1.75cm),
+        margin: (
+          top: top-margin,
+          bottom: page-margin-bottom,
+          left: 1.55cm,
+          right: 1.75cm,
+        ),
         header-ascent: 0pt,
         header: header,
       ),

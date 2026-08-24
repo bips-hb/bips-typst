@@ -124,6 +124,10 @@
 // Footnote entry text size, as a fraction of the base body size
 #let font-scale-footnote = 0.8
 
+// Bottom page margin, shared by theme.typ's config-page and slides.typ's
+// header config-page (both set explicit margins that must match).
+#let page-margin-bottom = 1.55cm
+
 // Deck progress bar (opt-in via bips-theme(progress-bar: true)).
 // The track reuses the same tint as the table header fill in theme.typ.
 #let progress-bar-height = 3pt
@@ -131,9 +135,8 @@
 #let progress-bar-track = bips-blue.lighten(85%)
 
 // Footer descent that lands the bar flush with the bottom page edge: the
-// bottom page margin less the bar's own height. NOTE: this tracks the 1.55cm
-// bottom margin set in theme.typ and slides.typ — change all three together.
-#let progress-bar-descent = 1.55cm - progress-bar-height
+// bottom page margin less the bar's own height.
+#let progress-bar-descent = page-margin-bottom - progress-bar-height
 
 // List and enumeration spacing
 #let list-spacing = 0.6em
