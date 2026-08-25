@@ -1,5 +1,9 @@
 # bypst — BIPS Presentation Theme
 
+# Every Typst source that is formatted and checked. `format` and `format-check`
+# share this list so the gate can never cover less than the formatter writes.
+typst_sources := "*.typ src/*.typ gallery/*.typ tests/*/test.typ"
+
 # Compile all gallery demos
 all:
     #!/bin/bash
@@ -67,13 +71,11 @@ test-verbose:
 
 # Format all Typst source files with typstyle
 format:
-    typstyle -i *.typ
-    typstyle -i gallery/*.typ
-    typstyle -i tests/*/test.typ
+    typstyle -i {{ typst_sources }}
 
 # Check formatting without modifying files
 format-check:
-    typstyle --check *.typ
+    typstyle --check {{ typst_sources }}
 
 # Install package locally for development
 install:

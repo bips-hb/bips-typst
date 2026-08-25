@@ -35,7 +35,7 @@
 ][
   - A normal amount of items
   - A very normal fifth item
-  
+
   #two-columns(columns: (1fr, 1fr))[
     A secret nested two-column thing with a left column
   ][

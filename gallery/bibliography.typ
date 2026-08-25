@@ -49,14 +49,14 @@
 // [BIPS] Citation helpers — natbib-style wrappers over Typst's `cite()`.
 #bips-slide(title: "Citation Helpers", text-size: 16pt)[
   == Convenience wrappers over Typst's `cite()`, for the natbib crowd:
-  
+
   - `#citet(<label>)`: textual: #citet(<johnson2023>)
   - `#citep(<label>)`: parenthetical: #citep(<smith2022>)
-  
+
   == Layout-specific helpers
-  
+
   Each supporting passthrouygh of the `form` argument of typst's native `cite()` function:
-  
+
   - `#footcite(<label>)`: footnote-area citation #footcite(<brown2024>)
   - `#footcite(<label>, form: "full")`: Full citation #footcite(<brown2024>, form: "full")
   - `#sideref(<label>)` pushes a citation to the right edge #sideref(<johnson2023>)

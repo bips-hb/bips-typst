@@ -236,7 +236,10 @@
   let subtitle = pick-first(subtitle, info.at("subtitle", default: none))
   let author = pick-first(author, info.at("author", default: none))
   let date = pick-first(date, info.at("date", default: none))
-  let institution = pick-first(institution, info.at("institution", default: none))
+  let institution = pick-first(institution, info.at(
+    "institution",
+    default: none,
+  ))
 
   let body = {
     v(1fr)
