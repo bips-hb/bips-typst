@@ -33,14 +33,15 @@ jobs:
   # cannot do this: tytanic embeds its own Typst, so it pins a single version
   # regardless of what is installed.
   #
-  # Matrix: the floor (must match typst.toml `compiler`), the previous minor,
-  # and whatever is current. Bump the middle entry when a new minor lands.
+  # Matrix: the floor (must match typst.toml `compiler`) and whatever is
+  # current. Typst does not backport to older minors, so once a minor is
+  # superseded it is frozen — floor + latest covers the supported range.
   compat:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        typst-version: ["0.14.0", "0.14.2", "latest"]
+        typst-version: ["0.15.0", "latest"]
     steps:
       - uses: actions/checkout@v7
 
