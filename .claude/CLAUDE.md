@@ -201,10 +201,12 @@ and bump the version number.
 `typst.toml` + every `bypst:` import in README/gallery-README/templates). Do this
 on `dev` when development for a new version begins.
 
-**At release:** finalize `dev` → **squash-merge `dev` → `main`** (one commit per
-release) → publish to Typst from `main` → tag `main` → **create a fresh `dev`
-from `main`** for the next cycle (keeping the old `dev` as the granular-history
-archive). See the checklist below. After release, `main` == the new published
+**At release:** finalize `dev` → **publish to Typst from `dev`** → wait for the
+`typst/packages` PR to merge → **squash-merge `dev` → `main`** (one commit per
+release) → tag `main` → **create a fresh `dev` from `main`** for the next cycle
+(keeping the old `dev` as the granular-history archive). See the checklist below.
+`main` moves only after Typst has accepted the package, so it never claims to be
+a release that is still under review. After release, `main` == the new published
 version again. Squashing is safe here precisely because `dev` is recreated from
 `main` each cycle, so no long-lived branch diverges from the squash commit.
 
@@ -223,18 +225,29 @@ Before release, verify compliance with the Typst packaging guidelines:
 - Package compiles without errors when imported via absolute path
 
 Release checklist (all version/import refs are already at the target version on
-`dev` via `just set-version`; publish to Typst first, then tag + GitHub release):
+`dev` via `just set-version`). **Order: publish from `dev` → wait for the
+`typst/packages` PR to merge → only then squash-merge to `main` → tag.**
 1. On `dev`: confirm the version is set (`grep '^version' typst.toml`; `just set-version X.Y.Z` if not)
 2. On `dev`: the `CHANGELOG.md` section is already named `## [X.Y.Z]` (dev uses the version heading, not `[Unreleased]`). Add the release date to it; after tagging, update its compare link from `v<prev>...HEAD` to `v<prev>...vX.Y.Z`
 3. Verify on `dev`: `just release-check` (runs `just test`, `just format-check`, `just all`)
-4. **Squash-merge `dev` → `main`** so `main` reads as one commit per release: `git switch main && git merge --squash dev && git commit -m "Release vX.Y.Z"`. (The recreate-dev-from-main step below means there is no long-lived `dev` to diverge, so the usual squash-divergence problem does not apply.) `main` is now the release candidate.
-5. **Publish to Typst first** (from `main`): `tyler build . --no-bump --publish` (needs GitHub auth; `--no-bump` keeps the set version). Opens/updates the `typst/packages` PR.
-6. Wait for the `typst/packages` PR checks. If `typst-package-check` flags anything (e.g. an outdated dep-version warning), fix it on `main`, amend the release commit, and re-run step 5 (tyler force-recreates the `bypst-<version>` branch, updating the same PR).
-7. **Only once the published commit is final**: tag `main` and cut the GitHub release — `git tag -a vX.Y.Z -m "Release vX.Y.Z" && git push origin vX.Y.Z`, then `gh release create vX.Y.Z`.
-8. **Create a fresh `dev` from `main`** (the squashed release is the new base; keep the old `dev` branch as the granular-history archive, do not hard-delete it): `git switch -c dev main && git push -u origin dev`.
-9. On the new `dev`, start the next cycle: `just set-version <next>`, add a fresh `## [<next>]` CHANGELOG section + a `[<next>]: …compare/v<this>...HEAD` link at the bottom.
+4. On `dev`: inspect the bundle before shipping it — `tyler build . --no-bump --no-check --outdir /tmp/bypst-check && find /tmp/bypst-check -type f`. Anything gitignored-but-on-disk can leak in; see the packaging gotcha above.
+5. **Publish from `dev`**: `tyler build . --no-bump --publish` (needs GitHub auth; `--no-bump` keeps the set version). Opens/updates the `typst/packages` PR.
+6. Wait for the `typst/packages` PR checks. If `typst-package-check` flags anything (e.g. an outdated dep-version warning), fix it on `dev` as an ordinary commit and re-run step 5 (tyler force-recreates the `bypst-<version>` branch, updating the same PR). No amending, because no release commit exists yet.
+7. **Wait for the `typst/packages` PR to actually merge.** Nothing below happens before it does.
+8. **Now squash-merge `dev` → `main`** so `main` reads as one commit per release: `git switch main && git merge --squash dev && git commit -m "Release vX.Y.Z"`. (The recreate-dev-from-main step below means there is no long-lived `dev` to diverge, so the usual squash-divergence problem does not apply.)
+9. Tag `main` and cut the GitHub release — `git tag -a vX.Y.Z -m "Release vX.Y.Z" && git push origin vX.Y.Z`, then `gh release create vX.Y.Z`.
+10. **Create a fresh `dev` from `main`** (the squashed release is the new base; keep the old `dev` branch as the granular-history archive, do not hard-delete it): `git switch -c dev main && git push -u origin dev`.
+11. On the new `dev`, start the next cycle: `just set-version <next>`, add a fresh `## [<next>]` CHANGELOG section + a `[<next>]: …compare/v<this>...HEAD` link at the bottom.
 
-Tagging last avoids re-tagging HEAD every time a publish round-trip needs another commit. The `typst-package-check` "failure" with 0 errors / N warnings is non-blocking (warnings are suggestions; a human still reviews), but dep-version warnings are worth clearing before the final tag.
+**Why publish before merging to `main`:** `main` is defined as "exactly the
+currently published release". If `main` were cut first, it would claim to be the
+release while the `typst/packages` PR was still unreviewed — and any review fix
+would mean amending an already-published-looking release commit. Publishing from
+`dev` keeps `main` truthful: it only moves once Typst has actually accepted the
+package, and review fixes are ordinary `dev` commits. The squash means `main`'s
+content still matches the published bundle exactly.
+
+Tagging last also avoids re-tagging HEAD every time a publish round-trip needs another commit. The `typst-package-check` "failure" with 0 errors / N warnings is non-blocking (warnings are suggestions; a human still reviews), but dep-version warnings are worth clearing before the final tag.
 
 **tyler version:** use tyler >= 0.10.0 (0.10.3 verified). tyler runs under node (`#!/usr/bin/env node`), so the active node version matters. *Historical:* tyler 0.7.2 had a template-thumbnail check crash (`TypeError: The "list" argument must be ... ArrayBuffer ...`) on `check`/`build`/`publish`, fixed in 0.10.x; if you ever hit it on an old tyler, upgrade, or pass `--no-check` to skip local validation (the `typst/packages` CI re-validates on the PR).
 
