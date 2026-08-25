@@ -229,7 +229,7 @@ Release checklist (all version/import refs are already at the target version on
 `typst/packages` PR to merge → only then squash-merge to `main` → tag.**
 1. On `dev`: confirm the version is set (`grep '^version' typst.toml`; `just set-version X.Y.Z` if not)
 2. On `dev`: the `CHANGELOG.md` section is already named `## [X.Y.Z]` (dev uses the version heading, not `[Unreleased]`). Add the release date to it; after tagging, update its compare link from `v<prev>...HEAD` to `v<prev>...vX.Y.Z`
-3. Verify on `dev`: `just release-check` (runs `just test`, `just format-check`, `just all`)
+3. Verify on `dev`: `just release-check` (runs `just test`, `just format-check`, `just check-deps`, `just all`). `check-deps` compares every `@preview/…` import against the Typst Universe index: shipped deps (`bypst.typ`, `src/`, `template/`) **fail** the gate when stale, because `typst-package-check` flags them on the release PR; gallery/test deps only warn, since they never enter the bundle. Run it standalone with `just check-deps`.
 4. On `dev`: inspect the bundle before shipping it — `tyler build . --no-bump --no-check --outdir /tmp/bypst-check && find /tmp/bypst-check -type f`. Anything gitignored-but-on-disk can leak in; see the packaging gotcha above.
 5. **Publish from `dev`**: `tyler build . --no-bump --publish` (needs GitHub auth; `--no-bump` keeps the set version). Opens/updates the `typst/packages` PR.
 6. Wait for the `typst/packages` PR checks. If `typst-package-check` flags anything (e.g. an outdated dep-version warning), fix it on `dev` as an ordinary commit and re-run step 5 (tyler force-recreates the `bypst-<version>` branch, updating the same PR). No amending, because no release commit exists yet.

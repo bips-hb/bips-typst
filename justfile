@@ -77,6 +77,51 @@ format:
 format-check:
     typstyle --check {{ typst_sources }}
 
+# Check every @preview dependency against the latest Typst Universe release.
+# Shipped deps (bypst.typ, src/, template/) are an ERROR when stale — the
+# typst/packages CI flags them on the release PR. Gallery/test deps only WARN:
+# they never enter the bundle, so they cannot block a release.
+check-deps:
+    #!/usr/bin/env bash
+    set -uo pipefail
+    command -v jq >/dev/null || { echo "❌ jq is required"; exit 1; }
+    index=$(mktemp)
+    trap 'rm -f "$index"' EXIT
+    curl -sSfL https://packages.typst.org/preview/index.json -o "$index" \
+      || { echo "❌ could not fetch the Typst Universe index"; exit 1; }
+    rc=0
+    scan() {
+        local label="$1" mode="$2"
+        shift 2
+        echo "$label"
+        while IFS=: read -r pkg ver; do
+            name="${pkg#@preview/}"
+            [ "$name" = "bypst" ] && continue
+            # Versions are not ordered in the index; sort -V picks the real latest.
+            new=$(jq -r --arg n "$name" '.[] | select(.name==$n) | .version' "$index" | sort -V | tail -1)
+            if [ -z "$new" ]; then
+                echo "  ⚠️  $name $ver — not found in the index"
+            elif [ "$new" = "$ver" ]; then
+                echo "  ✅ $name $ver"
+            elif [ "$mode" = error ]; then
+                echo "  ❌ $name $ver → $new"
+                rc=1
+            else
+                echo "  ⚠️  $name $ver → $new"
+            fi
+        done < <(grep -rhoE '@preview/[a-z0-9-]+:[0-9]+\.[0-9]+\.[0-9]+' "$@" 2>/dev/null | sort -u)
+    }
+    scan "Shipped (must be current):" error bypst.typ src template
+    echo ""
+    scan "Gallery/tests (advisory):" warn gallery tests
+    echo ""
+    if [ "$rc" -ne 0 ]; then
+        echo "❌ a shipped dependency is out of date — update it before publishing"
+    else
+        echo "✅ all shipped dependencies are at their latest release"
+    fi
+    exit "$rc"
+
 # Install package locally for development
 install:
     tyler build . --no-bump --install --no-check
@@ -91,6 +136,7 @@ clean:
 release-check:
     just test
     just format-check
+    just check-deps
     just all
     @echo "✅ release-check passed"
 
