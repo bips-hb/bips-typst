@@ -8,7 +8,7 @@
 // Run: typst compile --root . gallery/dataviz.typ
 
 #import "../bypst.typ": *
-#import "@preview/gribouille:0.4.1": *
+#import "@preview/gribouille:0.6.0": *
 
 // [Touying] Presentation info declared once via config-info(): sets the PDF
 // document metadata and feeds title-slide()'s fields below.

@@ -10,7 +10,7 @@
 // Run: typst compile --root . gallery/diagrams.typ
 
 #import "../bypst.typ": *
-#import "@preview/cetz:0.4.1"
+#import "@preview/cetz:0.5.2"
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 
 // [Touying] Presentation info declared once via config-info(): sets the PDF

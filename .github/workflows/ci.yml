@@ -28,15 +28,19 @@ jobs:
       - name: Run tests
         run: just test
 
-  # Compile every gallery demo on the minimum supported Typst (matches
-  # typst.toml `compiler`) and on the latest, so feature/version regressions
-  # surface here.
-  gallery:
+  # Compile every gallery demo AND every test file across the supported Typst
+  # range, so feature/version regressions surface here. The `test` job above
+  # cannot do this: tytanic embeds its own Typst, so it pins a single version
+  # regardless of what is installed.
+  #
+  # Matrix: the floor (must match typst.toml `compiler`), the previous minor,
+  # and whatever is current. Bump the middle entry when a new minor lands.
+  compat:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        typst-version: ["0.14.0", "latest"]
+        typst-version: ["0.14.0", "0.14.2", "latest"]
     steps:
       - uses: actions/checkout@v7
 
@@ -46,5 +50,16 @@ jobs:
 
       - uses: extractions/setup-just@v4
 
-      - name: Compile gallery
-        run: just all
+      - name: Compile gallery and tests
+        run: just compile-check
+
+  # Dependency freshness: fails when a shipped dependency is behind the newest
+  # release compatible with our Typst floor. typst-package-check flags these on
+  # the release PR, so catching it here avoids a round-trip.
+  deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: extractions/setup-just@v4
+      - name: Check dependency freshness
+        run: just check-deps
