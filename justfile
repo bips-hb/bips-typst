@@ -2,7 +2,7 @@
 
 # Every Typst source that is formatted and checked. `format` and `format-check`
 # share this list so the gate can never cover less than the formatter writes.
-typst_sources := "*.typ src/*.typ gallery/*.typ tests/*/test.typ"
+typst_sources := "*.typ src/*.typ gallery/*.typ template/*.typ tests/*.typ tests/*/test.typ"
 
 # Compile all gallery demos
 all:
