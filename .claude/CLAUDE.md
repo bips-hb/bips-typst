@@ -15,6 +15,8 @@ BIPS Typst presentation template for 16:9 institutional presentations using Typs
 - `just all` - Compile all 9 gallery demos (and the speaker-notes pdfpc sidecar + inline-notes preview)
 - `just test` - Run tytanic test suite (compile-only feature tests + a template test)
 - `just test-verbose` - Run tests with verbose output
+- `just compile-check` - Compile all gallery decks **and** all tests with whatever `typst` is on `PATH`. This is the only version-compatibility check: `just test` runs tytanic, which embeds its own Typst and therefore pins one version regardless of what is installed. CI runs this across the version matrix; run it locally against another Typst by putting that binary first on `PATH`.
+- `just check-deps` - Compare every `@preview/…` import against the Typst Universe index. Floor-aware: the target is the newest release whose own `compiler` requirement still fits our `typst.toml` floor, so a major that needs a newer Typst is reported as held back rather than flagged stale. Shipped deps fail the gate; gallery/test deps warn.
 - `just clean` - Remove all generated PDFs
 - `typst compile file.typ` - Compile single file
 - `typst watch file.typ` - Live preview during editing
