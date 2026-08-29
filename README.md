@@ -92,7 +92,16 @@ Then use the local import instead:
 
 `content-align` accepts any Typst alignment: `center`, `horizon`, `center + horizon`, etc.
 
-### Multi-author title slides
+### Authors and affiliations
+
+`#title-slide()` reads `author:` and `institution:` from `config-info()`, so a
+single author at one institution needs nothing beyond the [Quick
+Start](#quick-start). `institution:` defaults to `bips-en`; set it only for
+`bips-de` or an external affiliation.
+
+For several authors, or one author with several affiliations, pass the plural
+`authors:` and `institutions:` to `#title-slide()`. `inst(n)` renders the
+superscript marker linking an author to the *n*-th entry of `institutions:`:
 
 ```typst
 #title-slide(
@@ -107,6 +116,9 @@ Then use the local import instead:
   ),
 )
 ```
+
+Unlike the singular forms, the plurals are not read from `config-info()`.
+Putting them there has no effect.
 
 ### Section slides
 

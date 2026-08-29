@@ -8,6 +8,58 @@ BIPS Typst presentation template for 16:9 institutional presentations using Typs
 
 ## Development Commands
 
+### Toolchain
+
+A fresh sandbox ships **none** of these except `just`. Before running a task that
+needs one, check with `command -v` and install what is missing. Do not skip a
+verification step because its tool is absent, and never report tests, formatting,
+or a release gate as passing when the tool never ran.
+
+| Task | Needs |
+|---|---|
+| compile anything, `just all`, `just compile-check` | `typst` |
+| `just test`, `tt run` | `tt` (tytanic) |
+| `just format`, `just format-check` | `typstyle` |
+| `just check-deps` | `curl`, `jq` (usually already present) |
+| `just install`, `just publish`, release tasks | `tyler` (runs under node; install via bun) |
+| `just release-check` | all of the above |
+
+Install (aarch64 Linux — swap the target triple on other hosts):
+
+```sh
+# typst: pin to the typst.toml floor so floor-incompatible features fail here.
+# For compat checks install the latest as a second binary (e.g. /usr/local/bin/typst-latest).
+curl -sSL -o /tmp/t.tar.xz https://github.com/typst/typst/releases/download/v0.15.0/typst-aarch64-unknown-linux-musl.tar.xz
+tar xf /tmp/t.tar.xz -C /tmp && sudo install -m755 /tmp/typst-aarch64-unknown-linux-musl/typst /usr/local/bin/typst
+
+# typstyle: gnu build; there is no musl asset
+curl -sSL -o /tmp/typstyle https://github.com/Enter-tainer/typstyle/releases/latest/download/typstyle-aarch64-unknown-linux-gnu
+sudo install -m755 /tmp/typstyle /usr/local/bin/typstyle
+
+# tytanic — note the binary is `tt` inside a versioned directory, like typst's
+curl -sSL -o /tmp/tt.tar.xz https://github.com/tingerrr/tytanic/releases/latest/download/tytanic-aarch64-unknown-linux-musl.tar.xz
+tar xf /tmp/tt.tar.xz -C /tmp && sudo install -m755 /tmp/tytanic-aarch64-unknown-linux-musl/tt /usr/local/bin/tt
+
+# tyler (release/publish only)
+bun install -g @mkpoli/tyler@latest && export PATH="$HOME/.bun/bin:$PATH"
+```
+
+CI installs tytanic and typstyle with `cargo install --locked`; sandboxes usually
+have no cargo, hence the release binaries above.
+
+Sandbox caveats:
+- **`pdfinfo` will not install** (apt fails). For page counts and pixel checks,
+  render PNGs instead: `typst compile --root . f.typ '/tmp/p-{n}.png'`, then count
+  the files. `pip install --break-system-packages pillow` enables pixel diffing
+  (plain `pip install` fails on PEP 668).
+- **Font warnings are expected.** Fira Sans, Fira Mono and Noto Sans are absent, so
+  every compile emits ~3 `unknown font family` warnings. Judge success by exit code
+  and the absence of `error:` lines, never by warning count.
+- **Git remotes are SSH with no key**, so push and fetch fail. Commit locally and
+  leave pushing to the human. Same for the Obsidian vault.
+- Typst refuses files outside `--root`, so scratch `.typ` files must live in the
+  repo (use the gitignored `debug/`), not `/tmp`.
+
 ### Package Management
 - `just install` - Install/refresh the local package for development (run after cloning or modifying the theme). Overwrites any existing same-version install, so no separate uninstall step is needed (verified with tyler 0.10.3).
 
@@ -31,7 +83,7 @@ BIPS Typst presentation template for 16:9 institutional presentations using Typs
 ### Validation Tools
 - `ferrules` - Convert PDF to JSON for structure analysis
 - `diff-pdf` or `diff-pdf-visually` - Visual comparison of PDF outputs
-- `pdfinfo file.pdf` - Check page counts
+- `pdfinfo file.pdf` - Check page counts (unavailable in the sandbox; see Toolchain for the PNG-rendering substitute)
 
 ## Architecture
 
