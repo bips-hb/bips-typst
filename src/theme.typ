@@ -45,11 +45,15 @@
   page-number-size: none,
   code-block-scale: none,
   code-inline-scale: none,
+  footnote-scale: none,
   // Handout mode: collapse all pauses/uncover/only to final state,
   // emitting one page per slide (no incremental subslides).
   // `auto` (default) reads the `handout` CLI input flag
   // (`typst compile --input handout=true`); `true`/`false` override it.
   handout: auto,
+  // Opt-in deck progress bar: a full-bleed BIPS-blue bar at the bottom page
+  // edge, filling as the deck advances. Shown only on counted content slides.
+  progress-bar: false,
   // Extra Touying config dicts (e.g. config-info(...), config-common(...),
   // config-page(...)) forwarded to touying-slides(). They deep-merge after
   // the theme's own config, so user values override on conflict. This is how
@@ -66,6 +70,10 @@
   let effective-code-inline-scale = pick-first(
     code-inline-scale,
     font-scale-code-inline,
+  )
+  let effective-footnote-scale = pick-first(
+    footnote-scale,
+    font-scale-footnote,
   ) // Resolve font families
   let effective-font = pick-first(font, font-family-text)
   let effective-code-font = pick-first(code-font, font-family-code)
@@ -159,11 +167,20 @@
   show raw.where(block: false): set text(
     size: effective-code-inline-scale * 1em,
   )
+  // Footnote entry text scaled relative to the base size (absolute length, so
+  // it does not compound with Typst's default footnote reduction).
+  show footnote.entry: set text(
+    size: effective-footnote-scale * effective-font-size-base,
+  )
   // Use Touying's infrastructure with BIPS customizations. config-info(...)
   // dicts in ..args.pos() flow into self.info natively (read by title-slide);
   // config-store(...) publishes sizes/align/logo into self.store for the slides.
   touying-slides(
     config-common(handout: effective-handout),
+    // Default the document institution to the BIPS English name, since this is
+    // an institution-specific theme. User config-info(institution: ...) (or
+    // bips-de) deep-merges over this via ..args.pos() below.
+    config-info(institution: bips-en),
     config-store(
       slide-title: pick-first(slide-title-size, font-size-slide-title),
       slide-title-only: font-size-slide-title-only,
@@ -171,10 +188,16 @@
       page-number: pick-first(page-number-size, font-size-page-number),
       title-align: title-align,
       logo: effective-logo,
+      progress-bar: progress-bar,
     ),
     config-page(
       ..utils.page-args-from-aspect-ratio(aspect-ratio),
-      margin: (top: 1.55cm, bottom: 1.55cm, left: 1.55cm, right: 1.75cm),
+      margin: (
+        top: 1.55cm,
+        bottom: page-margin-bottom,
+        left: 1.55cm,
+        right: 1.75cm,
+      ),
       background: bips-background(logo: effective-logo, show-logo: true),
     ),
     // User-supplied config dicts override the above via Touying's deep merge.

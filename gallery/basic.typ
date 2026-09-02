@@ -6,7 +6,7 @@
   title: "BIPS Theme Basic Example",
   subtitle: "Simple presentation structure",
   author: "Your Name",
-  institute: bips-en,
+  // institution defaults to the BIPS English name; pass institution: to override
   date: datetime.today().display(),
 )
 
@@ -35,7 +35,7 @@
 ][
   - A normal amount of items
   - A very normal fifth item
-  
+
   #two-columns(columns: (1fr, 1fr))[
     A secret nested two-column thing with a left column
   ][

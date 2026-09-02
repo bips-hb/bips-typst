@@ -4,7 +4,7 @@
 // title area with shrink-to-fit, background, alignment, slide overrides).
 // ===================================================================
 
-#import "@preview/touying:0.7.4": utils
+#import "@preview/touying:0.7.4": components, utils
 #import "config.typ": *
 
 /// Choose first non-none value from list of options
@@ -55,6 +55,20 @@
   width: 85%,
   height: 0.75pt,
   fill: gradient.linear(bips-text-gray, white, angle: 0deg),
+)
+
+/// The deck progress bar: BIPS blue fill over a light track, filling as the
+/// deck advances. Wraps touying's own `components.progress-bar`, which reads
+/// the logical slide counter against the final slide number.
+///
+/// MUST be rendered in the footer, not the background: the counter is stepped
+/// in `page-preamble` (prepended to the header), so a background-rendered bar
+/// is off by one on the first subslide and jumps between `#pause` states.
+/// See CLAUDE.md for the full render-order rationale.
+#let _progress-bar() = components.progress-bar(
+  height: progress-bar-height,
+  progress-bar-fill,
+  progress-bar-track,
 )
 
 // Vertical gap between the title area's lower edge and the divider line.

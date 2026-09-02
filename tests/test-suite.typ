@@ -24,7 +24,7 @@
   title: "Test: Multi-Author Title",
   subtitle: "Multiple affiliations",
   authors: ([Author A#inst(1)], [Author B#inst(2)], [Author C#inst(1, 2)]),
-  institutes: ("Institute Alpha", "Institute Beta"),
+  institutions: ("Institute Alpha", "Institute Beta"),
   date: "2025-01-01",
   occasion: "Test Conference",
 )

@@ -15,3 +15,14 @@
     Callouts can have titles.
   ]
 ]
+
+#bips-slide(title: "Default Callout")[
+  #callout[Default (no type) is a neutral shaded box.]
+]
+
+#bips-slide(title: "Callout Shorthands")[
+  #callout-note[Note shorthand.]
+  #callout-tip[Tip shorthand.]
+  #callout-warning[Warning shorthand.]
+  #callout-important(title: "Heads up")[Important shorthand with a title.]
+]

@@ -86,9 +86,9 @@
 #let font-color-title-slide-author = bips-blue
 #let font-weight-title-slide-author = 500
 
-#let font-size-title-slide-institute = 18pt
-#let font-color-title-slide-institute = bips-text-gray
-#let font-weight-title-slide-institute = "regular"
+#let font-size-title-slide-institution = 18pt
+#let font-color-title-slide-institution = bips-text-gray
+#let font-weight-title-slide-institution = "regular"
 
 #let font-size-title-slide-date = 16pt
 #let font-color-title-slide-date = bips-text-gray
@@ -120,6 +120,23 @@
 // Code styling
 #let font-scale-code-inline = 1
 #let font-scale-code-block = 0.8
+
+// Footnote entry text size, as a fraction of the base body size
+#let font-scale-footnote = 0.8
+
+// Bottom page margin, shared by theme.typ's config-page and slides.typ's
+// header config-page (both set explicit margins that must match).
+#let page-margin-bottom = 1.55cm
+
+// Deck progress bar (opt-in via bips-theme(progress-bar: true)).
+// The track reuses the same tint as the table header fill in theme.typ.
+#let progress-bar-height = 3pt
+#let progress-bar-fill = bips-blue
+#let progress-bar-track = bips-blue.lighten(85%)
+
+// Footer descent that lands the bar flush with the bottom page edge: the
+// bottom page margin less the bar's own height.
+#let progress-bar-descent = page-margin-bottom - progress-bar-height
 
 // List and enumeration spacing
 #let list-spacing = 0.6em

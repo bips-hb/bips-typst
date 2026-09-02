@@ -22,7 +22,15 @@
 // [Touying] enable-pdfpc records the notes into the exported sidecar. The deck
 // stays a normal 16:9 PDF (the proper input for pdfpc). Passing
 // `--input notes=true` additionally renders the notes beside each slide.
+// [Touying] config-info() sets the PDF metadata and feeds the title slide;
+// config-common() enables pdfpc export and presenter notes. Both config dicts
+// are forwarded to Touying and merged.
 #show: bips-theme.with(
+  config-info(
+    title: "Speaker Notes",
+    subtitle: "Presenter-only notes with Touying",
+    author: "BIPS",
+  ),
   config-common(
     enable-pdfpc: true,
     show-notes-on-second-screen: if sys.inputs.at("notes", default: "")
@@ -32,11 +40,7 @@
   ),
 )
 
-#title-slide(
-  title: "Speaker Notes",
-  subtitle: "Presenter-only notes with Touying",
-  author: "BIPS",
-)
+#title-slide()
 #speaker-note[A note attached to the title slide. It appears in the right-hand panel, never on the slide.]
 
 // [Touying] Attach a note by placing `#speaker-note[...]` right after the slide.

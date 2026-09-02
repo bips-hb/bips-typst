@@ -2,6 +2,24 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.5.0] - September 2026
+
+### Added
+
+- `footnote-scale` parameter on `bips-theme()` to size footnote text as a fraction of the base body size (default `0.8`, a small reduction from Typst's ~0.85 default). Scales with `base-size`; applies to all footnotes including `footcite`.
+- Citation helpers wrapping `cite()`: `#citet()` (textual "Author (Year)"), `#citep()` (parenthetical), `#sideref()` (small, right-aligned side citation), and `#footcite()` (footnote-area citation). natbib-style convenience for the LaTeX crowd.
+- `#callout()` shorthands `#callout-note()`, `#callout-tip()`, `#callout-warning()`, and `#callout-important()` for the corresponding callout types (each forwards `title:` and the body to `callout(type: ...)`).
+- `progress-bar` parameter on `bips-theme()` (default `false`) rendering a full-bleed BIPS-blue progress bar at the bottom page edge, filling as the deck advances. Shown only on counted content slides, so title, section, thanks, and uncounted `empty-slide`s stay clean. Override per slide with `base-slide(progress-bar: false)` (or `bips-slide(progress-bar: false)`); `progress-bar: true` is a no-op unless the slide is also counted (`count: true`).
+- Three annotated gallery decks: `typst-basics` (Typst syntax for Beamer refugees), `diagrams` (cetz + fletcher), and `dataviz` (gribouille). Each is a self-documenting deck showing the theme alongside the wider Typst ecosystem.
+
+### Changed
+
+- **Breaking:** raised the minimum supported Typst version to 0.15.0 (from 0.13.0). Typst ships as a self-contained static binary and does not backport fixes to superseded minors, so tracking the current release keeps the theme and its gallery dependencies on maintained versions. Update with your usual installer, or grab a binary from [the Typst releases page](https://github.com/typst/typst/releases).
+- Default `#callout()` (no `type:`) now renders as a neutral shaded box (light gray background, blue left accent, no icon) instead of mirroring the `note` styling.
+- **Breaking:** `title-slide()` parameters `institute`/`institutes`/`institute-size` renamed to `institution`/`institutions`/`institution-size`, matching Touying's `config-info(institution: ...)` key (removing the institute-vs-institution ambiguity). Rectify by renaming the arguments at the call site.
+- `institution` now defaults to the BIPS English name (`bips-en`) for the whole document, since the theme is institution-specific; `title-slide()` shows it with no setup. Override via `config-info(institution: ...)` (e.g. `bips-de`) or the `title-slide(institution: ...)` argument.
+
+
 ## 0.4.0
 
 ### Added
@@ -112,7 +130,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Gallery of example presentations
 - Test suite for validation
 
-[Unreleased]: https://github.com/bips-hb/bips-typst/compare/v0.3.0...HEAD
+[0.5.0]: https://github.com/bips-hb/bips-typst/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/bips-hb/bips-typst/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/bips-hb/bips-typst/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/bips-hb/bips-typst/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/bips-hb/bips-typst/compare/v0.1.0...v0.1.1

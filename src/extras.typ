@@ -102,13 +102,14 @@
 ///
 /// Example: #callout(type: "warning")[Content here]
 #let callout(
-  type: "note",
+  type: "default",
   title: none,
   icon: none,
   body,
 ) = {
   // Color schemes for different callout types
   let colors = (
+    default: (border: bips-blue, bg: luma(240), icon: bips-blue),
     note: (border: bips-blue, bg: bips-blue.lighten(90%), icon: bips-blue),
     tip: (border: bips-green, bg: bips-green.lighten(90%), icon: bips-green),
     warning: (
@@ -118,18 +119,19 @@
     ),
     important: (border: red, bg: red.lighten(90%), icon: red),
   )
-
   // Default icons for each type
   let icons = (
-    note: "📝",
-    tip: "💡",
-    warning: "⚠",
-    important: "❗",
-  )
+    default: none,
+    note: emoji.page.pencil,
+    tip: emoji.lightbulb,
+    warning: emoji.warning,
+    important: emoji.excl,
+  ) //
 
-  let color-scheme = colors.at(type, default: colors.note)
-  let default-icon = icons.at(type, default: icons.note)
+  let color-scheme = colors.at(type, default: colors.default)
+  let default-icon = icons.at(type, default: icons.default)
   let display-icon = pick-first(icon, default-icon)
+  //
 
   block(
     width: 100%,
@@ -146,10 +148,10 @@
         weight: "bold",
         fill: color-scheme.icon,
       )[
-        #if display-icon != none [#display-icon ]
+        #if display-icon != none [#display-icon ] #h(0.5em)
         #title
+        #linebreak()
       ]
-      v(0.3em)
       body
     } else {
       // Default: icon inline with content, no title
@@ -160,6 +162,55 @@
     }
   ]
 }
+
+
+/// Convenience wrapper: note callout
+#let callout-note(title: none, body) = callout(type: "note", title: title, body)
+
+/// Convenience wrapper: tip callout
+#let callout-tip(title: none, body) = callout(type: "tip", title: title, body)
+
+/// Convenience wrapper: warning callout
+#let callout-warning(title: none, body) = callout(
+  type: "warning",
+  title: title,
+  body,
+)
+
+/// Convenience wrapper: important callout
+#let callout-important(title: none, body) = callout(
+  type: "important",
+  title: title,
+  body,
+)
+
+// -------------------------------------------------------------------
+// Citations
+// -------------------------------------------------------------------
+
+/// Textual citation — "Author (Year)" (natbib \citet).
+/// Example: #citet(<knuth1984>)
+#let citet(label) = cite(label, form: "prose")
+
+/// Parenthetical citation — "(Author, Year)" (natbib \citep).
+/// The named twin of bare `@label` (which also uses form: "normal").
+/// Example: #citep(<knuth1984>)
+#let citep(label) = cite(label, form: "normal")
+
+/// A citation shrunk and pushed to the right edge — unobtrusive side
+/// attribution. `gap: 1fr` pushes to the far edge; `form` defaults to
+/// parenthetical (pass "prose" for "Author (Year)").
+/// Example: #sideref(<knuth1984>)   #sideref(<knuth1984>, form: "prose")
+#let sideref(label, form: "normal", size: font-em-tiny * 1em, gap: 1fr) = {
+  h(gap)
+  text(size: size)[#cite(label, form: form)]
+}
+
+/// Footnote-area citation — numeric superscript inline, the citation in the
+/// footnote. Defaults to prose form (parentheses read poorly after a
+/// superscript).
+/// Example: text#footcite(<knuth1984>)
+#let footcite(label, form: "prose") = footnote(cite(label, form: form))
 
 // -------------------------------------------------------------------
 // Miscellaneous Helpers

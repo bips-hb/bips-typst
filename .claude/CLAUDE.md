@@ -8,13 +8,67 @@ BIPS Typst presentation template for 16:9 institutional presentations using Typs
 
 ## Development Commands
 
+### Toolchain
+
+A fresh sandbox ships **none** of these except `just`. Before running a task that
+needs one, check with `command -v` and install what is missing. Do not skip a
+verification step because its tool is absent, and never report tests, formatting,
+or a release gate as passing when the tool never ran.
+
+| Task | Needs |
+|---|---|
+| compile anything, `just all`, `just compile-check` | `typst` |
+| `just test`, `tt run` | `tt` (tytanic) |
+| `just format`, `just format-check` | `typstyle` |
+| `just check-deps` | `curl`, `jq` (usually already present) |
+| `just install`, `just publish`, release tasks | `tyler` (runs under node; install via bun) |
+| `just release-check` | all of the above |
+
+Install (aarch64 Linux — swap the target triple on other hosts):
+
+```sh
+# typst: pin to the typst.toml floor so floor-incompatible features fail here.
+# For compat checks install the latest as a second binary (e.g. /usr/local/bin/typst-latest).
+curl -sSL -o /tmp/t.tar.xz https://github.com/typst/typst/releases/download/v0.15.0/typst-aarch64-unknown-linux-musl.tar.xz
+tar xf /tmp/t.tar.xz -C /tmp && sudo install -m755 /tmp/typst-aarch64-unknown-linux-musl/typst /usr/local/bin/typst
+
+# typstyle: gnu build; there is no musl asset
+curl -sSL -o /tmp/typstyle https://github.com/Enter-tainer/typstyle/releases/latest/download/typstyle-aarch64-unknown-linux-gnu
+sudo install -m755 /tmp/typstyle /usr/local/bin/typstyle
+
+# tytanic — note the binary is `tt` inside a versioned directory, like typst's
+curl -sSL -o /tmp/tt.tar.xz https://github.com/tingerrr/tytanic/releases/latest/download/tytanic-aarch64-unknown-linux-musl.tar.xz
+tar xf /tmp/tt.tar.xz -C /tmp && sudo install -m755 /tmp/tytanic-aarch64-unknown-linux-musl/tt /usr/local/bin/tt
+
+# tyler (release/publish only)
+bun install -g @mkpoli/tyler@latest && export PATH="$HOME/.bun/bin:$PATH"
+```
+
+CI installs tytanic and typstyle with `cargo install --locked`; sandboxes usually
+have no cargo, hence the release binaries above.
+
+Sandbox caveats:
+- **`pdfinfo` will not install** (apt fails). For page counts and pixel checks,
+  render PNGs instead: `typst compile --root . f.typ '/tmp/p-{n}.png'`, then count
+  the files. `pip install --break-system-packages pillow` enables pixel diffing
+  (plain `pip install` fails on PEP 668).
+- **Font warnings are expected.** Fira Sans, Fira Mono and Noto Sans are absent, so
+  every compile emits ~3 `unknown font family` warnings. Judge success by exit code
+  and the absence of `error:` lines, never by warning count.
+- **Git remotes are SSH with no key**, so push and fetch fail. Commit locally and
+  leave pushing to the human. Same for the Obsidian vault.
+- Typst refuses files outside `--root`, so scratch `.typ` files must live in the
+  repo (use the gitignored `debug/`), not `/tmp`.
+
 ### Package Management
 - `just install` - Install/refresh the local package for development (run after cloning or modifying the theme). Overwrites any existing same-version install, so no separate uninstall step is needed (verified with tyler 0.10.3).
 
 ### Build and Test
-- `just all` - Compile all 6 gallery demos (and the speaker-notes pdfpc sidecar + inline-notes preview)
-- `just test` - Run tytanic test suite (13 compile-only feature tests + 1 template test)
+- `just all` - Compile all 9 gallery demos (and the speaker-notes pdfpc sidecar + inline-notes preview)
+- `just test` - Run tytanic test suite (compile-only feature tests + a template test)
 - `just test-verbose` - Run tests with verbose output
+- `just compile-check` - Compile all gallery decks **and** all tests with whatever `typst` is on `PATH`. This is the only version-compatibility check: `just test` runs tytanic, which embeds its own Typst and therefore pins one version regardless of what is installed. CI runs this across the version matrix; run it locally against another Typst by putting that binary first on `PATH`.
+- `just check-deps` - Compare every `@preview/…` import against the Typst Universe index. Floor-aware: the target is the newest release whose own `compiler` requirement still fits our `typst.toml` floor, so a major that needs a newer Typst is reported as held back rather than flagged stale. Shipped deps fail the gate; gallery/test deps warn.
 - `just clean` - Remove all generated PDFs
 - `typst compile file.typ` - Compile single file
 - `typst watch file.typ` - Live preview during editing
@@ -29,7 +83,7 @@ BIPS Typst presentation template for 16:9 institutional presentations using Typs
 ### Validation Tools
 - `ferrules` - Convert PDF to JSON for structure analysis
 - `diff-pdf` or `diff-pdf-visually` - Visual comparison of PDF outputs
-- `pdfinfo file.pdf` - Check page counts
+- `pdfinfo file.pdf` - Check page counts (unavailable in the sandbox; see Toolchain for the PNG-rendering substitute)
 
 ## Architecture
 
@@ -54,17 +108,18 @@ Dependency DAG (all under `src/`): `config` → `helpers` → `slides`; `extras`
 - codetastic:0.2.2 (QR code generation for thanks slides)
 
 ### Slide Functions
-- `base-slide(title, subtitle, show-logo, page-number, show-line, count)` - Flexible base content slide with every BIPS chrome component independently toggleable; `bips-slide` and `empty-slide` are presets over it
+- `base-slide(title, subtitle, show-logo, page-number, show-line, count, progress-bar)` - Flexible base content slide with every BIPS chrome component independently toggleable; `bips-slide` and `empty-slide` are presets over it
 - `bips-slide(title, subtitle)` - Content slide preset: logo on, page-number on, line on, counted. Public signature unchanged from pre-refactor
 - `empty-slide[]` - Minimal slide preset: logo off, page-number off, line off, uncounted by default (set `count: true` or `show-logo: true` etc. to selectively add chrome)
-- `title-slide()` - Opening slide with multi-author/institute support
+- `title-slide()` - Opening slide with multi-author/institution support (`institution:`/`institutions:`; matches `config-info`'s `institution` key). Reads `title`/`subtitle`/`author`/`date`/`institution` from `config-info()` when not passed; `institution` defaults to `bips-en`
 - `section-slide()` - Section dividers with configurable logo
 - `thanks-slide()` - Contact slide with optional QR code
 - `bibliography-slide()` - Reference list
 
 ### Layout and Utility Functions
 - `two-columns[][]`, `three-columns[][][]` - Multi-column helpers (grid-based)
-- `callout(type)` - Styled blocks: note, tip, warning, important
+- `citet()`, `citep()`, `sideref()`, `footcite()` - Citation helpers over `cite()`: textual, parenthetical, side-aligned, and footnote-area citations (label-based)
+- `callout(type)` - Styled blocks: note, tip, warning, important; no `type:` (default) renders a neutral shaded box. Shorthands: `callout-note`, `callout-tip`, `callout-warning`, `callout-important`
 - `blue[]`, `orange[]`, `green[]`, `gray[]` - Color helpers
 - `small[]`, `tiny[]` - Text size utilities (scale with `base-size`)
 - `inst()` - Author affiliation superscripts
@@ -105,6 +160,8 @@ The `bips-theme()` function accepts size override parameters (`base-size`, `slid
 The `small`/`tiny`/`large`/`huge` text helpers are em-relative (not fixed pt), so they scale automatically when `base-size` changes. The `small-size`, `tiny-size`, `large-size`, and `huge-size` parameters on `bips-theme()` were removed in 0.4.0; use `base-size` to scale all helpers together, or wrap content in an explicit `text(size: ...)`.
 
 **Heading sizes** use em-based defaults in global `show heading` rules inside `bips-theme()`, scaling proportionally with `base-size`. Explicit pt overrides via `heading-*-size` take precedence.
+
+**`footnote-scale`** (default `0.8`) sizes footnote entry text as `footnote-scale * effective-font-size-base` via `show footnote.entry: set text(size: ...)`. It multiplies the base *length* (not `1em`) on purpose: inside `footnote.entry`, `1em` is Typst's already-reduced footnote size (~0.85em), so `* 1em` would compound; multiplying the base length gives predictable "fraction of base" semantics (and so does not stack with the built-in reduction). Affects all footnotes, including `footcite` output.
 
 ### Slide Structure Patterns
 
@@ -174,6 +231,39 @@ Understanding the render order is critical for correct counter behavior:
 - BIPS color palette: blue (primary), orange, green, gray
 - Math notation and academic formatting prioritized
 
+## Development Workflow (branch model)
+
+**`main` is ALWAYS the currently published release.** It matches
+`@preview/bypst:<version>` on Typst Universe exactly — same code, same README,
+same version number. Never develop on `main`.
+
+**All development happens on `dev`** (and short-lived feature branches off `dev`).
+`dev` represents the *upcoming* release: its `typst.toml` version and all
+`bypst:` import refs are already set to the next version (e.g. `0.5.0`), and its
+README/docs document the upcoming features.
+
+**README convention:** the README always documents the *current branch as if it
+were already published* — examples import `@preview/bypst:<version>` (never
+`@local`), and freely document the branch's features. The only `@local` mention
+is in the "Local development" install instructions. This means: on `dev` the
+README describes the next release using the next version number; when `dev`
+merges to `main` at release time, `main`'s README is already correct. No
+per-change "is this release-coupled?" juggling — just keep `dev`'s docs current
+and bump the version number.
+
+**Version:** set the whole-repo version with `just set-version X.Y.Z` (rewrites
+`typst.toml` + every `bypst:` import in README/gallery-README/templates). Do this
+on `dev` when development for a new version begins.
+
+**At release:** finalize `dev` → **publish to Typst from `dev`** → wait for the
+`typst/packages` PR to merge → **squash-merge `dev` → `main`** (one commit per
+release) → tag `main` → **create a fresh `dev` from `main`** for the next cycle
+(keeping the old `dev` as the granular-history archive). See the checklist below.
+`main` moves only after Typst has accepted the package, so it never claims to be
+a release that is still under review. After release, `main` == the new published
+version again. Squashing is safe here precisely because `dev` is recreated from
+`main` each cycle, so no long-lived branch diverges from the squash commit.
+
 ## Publishing to Typst Universe
 
 **Packaging guidelines**: https://github.com/typst/packages/blob/main/docs/README.md
@@ -188,22 +278,35 @@ Before release, verify compliance with the Typst packaging guidelines:
   `tyler build . --no-bump --no-check --outdir /tmp/bypst-check && find /tmp/bypst-check -type f`
 - Package compiles without errors when imported via absolute path
 
-Release checklist (publish to Typst first, then tag + GitHub release):
-1. Bump version in `typst.toml`
-2. Update all versioned `@preview/bypst:` and `@local/bypst:` imports (see Version references below)
-3. Move `CHANGELOG.md` `[Unreleased]` items under a new `[X.Y.Z]` heading and update the compare links at the bottom
-4. Verify: `just test` (14/14), `just format-check`, and compile the gallery (`just all`)
-5. Commit the release changes
-6. **Publish to Typst first**: `tyler build . --no-bump --publish` (needs GitHub auth; `--no-bump` keeps the version set in step 1). This opens/updates the `typst/packages` PR.
-7. Wait for the `typst/packages` PR checks. If `typst-package-check` flags anything (e.g. an outdated dep-version warning), fix it, commit, and re-run step 6 (tyler force-recreates the `bypst-<version>` branch, updating the same PR).
-8. **Only once the published commit is final**: tag it and cut the GitHub release — `git tag -a vX.Y.Z -m "Release vX.Y.Z" && git push origin vX.Y.Z`, then `gh release create vX.Y.Z`.
+Release checklist (all version/import refs are already at the target version on
+`dev` via `just set-version`). **Order: publish from `dev` → wait for the
+`typst/packages` PR to merge → only then squash-merge to `main` → tag.**
+1. On `dev`: confirm the version is set (`grep '^version' typst.toml`; `just set-version X.Y.Z` if not)
+2. On `dev`: the `CHANGELOG.md` section is already named `## [X.Y.Z]` (dev uses the version heading, not `[Unreleased]`). Add the release date to it; after tagging, update its compare link from `v<prev>...HEAD` to `v<prev>...vX.Y.Z`
+3. Verify on `dev`: `just release-check` (runs `just test`, `just format-check`, `just check-deps`, `just all`). `check-deps` compares every `@preview/…` import against the Typst Universe index: shipped deps (`bypst.typ`, `src/`, `template/`) **fail** the gate when stale, because `typst-package-check` flags them on the release PR; gallery/test deps only warn, since they never enter the bundle. Run it standalone with `just check-deps`.
+4. On `dev`: inspect the bundle before shipping it — `tyler build . --no-bump --no-check --outdir /tmp/bypst-check && find /tmp/bypst-check -type f`. Anything gitignored-but-on-disk can leak in; see the packaging gotcha above.
+5. **Publish from `dev`**: `tyler build . --no-bump --publish` (needs GitHub auth; `--no-bump` keeps the set version). Opens/updates the `typst/packages` PR.
+6. Wait for the `typst/packages` PR checks. If `typst-package-check` flags anything (e.g. an outdated dep-version warning), fix it on `dev` as an ordinary commit and re-run step 5 (tyler force-recreates the `bypst-<version>` branch, updating the same PR). No amending, because no release commit exists yet.
+7. **Wait for the `typst/packages` PR to actually merge.** Nothing below happens before it does.
+8. **Now squash-merge `dev` → `main`** so `main` reads as one commit per release: `git switch main && git merge --squash dev && git commit -m "Release vX.Y.Z"`. (The recreate-dev-from-main step below means there is no long-lived `dev` to diverge, so the usual squash-divergence problem does not apply.)
+9. Tag `main` and cut the GitHub release — `git tag -a vX.Y.Z -m "Release vX.Y.Z" && git push origin vX.Y.Z`, then `gh release create vX.Y.Z`.
+10. **Create a fresh `dev` from `main`** (the squashed release is the new base; keep the old `dev` branch as the granular-history archive, do not hard-delete it): `git switch -c dev main && git push -u origin dev`.
+11. On the new `dev`, start the next cycle: `just set-version <next>`, add a fresh `## [<next>]` CHANGELOG section + a `[<next>]: …compare/v<this>...HEAD` link at the bottom.
 
-Tagging last avoids re-tagging HEAD every time a publish round-trip needs another commit. The `typst-package-check` "failure" with 0 errors / N warnings is non-blocking (warnings are suggestions; a human still reviews), but dep-version warnings are worth clearing before the final tag.
+**Why publish before merging to `main`:** `main` is defined as "exactly the
+currently published release". If `main` were cut first, it would claim to be the
+release while the `typst/packages` PR was still unreviewed — and any review fix
+would mean amending an already-published-looking release commit. Publishing from
+`dev` keeps `main` truthful: it only moves once Typst has actually accepted the
+package, and review fixes are ordinary `dev` commits. The squash means `main`'s
+content still matches the published bundle exactly.
+
+Tagging last also avoids re-tagging HEAD every time a publish round-trip needs another commit. The `typst-package-check` "failure" with 0 errors / N warnings is non-blocking (warnings are suggestions; a human still reviews), but dep-version warnings are worth clearing before the final tag.
 
 **tyler version:** use tyler >= 0.10.0 (0.10.3 verified). tyler runs under node (`#!/usr/bin/env node`), so the active node version matters. *Historical:* tyler 0.7.2 had a template-thumbnail check crash (`TypeError: The "list" argument must be ... ArrayBuffer ...`) on `check`/`build`/`publish`, fixed in 0.10.x; if you ever hit it on an old tyler, upgrade, or pass `--no-check` to skip local validation (the `typst/packages` CI re-validates on the PR).
 
 **Packaging gotcha:** glob `**` does not match dotfiles, and a bare `.DS_Store` pattern only matches the top level. Keep both `.DS_Store` and `**/.DS_Store` in `[tool.tyler] ignore` so nested `.DS_Store` files stay out of the bundle. Anything gitignored but present on disk (e.g. `presentations/`) must also be listed in `[tool.tyler] ignore` and `[package] exclude`, or it ships.
 
-**Version references**: Gallery and test files use relative/root imports (`#import "../bypst.typ": *` or `/bypst.typ`), so they don't need updating. Only these files contain versioned imports to bump: `typst.toml`, `README.md` (3 places), `gallery/README.md`, `template/basic.typ`, `template/complete.typ`. Use `grep -rn "bypst:0" .` to find them.
+**Version references**: bump everything with `just set-version X.Y.Z` (rewrites `typst.toml` version + every `bypst:` import in `README.md`, `gallery/README.md`, `template/basic.typ`, `template/complete.typ`). Gallery and test files use relative/root imports (`#import "../bypst.typ": *` or `/bypst.typ`), so they are version-agnostic and untouched. Verify with `grep -rn "bypst:" README.md gallery/README.md template/`.
 
 **Note**: Gallery/test files use `--root .` in the justfile to allow `/bypst.typ` imports. For standalone compilation outside the justfile, use `typst compile --root . gallery/foo.typ`.

@@ -38,6 +38,7 @@
   page-number: true,
   show-line: true,
   count: true,
+  progress-bar: auto,
   content-align: none,
   title-size: none,
   subtitle-size: none,
@@ -86,12 +87,34 @@
     v(body-gap)
   }
 
+  // `auto` follows the theme-level flag; an explicit bool on the slide wins.
+  // The bar is tied to `count`, so uncounted slides never show a stale ratio.
+  let show-progress = if progress-bar == auto {
+    self.store.progress-bar
+  } else {
+    progress-bar
+  }
+
+  // Plain content (not a function): utils.call-or-display accepts either, and
+  // this avoids a `self` param that would shadow the enclosing one unused.
+  let progress-footer = block(
+    width: 100%,
+    height: progress-bar-height,
+    _progress-bar(),
+  )
+
   let chrome-config = utils.merge-dicts(
     config-common(freeze-slide-counter: not count),
     config-page(background: bips-background(
       logo: self.store.logo,
       show-logo: show-logo,
     )),
+    if show-progress and count {
+      config-page(
+        footer: progress-footer,
+        footer-descent: progress-bar-descent,
+      )
+    } else { (:) },
   )
 
   let config = if has-header {
@@ -99,7 +122,12 @@
       chrome-config,
       config-common(zero-margin-header: false),
       config-page(
-        margin: (top: top-margin, bottom: 1.55cm, left: 1.55cm, right: 1.75cm),
+        margin: (
+          top: top-margin,
+          bottom: page-margin-bottom,
+          left: 1.55cm,
+          right: 1.75cm,
+        ),
         header-ascent: 0pt,
         header: header,
       ),
@@ -191,14 +219,14 @@
   subtitle: none,
   author: none,
   authors: none,
-  institute: none,
-  institutes: none,
+  institution: none,
+  institutions: none,
   date: none,
   occasion: none,
   title-size: none,
   subtitle-size: none,
   author-size: none,
-  institute-size: none,
+  institution-size: none,
   date-size: none,
   ..args,
 ) = touying-slide-wrapper(self => {
@@ -208,7 +236,10 @@
   let subtitle = pick-first(subtitle, info.at("subtitle", default: none))
   let author = pick-first(author, info.at("author", default: none))
   let date = pick-first(date, info.at("date", default: none))
-  let institute = pick-first(institute, info.at("institution", default: none))
+  let institution = pick-first(institution, info.at(
+    "institution",
+    default: none,
+  ))
 
   let body = {
     v(1fr)
@@ -249,23 +280,23 @@
 
     v(1fr)
 
-    if institutes != none {
+    if institutions != none {
       block(text(
-        size: pick-first(institute-size, font-size-title-slide-institute),
-        weight: font-weight-title-slide-institute,
-        fill: font-color-title-slide-institute,
+        size: pick-first(institution-size, font-size-title-slide-institution),
+        weight: font-weight-title-slide-institution,
+        fill: font-color-title-slide-institution,
       )[
-        #for (i, inst) in institutes.enumerate() [
+        #for (i, inst) in institutions.enumerate() [
           #super[#(i + 1)] #inst
-          #if i < institutes.len() - 1 [\ ]
+          #if i < institutions.len() - 1 [\ ]
         ]
       ])
-    } else if institute != none {
+    } else if institution != none {
       block(text(
-        size: pick-first(institute-size, font-size-title-slide-institute),
-        weight: font-weight-title-slide-institute,
-        fill: font-color-title-slide-institute,
-      )[#institute])
+        size: pick-first(institution-size, font-size-title-slide-institution),
+        weight: font-weight-title-slide-institution,
+        fill: font-color-title-slide-institution,
+      )[#institution])
     }
 
     v(1fr)
