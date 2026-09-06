@@ -410,7 +410,7 @@
 ///    ]
 ///    ```
 #let bibliography-slide(
-  title: "References",
+  title: auto,
   text-size: none,
   content-align: horizon,
   bib: none, // `read("references.bib")` (string or bytes); builds the bibliography internally
@@ -419,6 +419,7 @@
   bib-title: none, // bibliography()'s own heading; off by default (slide already has a title)
   ..body, // or pass pre-built bibliography content as a trailing block
 ) = {
+  let title = if title == auto { _localized("references") } else { title }
   let refs = if bib != none {
     // read() returns a string by default; bibliography() needs bytes (a plain
     // string would be read as a path). bytes() preserves UTF-8 content.
@@ -441,13 +442,31 @@
 // Thanks Slide
 // -------------------------------------------------------------------
 
+/// Closing slide: a thank-you line, the website (or a QR code), and the
+/// institutional contact block. Every string defaults to `auto`, which resolves
+/// against the deck's language — see `theme-strings` in config.typ. Override any
+/// of them for a different department, office, or wording.
 #let thanks-slide(
-  thanks-text: "Thank you for your attention!",
+  thanks-text: auto,
+  contact-title: auto,
+  institution: auto,
+  address: auto,
+  website: bips-website,
   contact-author: "",
   email: "",
   qr-url: none,
   ..args,
 ) = touying-slide-wrapper(self => {
+  let thanks-text = if thanks-text == auto { _localized("thanks") } else {
+    thanks-text
+  }
+  let contact-title = if contact-title == auto { _localized("contact") } else {
+    contact-title
+  }
+  let institution = if institution == auto { _localized("institution") } else {
+    institution
+  }
+  let address = if address == auto { _localized("address") } else { address }
   let o = _slide-overrides(args)
   let logo = self.store.logo
   touying-slide(
@@ -484,9 +503,7 @@
               size: font-size-thanks-slide-website,
               weight: font-weight-thanks-slide-website,
               fill: font-color-thanks-slide-website,
-            )[
-              www.leibniz-bips.de
-            ]
+            )[#website]
           ]
         ]
       ],
@@ -502,14 +519,11 @@
                 weight: font-weight-thanks-slide-contact,
                 fill: font-color-thanks-slide-contact,
               )[
-                *Contact*
+                *#contact-title*
 
                 #text(fill: font-color-thanks-slide-website)[#contact-author]\
-                Leibniz Institute for Prevention Research\
-                and Epidemiology -- BIPS\
-                Achterstraße 30\
-                28359 Bremen\
-                Germany
+                #institution\
+                #address
 
                 #if email != "" [
                   #text(fill: font-color-thanks-slide-website)[#email]

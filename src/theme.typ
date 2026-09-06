@@ -31,6 +31,11 @@
   // Title alignment inside the title area box (e.g. left, center, right)
   // Applies to the horizontal alignment of slide titles/subtitles.
   title-align: left,
+  /// Document language. `auto` follows whatever `#set text(lang: ...)` the deck
+  /// sets (or Typst's "en" default). A value here sets `text.lang` itself, so
+  /// the theme's own strings and Typst's built-in ones (figure supplements,
+  /// smart quotes, hyphenation, bibliography terms) never disagree.
+  lang: auto,
   // Font family overrides (string or array of strings with fallbacks)
   font: none,
   code-font: none,
@@ -88,6 +93,7 @@
     font: effective-font,
     size: effective-font-size-base,
     fill: font-color-base,
+    ..if lang == auto { (:) } else { (lang: lang) },
   )
   show math.equation: set text(font: effective-math-font) // Heading styles use em-based defaults so they scale proportionally with base-size.
   // Explicit pt overrides take precedence over the em-based defaults.
@@ -127,10 +133,28 @@
     ),
     inset: 0pt,
     it,
-  ) // List styling with configurable spacing
+  )
+  // Block quotes get a thin left rule; callouts own the heavier 4pt rule plus
+  // fill, so the two stay tellable apart.
+  show quote.where(block: true): it => block(
+    width: 100%,
+    stroke: (left: quote-rule-width + quote-rule-color),
+    inset: (left: quote-inset, top: 0.3em, bottom: 0.3em),
+    below: 0.8em,
+  )[
+    #it.body
+    #if it.attribution != none {
+      set text(size: font-em-small * 1em, fill: quote-attribution-color)
+      block(above: 0.5em)[— #it.attribution]
+    }
+  ]
+  // Captions scale with the surrounding text, so `#small[]` shrinks them too.
+  show figure.caption: set text(size: caption-scale * 1em)
+  // List styling with configurable spacing
   // Spacing uses `set` (not `show`) so users can override with local `#set list(spacing: ...)`
   set list(spacing: list-spacing)
   set enum(spacing: enum-spacing)
+  set terms(spacing: terms-spacing)
   // top-edge/bottom-edge ensure consistent line metrics so bullet markers
   // stay aligned with text even when emojis or other tall glyphs are present.
   // Tighter par leading compensates for the taller ascender line height on line breaks within items.
@@ -144,6 +168,7 @@
   show list: it => {
     show list: set list(spacing: 0.4em)
     show enum: set enum(spacing: 0.4em)
+    show terms: set terms(spacing: 0.4em)
     it
   }
   show enum: set text(
@@ -160,6 +185,21 @@
   show enum: it => {
     show enum: set enum(spacing: 0.4em)
     show list: set list(spacing: 0.4em)
+    show terms: set terms(spacing: 0.4em)
+    it
+  }
+  // Term lists match list/enum metrics: without the taller line box, markup
+  // terms sit ~0.5em tighter per row than bullets at the same `spacing`.
+  show terms: set text(
+    fill: font-color-base,
+    top-edge: "ascender",
+    bottom-edge: "descender",
+  )
+  show terms: set par(leading: 0.4em)
+  show terms: it => {
+    show terms: set terms(spacing: 0.4em)
+    show list: set list(spacing: 0.4em)
+    show enum: set enum(spacing: 0.4em)
     it
   } // Code styling - Fira Mono pairs with Fira Sans for consistent metrics
   show raw: set text(font: effective-code-font)
@@ -177,10 +217,10 @@
   // config-store(...) publishes sizes/align/logo into self.store for the slides.
   touying-slides(
     config-common(handout: effective-handout),
-    // Default the document institution to the BIPS English name, since this is
-    // an institution-specific theme. User config-info(institution: ...) (or
-    // bips-de) deep-merges over this via ..args.pos() below.
-    config-info(institution: bips-en),
+    // Default the document institution to the BIPS name in the deck's language,
+    // since this is an institution-specific theme. User config-info(institution:
+    // ...) deep-merges over this via ..args.pos() below.
+    config-info(institution: _localized("institution")),
     config-store(
       slide-title: pick-first(slide-title-size, font-size-slide-title),
       slide-title-only: font-size-slide-title-only,

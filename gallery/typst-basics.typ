@@ -25,7 +25,8 @@
 
 #title-slide()
 
-// [Typst] Block quotes carry an attribution.
+// [Typst] Block quotes carry an attribution. [BIPS] The theme gives them a
+// thin left rule and sets the attribution small and blue.
 #bips-slide(title: "Quotes")[
   #quote(block: true, attribution: [Donald Knuth])[
     The best programs are written so that computing machines can perform them
@@ -36,6 +37,7 @@
 ]
 
 // [Typst] Term lists: "/ Term: definition" — like LaTeX description lists.
+// [BIPS] Spaced to match bullet and numbered lists, so mixing them reads evenly.
 #bips-slide(title: "Term lists")[
   / Estimand: the quantity a study aims to estimate.
   / Estimator: a rule for computing an estimate from data.

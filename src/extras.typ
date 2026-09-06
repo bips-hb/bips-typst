@@ -184,6 +184,47 @@
   body,
 )
 
+/// Titled content box — a shaded panel under a solid title bar, in the spirit
+/// of a Beamer theorem block. Use it to frame a definition, a result, or an
+/// aside that deserves more weight than a `callout` and no icon.
+///
+/// `fill` defaults to a light tint of `color`. The title bar text is white, so
+/// pass a dark `color` (or override the whole bar via `title-color`).
+///
+/// Example: #card(title: "Definition")[The estimand is ...]
+/// With options: #card(title: "Result", color: bips-green)[...]
+#let card(
+  title: none,
+  color: bips-blue,
+  fill: auto,
+  title-color: white,
+  radius: 4pt,
+  width: 100%,
+  inset: (x: 0.8em, y: 0.6em),
+  body,
+) = {
+  let body-fill = if fill == auto { color.lighten(92%) } else { fill }
+  block(
+    width: width,
+    radius: radius,
+    clip: true,
+    fill: body-fill,
+    below: 0.8em,
+  )[
+    #if title != none {
+      block(
+        width: 100%,
+        fill: color,
+        inset: (x: inset.x, y: 0.4em),
+        above: 0pt,
+        below: 0pt,
+        text(fill: title-color, weight: "bold")[#title],
+      )
+    }
+    #block(width: 100%, inset: inset, above: 0pt, below: 0pt, body)
+  ]
+}
+
 // -------------------------------------------------------------------
 // Citations
 // -------------------------------------------------------------------
@@ -226,8 +267,10 @@
 #let compact(spacing: 0.4em, leading: 0.4em, body) = {
   show list: set list(spacing: spacing)
   show enum: set enum(spacing: spacing)
+  show terms: set terms(spacing: spacing)
   set par(leading: leading)
   show list: set text(top-edge: "cap-height", bottom-edge: "baseline")
+  show terms: set text(top-edge: "cap-height", bottom-edge: "baseline")
   // Tabular figures keep the enum marker gutter fixed; see the main `show enum`
   // rule above for why (proportional digits shift the marker under #pause).
   show enum: set text(

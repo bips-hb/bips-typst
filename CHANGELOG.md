@@ -4,6 +4,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [0.6.0]
 
+### Added
+
+- `lang` parameter on `bips-theme()` (default `auto`) plus German translations of every string the theme renders itself: the thank-you line, the contact block heading, the references slide title, and the institution name. With `auto` the theme follows the document's `text.lang`, so `#set text(lang: "de")` alone now yields a fully German deck; passing `lang:` explicitly sets `text.lang` too, so the theme's strings and Typst's built-in ones (figure supplements, quotation marks, hyphenation, bibliography terms) can never disagree. Unsupported languages fall back to English.
+- `thanks-slide()` gained `contact-title`, `institution`, `address` and `website` parameters. The contact block was previously hardcoded to BIPS's English name and Bremen address with no way to change it; all four now default to the language-appropriate BIPS values.
+- `gallery/german.typ` — a German-language deck showing that one `#set text(lang: "de")` localizes Typst's output and the theme's chrome together.
+- `#card()` — a titled content box: a solid title bar over a shaded body, in the spirit of a Beamer theorem block. For framing a definition, a result, or an aside that wants more weight than a `#callout()` and no icon. `color:` sets the bar and, unless `fill:` overrides it, a light tint of the same color for the body; `title-color:`, `radius:`, `width:` and `inset:` are available for the rest. Without `title:` it degrades to a plain shaded panel.
+
 ### Changed
 
 - Body text font fallback is now Arial, then DejaVu Sans (was Noto Sans), so decks without Fira Sans render in a sans-serif font on Windows, macOS and Linux instead of falling through to Typst's built-in serif.
@@ -11,6 +18,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - **Touying 0.7.4 → 0.8.0.** No API changes in bypst; every slide type, gallery deck, and test compiles and renders identically. Typst floor is unchanged (0.15.0 — Touying 0.8.0 requires exactly that).
 - **Breaking (Touying, affects your decks):** a `#pause` following `#uncover`/`#only`/`#alternatives` no longer skips the subslides those reserve. `#uncover("2")[..] one #pause two` now produces 2 subslides, not 3. Add an explicit `#pause` (or a `#waypoint`) where you relied on the old snap. No bypst slide type or gallery deck depended on it.
+- Term lists (`/ Term: definition`) now use the same line metrics and item spacing as bullet and numbered lists. Previously they inherited Typst defaults and rendered roughly half an em tighter per row than the surrounding lists. `#compact[]` and nesting inside a list/enum tighten them alongside the other list types.
+- Block quotes (`#quote(block: true)`) now carry a thin left rule in the same light blue as table borders, with the attribution set small and blue below. Typst's default renders a block quote flush left with no marker, so it read as ordinary body text. `#callout()` keeps the heavier 4pt rule plus fill, so the two stay tellable apart. Inline quotes are untouched.
+- Figure captions are set at `caption-scale` (0.8) of the surrounding text size instead of full body size. Relative, so `#small[]` and a changed `base-size` both carry through.
 
 ### Fixed
 
@@ -32,7 +42,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Default `#callout()` (no `type:`) now renders as a neutral shaded box (light gray background, blue left accent, no icon) instead of mirroring the `note` styling.
 - **Breaking:** `title-slide()` parameters `institute`/`institutes`/`institute-size` renamed to `institution`/`institutions`/`institution-size`, matching Touying's `config-info(institution: ...)` key (removing the institute-vs-institution ambiguity). Rectify by renaming the arguments at the call site.
 - `institution` now defaults to the BIPS English name (`bips-en`) for the whole document, since the theme is institution-specific; `title-slide()` shows it with no setup. Override via `config-info(institution: ...)` (e.g. `bips-de`) or the `title-slide(institution: ...)` argument.
-
 
 ## 0.4.0
 

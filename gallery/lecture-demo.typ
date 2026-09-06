@@ -124,16 +124,17 @@
   7. *Model refinement*: Improve if necessary
   8. *Interpretation*: Draw conclusions
 
-  #callout(type: "tip")[
-    "All models are wrong, but some are useful." --- George Box
+  #quote(block: true, attribution: [George Box])[
+    All models are wrong, but some are useful.
   ]
 ]
 
 #section-slide("Linear Regression Foundations")
 
 #bips-slide(title: "Simple Linear Regression")[
-  === Mathematical Form
-  $ y_i = beta_0 + beta_1 x_i + epsilon_i $
+  #card(title: "Model")[
+    $ y_i = beta_0 + beta_1 x_i + epsilon_i $
+  ]
 
   #two-columns(
     [
@@ -285,7 +286,7 @@
     - No multicollinearity
   ][
     #align(horizon)[
-      #callout(type: "note")[
+      #card(title: "Requirement")[
         $bold(X)^top bold(X)$ must be invertible.
       ]
     ]
@@ -463,8 +464,9 @@
   === Concept
   Effect of one variable depends on level of another variable
 
-  === Mathematical Form
-  $ y = beta_0 + beta_1 x_1 + beta_2 x_2 + beta_3 x_1 x_2 + epsilon $
+  #card(title: "Model")[
+    $ y = beta_0 + beta_1 x_1 + beta_2 x_2 + beta_3 x_1 x_2 + epsilon $
+  ]
 
   === Interpretation
   - $beta_1$: Effect of $x_1$ when $x_2 = 0$

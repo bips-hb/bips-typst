@@ -142,6 +142,39 @@
 // List and enumeration spacing
 #let list-spacing = 0.6em
 #let enum-spacing = 0.6em
+#let terms-spacing = 0.6em
+
+#let bips-website = "www.leibniz-bips.de"
+
+// Chrome strings the theme renders itself, keyed by `text.lang`. Anything
+// missing — an absent language, an absent key — falls back to the English
+// entry, so a deck in an unsupported language still reads sensibly.
+#let theme-strings = (
+  en: (
+    thanks: "Thank you for your attention!",
+    contact: "Contact",
+    references: "References",
+    institution: bips-en,
+    address: [Achterstraße 30\ 28359 Bremen\ Germany],
+  ),
+  de: (
+    thanks: "Vielen Dank für Ihre Aufmerksamkeit!",
+    contact: "Kontakt",
+    references: "Literatur",
+    institution: bips-de,
+    address: [Achterstraße 30\ 28359 Bremen\ Deutschland],
+  ),
+)
+
+// Block quote styling. A thinner, lighter rule than `callout`'s 4pt accent,
+// and no fill, so a quote never reads as a callout.
+#let quote-rule-width = 2pt
+#let quote-rule-color = bips-blue.lighten(50%)
+#let quote-inset = 1em
+#let quote-attribution-color = bips-blue
+
+// Figure caption size, as a fraction of the surrounding text size.
+#let caption-scale = 0.8
 
 // Emphasis and strong text styling
 #let font-color-emphasis = bips-blue

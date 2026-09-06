@@ -103,6 +103,27 @@
   - Footnotes work naturally#footnote[Like this one — appears at the slide bottom.]
 ]
 
+// [BIPS] Bullet, numbered and term lists share one set of metrics, so mixing
+// them on a slide keeps a common rhythm.
+#bips-slide(
+  title: "List Types",
+  subtitle: "Consistent spacing across all three",
+)[
+  #two-columns[
+    - `-` starts a bullet list
+    - `+` starts a numbered list
+
+    + First step
+    + Second step
+  ][
+    // [Typst] Term lists: `/ Term: definition`. Terms pick up the theme's
+    // strong styling, so they render in BIPS blue.
+    / Estimand: The quantity we want to estimate
+    / Estimator: The rule applied to the sample
+    / Estimate: The number the rule produces
+  ]
+]
+
 // [BIPS] Content slide with title only (no subtitle) — renders slightly larger.
 #bips-slide(title: "Color Utilities & Headings")[
   // [BIPS] Color helper functions for inline coloring:
@@ -217,6 +238,31 @@
   ]
 ]
 
+// [BIPS] Cards — a titled panel for framing a definition or result, in the
+// spirit of a Beamer theorem block. Heavier than a callout, and icon-free.
+#bips-slide(title: "Cards")[
+  #card(title: "Definition")[
+    An *estimand* is the quantity a study sets out to estimate, stated
+    independently of the data or the method used to get at it.
+  ]
+  #two-columns(gutter: 1.5em)[
+    #card(title: "Result", color: bips-green)[
+      `color:` recolors the title bar and the body tint together.
+    ]
+  ][
+    #card[Without `title:`, a card is a plain shaded panel.]
+  ]
+]
+
+// [BIPS] Block quotes get a thin left rule and a small blue attribution — a
+// theme show rule, so plain `#quote(block: true)` markup is all it takes.
+#bips-slide(title: "Quotes")[
+  #quote(block: true, attribution: [Tukey, 1962])[
+    Far better an approximate answer to the right question, which is often
+    vague, than an exact answer to the wrong question.
+  ]
+]
+
 // [BIPS] Images and figures — standard Typst image inclusion.
 #bips-slide(title: "Images & Figures")[
   // [Typst] Basic image inclusion with sizing:
@@ -227,7 +273,8 @@
     Images are included with `#image()` and sized
     via `width` or `height`.
   ][
-    // [Typst] `figure()` adds numbering and captions:
+    // [Typst] `figure()` adds numbering and captions. [BIPS] The theme sets
+    // captions at `caption-scale` (0.8) of the surrounding text size.
     #figure(
       image("/logo.png", width: 50%),
       caption: [The BIPS logo],

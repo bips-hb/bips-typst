@@ -7,6 +7,14 @@
 #import "@preview/touying:0.8.0": components, utils
 #import "config.typ": *
 
+/// Chrome string for `key` in the document's language, falling back to English.
+/// `bips-theme(lang: ...)` sets `text.lang` itself, so `text.lang` is the single
+/// source of truth for both the theme's own strings and Typst's built-in ones.
+#let _localized(key) = context {
+  let table = theme-strings.at(text.lang, default: theme-strings.en)
+  table.at(key, default: theme-strings.en.at(key))
+}
+
 /// Choose first non-none value from list of options
 /// This simplifies the common pattern: if override != none { override } else { default }
 /// Usage: #pick-first(user-override, theme-default)

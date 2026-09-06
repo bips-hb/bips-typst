@@ -184,6 +184,17 @@ multiplies the base *length*, not `1em`, on purpose: inside `footnote.entry`,
 `1em` is Typst's already-reduced footnote size, so `× 1em` would compound.
 Multiplying the base length gives predictable "fraction of base" semantics.
 
+### Localization
+
+`theme-strings` in `src/config.typ` holds every string the theme renders itself, keyed by language (`en`, `de`), with English as the fallback for both an unknown language and a missing key.
+`_localized(key)` in `src/helpers.typ` is a `context` block reading `text.lang`.
+
+`bips-theme(lang:)` defaults to `auto` (follow the document's `text.lang`).
+A non-`auto` value is applied as `set text(lang: ...)` inside the theme's own `show: set text(...)`, so the theme's strings and Typst's built-in ones (figure supplements, smart quotes, hyphenation, bibliography terms) cannot diverge.
+Do not add a separate store/state bridge for language.
+
+Adding a language means adding a full entry to `theme-strings`; `tests/localization/test.typ` asserts every table defines the same keys.
+
 ### Slide structure patterns
 
 - **`config:`** — page-level overrides and counter freeze. Combine multiple

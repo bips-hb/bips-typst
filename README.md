@@ -161,6 +161,23 @@ Putting them there has no effect.
 Per-type shorthands are available: `#callout-note[…]`, `#callout-tip[…]`,
 `#callout-warning[…]`, `#callout-important[…]` (each takes an optional `title:`).
 
+### Cards
+
+A titled panel for framing a definition, a result, or an aside — the Beamer
+theorem-block shape. Heavier than a callout and icon-free, so the two read as
+different things.
+
+```typst
+#card(title: "Definition")[The estimand is ...]
+#card(title: "Result", color: bips-green)[Recolors bar and body tint]
+#card[Without a title, a plain shaded panel]
+#card(title: "Custom", fill: luma(230), title-color: white)[Explicit body fill]
+```
+
+`color:` sets the title bar and, unless `fill:` says otherwise, a light tint of
+it for the body. The bar's text is white by default, so pass a dark `color`
+(or override `title-color:`).
+
 ### Citations
 
 natbib-style convenience wrappers over Typst's `cite()`. They inherit the
@@ -204,6 +221,41 @@ For when you want to fill space until the lower or rightmost end of the current 
 ```typst
 #bips-en  // Leibniz Institute for Prevention Research and Epidemiology — BIPS
 #bips-de  // Leibniz-Institut für Präventionsforschung und Epidemiologie — BIPS
+```
+
+### Language
+
+Set the document language once and the whole deck follows — Typst's own output
+(figure supplements, quotation marks, hyphenation, outline title, bibliography
+terms) and the theme's chrome (thank-you line, contact block, references title,
+institution name) together:
+
+```typst
+#set text(lang: "de")
+#show: bips-theme.with()
+```
+
+German and English ship with the theme; any other language falls back to
+English. Placement doesn't matter — before or after the `#show` rule both work.
+
+To pin the deck to one language regardless of `text.lang`, pass `lang:`. The
+theme sets `text.lang` itself in that case, so the two can never disagree:
+
+```typst
+#show: bips-theme.with(lang: "en")
+```
+
+Every localized string stays overridable per slide:
+
+```typst
+#thanks-slide(
+  thanks-text: "Danke!",
+  contact-title: "Anschrift",
+  institution: bips-de,
+  address: [Musterweg 1\ 12345 Musterstadt],
+  website: "www.example.org",
+)
+#bibliography-slide(title: "Literatur", bib: read("references.bib"))
 ```
 
 ## Animations
@@ -302,6 +354,7 @@ The `gallery/` directory contains example presentations:
 - `typst-basics.typ` — native Typst features (quotes, term lists, tables, figures, footnotes, code, links, refs)
 - `diagrams.typ` — drawing and diagrams with CeTZ and Fletcher (TikZ-style)
 - `dataviz.typ` — ggplot2-style grammar-of-graphics plots with gribouille
+- `german.typ` — German-language deck; one `#set text(lang: "de")` localizes Typst and the theme together
 
 ## Development
 
