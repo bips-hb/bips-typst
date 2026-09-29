@@ -5,7 +5,7 @@ A 16:9 presentation template for [BIPS](https://www.leibniz-bips.de/) using [Typ
 ## Quick Start
 
 ```typst
-#import "@preview/bypst:0.5.0": *
+#import "@preview/bypst:0.6.0": *
 
 // Declare presentation info once: config-info() sets the PDF document metadata
 // and title-slide() reads these fields, so they need not be repeated.
@@ -43,7 +43,7 @@ A 16:9 presentation template for [BIPS](https://www.leibniz-bips.de/) using [Typ
 The theme is available from the [Typst package registry](https://typst.app/universe/package/bypst), just import it like any other package:
 
 ```typst
-#import "@preview/bypst:0.5.0": *
+#import "@preview/bypst:0.6.0": *
 ```
 
 Please note that the official BIPS logo is not bundled with the package to avoid licensing concerns.
@@ -62,7 +62,7 @@ just install
 Then use the local import instead:
 
 ```typst
-#import "@local/bypst:0.5.0": *
+#import "@local/bypst:0.6.0": *
 ```
 
 ## Slide Types

@@ -3,7 +3,7 @@
 // base-slide (the flexible base) plus presets and special slides.
 // ===================================================================
 
-#import "@preview/touying:0.7.4": (
+#import "@preview/touying:0.8.0": (
   config-common, config-page, touying-slide, touying-slide-wrapper, utils,
 )
 #import "@preview/codetastic:0.2.2": qrcode

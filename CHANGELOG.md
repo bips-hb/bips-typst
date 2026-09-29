@@ -2,6 +2,17 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.6.0]
+
+### Changed
+
+- **Touying 0.7.4 → 0.8.0.** No API changes in bypst; every slide type, gallery deck, and test compiles and renders identically. Typst floor is unchanged (0.15.0 — Touying 0.8.0 requires exactly that).
+- **Breaking (Touying, affects your decks):** a `#pause` following `#uncover`/`#only`/`#alternatives` no longer skips the subslides those reserve. `#uncover("2")[..] one #pause two` now produces 2 subslides, not 3. Add an explicit `#pause` (or a `#waypoint`) where you relied on the old snap. No bypst slide type or gallery deck depended on it.
+
+### Fixed
+
+- Speaker-note second-screen output (`config-common(show-notes-on-second-screen: right)`) now renders the BIPS logo and confines the slide background to the slide half. Touying 0.7.x placed the page background/foreground across the full spread, which clipped the logo away.
+
 ## [0.5.0] - September 2026
 
 ### Added
@@ -130,7 +141,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Gallery of example presentations
 - Test suite for validation
 
-[0.5.0]: https://github.com/bips-hb/bips-typst/compare/v0.4.0...HEAD
+[0.6.0]: https://github.com/bips-hb/bips-typst/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/bips-hb/bips-typst/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/bips-hb/bips-typst/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/bips-hb/bips-typst/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/bips-hb/bips-typst/compare/v0.1.1...v0.2.0

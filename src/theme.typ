@@ -1,4 +1,4 @@
-#import "@preview/touying:0.7.4": *
+#import "@preview/touying:0.8.0": *
 
 // ===================================================================
 // BYPST — BIPS PRESENTATION THEME
