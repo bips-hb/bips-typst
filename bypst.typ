@@ -1,10 +1,6 @@
-// Re-export the theme implementation from src/
+// Package entrypoint (`typst.toml` `entrypoint`).
+//
+// `src/theme.typ` imports Touying with `*`, so Touying's own API — `#pause`,
+// `#only`, `#uncover`, `#alternatives`, `#meanwhile`, `utils`, the `config-*`
+// constructors — reaches the user through this re-export. Nothing else to add.
 #import "src/theme.typ": *
-
-// Note: Basic Touying functions like `pause` and `slide` are already available
-// through theme.typ's `#import "@preview/touying:0.8.0": *`
-
-// Re-export additional Touying utilities for user convenience
-// These animation and utility functions are useful but not in Touying's main namespace
-#import "@preview/touying:0.8.0": alternatives, meanwhile, only, uncover
-#import "@preview/touying:0.8.0": utils  // Includes slide-counter and other utilities

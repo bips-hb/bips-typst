@@ -24,7 +24,9 @@ exclude = [
   ".superpowers/",
   "*.pdf",
   "justfile",
+  "AGENTS.md",
   "CLAUDE.md",
+  "docs/",
   ".github/",
   "bips-logo.png",
 ]
@@ -49,8 +51,10 @@ ignore = [
   "presentations{,/**}",
   "*.pdf",
   "justfile",
+  "AGENTS.md",
   "CLAUDE.md",
   "CLAUDE.local.md",
+  "docs{,/**}",
   "TODO.md",
   "bips-logo.png",
 ]
