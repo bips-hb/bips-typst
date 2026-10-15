@@ -158,6 +158,7 @@ thanks slides). Exact versions: `src/theme.typ` and `src/slides.typ`.
 - `tests/<name>/test.typ` — tytanic tests, one directory per feature
 - `template/` — Typst Universe package templates
 - `docs/` — design notes too long to belong in a comment
+- `docs/adr/` — architecture decision records, one per decision (`NNNN-slug.md`). Read them before reopening a settled choice; change a decision with a new ADR, never by editing an accepted one
 - `debug/` — ad-hoc scratch work (gitignored; clean up when done)
 
 ### Public API
@@ -251,6 +252,7 @@ Touying bump.
 ## Content guidelines
 
 - Formal, concise academic tone
+- Docs (README, gallery, `docs/`) describe only the current state; changes from earlier versions belong in `CHANGELOG.md` alone
 - No sensationalism, influencer speak, or marketing language
 - BIPS color palette: blue (primary), orange, green, gray
 - Math notation and academic formatting prioritized
