@@ -1,0 +1,125 @@
+// R with knitr — bypst gallery
+//
+// R code chunks and inline R results in a bips deck, via knitr's `.Rtyp`
+// format (knitr >= 1.52). knitr runs the R code and writes a plain `.typ`
+// file, which Typst then compiles like any other deck.
+//
+//   [knitr] — knitr chunk and inline syntax, chunk options
+//
+// Run (from the project root):
+//   just knitr
+// or by hand:
+//   cd gallery && Rscript -e 'knitr::knit("knitr.Rtyp")' && cd ..
+//   typst compile --root . gallery/knitr.typ
+//
+// knitr.typ and knitr-files/ are generated and gitignored; edit this file.
+
+#import "../bypst.typ": *
+
+#show: bips-theme.with(
+  config-info(
+    title: "R with knitr",
+    subtitle: "Code chunks and inline results in a bips deck",
+    author: "Your Name",
+    date: datetime.today().display(),
+  ),
+)
+
+// [knitr] A setup chunk runs first and prints nothing (include = FALSE).
+// comment = "" drops knitr's `##` prefix on output; SVG figures stay sharp
+// at any projector resolution; fig.path keeps generated files together.
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  comment = "",
+  fig.path = "knitr-files/",
+  dev = "svg",
+  fig.width = 8,
+  fig.height = 4.5
+)
+dir.create("knitr-files", showWarnings = FALSE)
+fit <- lm(mpg ~ wt, data = mtcars)
+```
+
+#title-slide()
+
+#bips-slide(title: "How it works")[
+  + Write Typst as usual, with R code in fenced chunks
+  + `knitr::knit("deck.Rtyp")` runs the R code and writes `deck.typ`
+  + `typst compile deck.typ` builds the slides, theme and all
+
+  #v(1em)
+  // [knitr] Writing the inline syntax literally needs a split string:
+  // knitr would otherwise evaluate it.
+  Chunks open with #raw("```{r}"), inline results use #raw("`" + "r expr`").
+  Everything outside them is ordinary Typst, so all theme features work.
+]
+
+// [knitr] A chunk inside a slide body: the code and its printed output both
+// appear, as raw blocks in Fira Mono with R syntax highlighting.
+// [Touying] #pause works around chunks, since knitr's output is plain Typst.
+#bips-slide(title: "Code and output")[
+```{r fit-show, eval = FALSE}
+fit <- lm(mpg ~ wt, data = mtcars)
+```
+```{r coefs}
+round(coef(fit), 2)
+```
+
+  #pause
+  Each additional 1000 lbs of weight lowers fuel economy by about
+  `r abs(round(coef(fit)[["wt"]], 2))` miles per gallon.
+]
+
+// [knitr] Inline R results drop numbers straight into the text, so they can
+// never drift from the analysis.
+#bips-slide(title: "Inline results")[
+  - The data cover `r nrow(mtcars)` cars
+  - Mean fuel economy is `r round(mean(mtcars$mpg), 1)` mpg
+  - Weight explains `r round(100 * summary(fit)$r.squared)`% of its variance
+]
+
+// [knitr] fig.cap wraps the plot in a Typst #figure; out.width sets its
+// width. par(family =) uses Fira Sans for the plot text to match the slides,
+// when it is installed.
+#bips-slide(title: "Figures")[
+```{r scatter, echo = FALSE, out.width = "65%", fig.cap = "Fuel economy by weight, with the fitted line."}
+par(family = "Fira Sans", mar = c(4, 4, 0.5, 0.5))
+plot(mpg ~ wt, data = mtcars, pch = 19, col = "#17509d",
+     xlab = "Weight (1000 lbs)", ylab = "Miles per gallon")
+abline(fit, col = "#ed7d31", lwd = 2)
+```
+]
+
+// [knitr] knitr::kable() has no Typst format yet. Instead, R writes the data
+// and Typst lays out the table, so it picks up the theme's table styling.
+#bips-slide(title: "Tables")[
+```{r table-data, include = FALSE}
+tab <- aggregate(cbind(mpg, hp) ~ cyl, data = mtcars, FUN = function(x) round(mean(x), 1))
+names(tab) <- c("Cylinders", "Mean mpg", "Mean hp")
+write.csv(tab, "knitr-files/by-cyl.csv", row.names = FALSE)
+```
+  #let rows = csv("knitr-files/by-cyl.csv")
+  #align(center, table(
+    columns: rows.first().len(),
+    align: (left, right, right),
+    ..rows.flatten(),
+  ))
+
+  #v(1em)
+  #small[R: `write.csv(tab, "knitr-files/by-cyl.csv")` · Typst: `csv(..)` into `#table()`]
+]
+
+// [knitr] The handful of chunk options that matter most on slides.
+#bips-slide(title: "Chunk options for slides")[
+  #table(
+    columns: 2,
+    [*Option*], [*Effect*],
+    [`echo = FALSE`], [show the result, hide the code],
+    [`eval = FALSE`], [show the code, do not run it],
+    [`include = FALSE`], [run silently, show nothing],
+    [`results = "asis"`], [pass printed output through as Typst markup],
+    [`fig.cap`, `out.width`], [figure caption and width on the slide],
+  )
+]
+
+#thanks-slide()

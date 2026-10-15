@@ -2,7 +2,7 @@
 
 # Every Typst source that is formatted and checked. `format` and `format-check`
 # share this list so the gate can never cover less than the formatter writes.
-typst_sources := "*.typ src/*.typ gallery/*.typ template/*.typ tests/*/test.typ"
+typst_sources := `git ls-files '*.typ' | tr '\n' ' '`
 
 # Compile all gallery demos
 all:
@@ -57,6 +57,11 @@ all:
         echo "❌ Check error messages above for details"
         exit 1
     fi
+
+# Knit and compile the knitr gallery deck (needs R with knitr >= 1.52)
+knitr:
+    cd gallery && Rscript -e 'knitr::knit("knitr.Rtyp", quiet = TRUE)'
+    typst compile --root . gallery/knitr.typ
 
 # Download the Fira fonts the theme uses (OFL, from google/fonts) into DIR.
 # Use a user font dir (e.g. ~/.local/share/fonts, ~/Library/Fonts) to install

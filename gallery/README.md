@@ -16,6 +16,7 @@ Ready-to-use examples showcasing different features of the bypst theme.
 | `diagrams.typ` | Drawing and diagrams with CeTZ and Fletcher (TikZ-style) |
 | `dataviz.typ` | ggplot2-style grammar-of-graphics plots with gribouille |
 | `german.typ` | German-language deck — one `#set text(lang: "de")` localizes Typst and the theme together |
+| `knitr.Rtyp` | R code chunks and inline results via knitr — build with `just knitr` (needs R and knitr >= 1.52) |
 
 ## Quick Start
 

@@ -7,6 +7,10 @@ TODO.md
 *.pdf
 *.pdfpc
 
+# knitr output (generated from gallery/knitr.Rtyp)
+gallery/knitr.typ
+gallery/knitr-files/
+
 # Build output
 _site/
 dist/
