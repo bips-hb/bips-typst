@@ -58,6 +58,22 @@ all:
         exit 1
     fi
 
+# Download the Fira fonts the theme uses (OFL, from google/fonts) into DIR.
+# Use a user font dir (e.g. ~/.local/share/fonts, ~/Library/Fonts) to install
+# them system-wide, or keep the default and pass `--font-path .fonts`.
+fonts dir=".fonts":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    mkdir -p "{{ dir }}"
+    base=https://github.com/google/fonts/raw/main/ofl
+    for f in Regular Italic Medium SemiBold Bold BoldItalic; do
+        curl -sSfL "$base/firasans/FiraSans-$f.ttf" -o "{{ dir }}/FiraSans-$f.ttf"
+    done
+    for f in Regular Bold; do
+        curl -sSfL "$base/firamono/FiraMono-$f.ttf" -o "{{ dir }}/FiraMono-$f.ttf"
+    done
+    echo "✅ Fira fonts in {{ dir }}"
+
 # Run tytanic test suite (compile-only tests for all theme features)
 test:
     tt run --use-system-fonts

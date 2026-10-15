@@ -26,8 +26,9 @@
 // ===================================================================
 
 // Font families (with fallbacks for systems without Fira fonts)
-// Fallback chains: preferred → common alternatives → Typst built-in
-#let font-family-text = ("Fira Sans", "Noto Sans")
+// Typst bundles no sans font, so cover each OS: Arial (Windows/macOS), DejaVu
+// Sans (Linux). Each missing family warns, so keep the chain short.
+#let font-family-text = ("Fira Sans", "Arial", "DejaVu Sans")
 #let font-family-code = ("Fira Mono", "DejaVu Sans Mono")
 #let font-family-math = ("New Computer Modern Math",)
 

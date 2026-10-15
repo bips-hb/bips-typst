@@ -44,7 +44,7 @@ jobs:
             firasans/FiraSans-Italic.ttf \
             firasans/FiraSans-Bold.ttf \
             firasans/FiraSans-BoldItalic.ttf \
-            firasans/FiraSans-Light.ttf \
+            firasans/FiraSans-Medium.ttf \
             firasans/FiraSans-SemiBold.ttf \
             firamono/FiraMono-Regular.ttf \
             firamono/FiraMono-Bold.ttf; do

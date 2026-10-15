@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- Body text font fallback is now Arial, then DejaVu Sans (was Noto Sans), so decks without Fira Sans render in a sans-serif font on Windows, macOS and Linux instead of falling through to Typst's built-in serif.
+- README lists the exact Fira font files the theme uses and how to point Typst at them; `just fonts [dir]` downloads them.
+
 - **Touying 0.7.4 → 0.8.0.** No API changes in bypst; every slide type, gallery deck, and test compiles and renders identically. Typst floor is unchanged (0.15.0 — Touying 0.8.0 requires exactly that).
 - **Breaking (Touying, affects your decks):** a `#pause` following `#uncover`/`#only`/`#alternatives` no longer skips the subslides those reserve. `#uncover("2")[..] one #pause two` now produces 2 subslides, not 3. Add an explicit `#pause` (or a `#waypoint`) where you relied on the old snap. No bypst slide type or gallery deck depended on it.
 

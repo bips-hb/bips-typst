@@ -334,15 +334,34 @@ tests/           # test suite
 
 ## Fonts
 
-The theme uses [Fira Sans](https://fonts.google.com/specimen/Fira+Sans) for body text and [Fira Mono](https://fonts.google.com/specimen/Fira+Mono) for code, with automatic fallbacks if they are not installed:
+The theme uses [Fira Sans](https://fonts.google.com/specimen/Fira+Sans) for body text and [Fira Mono](https://fonts.google.com/specimen/Fira+Mono) for code.
+Typst packages cannot ship fonts, so install these yourself.
+The theme needs these files (OTF from [mozilla/Fira](https://github.com/mozilla/Fira) or TTF from Google Fonts both work):
+
+| File | Used for |
+|------|----------|
+| `FiraSans-Regular` | body text |
+| `FiraSans-Italic` | emphasis |
+| `FiraSans-Medium` | title-slide title and author |
+| `FiraSans-SemiBold` | slide titles |
+| `FiraSans-Bold` | strong text, headings, section and thanks slides |
+| `FiraSans-BoldItalic` | strong text inside emphasis |
+| `FiraMono-Regular` | code |
+
+Install them as regular system fonts, or put them in a folder and point Typst at it with `typst compile --font-path fonts/ deck.typ` (or the `TYPST_FONT_PATHS` environment variable).
+Run `typst fonts --variants` to check what Typst sees.
+
+Without Fira, the theme falls back as follows:
 
 | Role | Preferred | Fallback |
 |------|-----------|----------|
-| Body text | Fira Sans | Noto Sans |
+| Body text | Fira Sans | Arial (Windows, macOS), DejaVu Sans (Linux) |
 | Code | Fira Mono | DejaVu Sans Mono (Typst built-in) |
 | Math | New Computer Modern Math | (Typst built-in) |
 
-For the best results, install the Fira fonts. Override with the `font:`, `code-font:`, and `math-font:` parameters on `bips-theme()`.
+Typst bundles no sans-serif font: if none of the body fonts is found, text renders in the serif Libertinus.
+Typst prints an `unknown font family` warning for each listed font it cannot find; these are harmless.
+Override the families with the `font:`, `code-font:`, and `math-font:` parameters on `bips-theme()`.
 
 ## Requirements
 
