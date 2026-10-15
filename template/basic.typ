@@ -8,7 +8,7 @@
   title: "Your Presentation Title",
   subtitle: "Optional Subtitle",
   author: "Your Name",
-  institute: bips-en,
+  institution: bips-en,
   date: datetime.today().display(),
 )
 

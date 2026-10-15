@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Body text font fallback is now Arial, then DejaVu Sans (was Noto Sans), so decks without Fira Sans render in a sans-serif font on Windows, macOS and Linux instead of falling through to Typst's built-in serif.
 - README lists the exact Fira font files the theme uses and how to point Typst at them; `just fonts [dir]` downloads them.
+- **Breaking:** slide functions now reject unknown named arguments with an error naming them (e.g. `title-slide: unexpected argument: institute`). Previously a typo or a renamed parameter was silently ignored. `bips-slide()` and `empty-slide()` report it as `base-slide`. Remove or rename the argument at the call site.
 - **Touying 0.7.4 → 0.8.0.** No API changes in bypst; every slide type, gallery deck, and test compiles and renders identically. Typst floor is unchanged (0.15.0 — Touying 0.8.0 requires exactly that).
 - **Breaking (Touying, affects your decks):** a `#pause` following `#uncover`/`#only`/`#alternatives` no longer skips the subslides those reserve. `#uncover("2")[..] one #pause two` now produces 2 subslides, not 3. Add an explicit `#pause` (or a `#waypoint`) where you relied on the old snap. No bypst slide type or gallery deck depended on it.
 - Term lists (`/ Term: definition`) now use the same line metrics and item spacing as bullet and numbered lists. Previously they inherited Typst defaults and rendered roughly half an em tighter per row than the surrounding lists. `#compact[]` and nesting inside a list/enum tighten them alongside the other list types.
@@ -23,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- The `basic` package template passed `institute:` to `title-slide()`, a parameter renamed to `institution:` in 0.5.0. It was silently ignored, so editing it had no effect.
 - Speaker-note second-screen output (`config-common(show-notes-on-second-screen: right)`) now renders the BIPS logo and confines the slide background to the slide half. Touying 0.7.x placed the page background/foreground across the full spread, which clipped the logo away.
 
 ## [0.5.0] - September 2026

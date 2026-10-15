@@ -231,6 +231,15 @@
   }
 }
 
+// `..args` sinks would otherwise swallow typos and renamed parameters silently.
+#let _reject-unknown(args, allowed, fn) = {
+  let unknown = args.named().keys().filter(k => k not in allowed)
+  assert(
+    unknown == (),
+    message: fn + ": unexpected argument: " + unknown.join(", "),
+  )
+}
+
 // Pull Touying `slide()` overrides (config, repeat, setting) out of a slide
 // function's `..args`, so the non-content slide types are as composable as
 // `bips-slide`. `config` is returned separately for the caller to merge into
@@ -238,7 +247,8 @@
 // `composer` is intentionally omitted: it only matters with multiple body
 // blocks, which the fixed-layout slides don't take. `empty-slide` handles
 // `composer` itself (see below).
-#let _slide-overrides(args) = {
+#let _slide-overrides(args, fn) = {
+  _reject-unknown(args, ("config", "repeat", "setting"), fn)
   let named = args.named()
   (
     config: named.at("config", default: (:)),

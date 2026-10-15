@@ -47,6 +47,11 @@
   code-inline-scale: none,
   ..args,
 ) = touying-slide-wrapper(self => {
+  _reject-unknown(
+    args,
+    ("config", "repeat", "composer", "setting"),
+    "base-slide",
+  )
   let named = args.named()
   let user-config = named.at("config", default: (:))
   let repeat = named.at("repeat", default: auto)
@@ -230,7 +235,7 @@
   date-size: none,
   ..args,
 ) = touying-slide-wrapper(self => {
-  let o = _slide-overrides(args)
+  let o = _slide-overrides(args, "title-slide")
   let info = self.info
   let title = pick-first(title, info.at("title", default: none))
   let subtitle = pick-first(subtitle, info.at("subtitle", default: none))
@@ -348,7 +353,7 @@
 ) = touying-slide-wrapper(self => {
   let body = args.pos().at(0, default: none)
   if body == [] { body = none }
-  let o = _slide-overrides(args)
+  let o = _slide-overrides(args, "section-slide")
   touying-slide(
     self: self,
     config: utils.merge-dicts(
@@ -467,7 +472,7 @@
     institution
   }
   let address = if address == auto { _localized("address") } else { address }
-  let o = _slide-overrides(args)
+  let o = _slide-overrides(args, "thanks-slide")
   let logo = self.store.logo
   touying-slide(
     self: self,
