@@ -3,6 +3,7 @@
 // Public helpers: colors, columns, callouts, text sizes, fills.
 // ===================================================================
 
+#import "@preview/touying:0.8.0": touying-fn-wrapper-raw
 #import "config.typ": *
 #import "helpers.typ": *
 
@@ -95,18 +96,9 @@
 // Callout Blocks
 // -------------------------------------------------------------------
 
-/// Create compact styled callout blocks with inline icons
-///
-/// Available types: note, tip, warning, important
-/// Displays icon inline with content for space efficiency
-///
-/// Example: #callout(type: "warning")[Content here]
-#let callout(
-  type: "default",
-  title: none,
-  icon: none,
-  body,
-) = {
+// Rendered through touying-fn-wrapper-raw so it can read the theme's
+// `callout-icons` from self.store, the way Touying's own `alert` does.
+#let _callout(self: none, type: "default", title: none, icon: none, body) = {
   // Color schemes for different callout types
   let colors = (
     default: (border: bips-blue, bg: luma(240), icon: bips-blue),
@@ -119,17 +111,60 @@
     ),
     important: (border: red, bg: red.lighten(90%), icon: red),
   )
-  // Default icons for each type
-  let icons = (
-    default: none,
-    note: emoji.page.pencil,
-    tip: emoji.lightbulb,
-    warning: emoji.warning,
-    important: emoji.excl,
-  ) //
+  // "symbol" glyphs are missing from Fira Sans but present in Typst's bundled
+  // DejaVu Sans Mono / Libertinus, which glyph fallback always reaches.
+  // "drawn" uses only ASCII marks, which every body font covers.
+  let mark(glyph) = text(
+    fill: white,
+    weight: "bold",
+    size: 0.7em,
+    top-edge: "cap-height",
+    bottom-edge: "baseline",
+    glyph,
+  )
+  let disc(color, inner) = box(baseline: 0.15em, circle(
+    radius: 0.5em,
+    fill: color,
+    inset: 0pt,
+    align(center + horizon, inner),
+  ))
+  let check = curve(
+    stroke: (paint: white, thickness: 0.12em, cap: "round", join: "round"),
+    curve.move((0em, 0.18em)),
+    curve.line((0.16em, 0.34em)),
+    curve.line((0.46em, 0em)),
+  )
+  let triangle(color, glyph) = box(
+    width: 1.1em,
+    height: 1em,
+    baseline: 0.12em,
+    {
+      place(polygon(fill: color, (0em, 1em), (0.55em, 0em), (1.1em, 1em)))
+      place(center + bottom, dy: -0.1em, mark(glyph))
+    },
+  )
+  let style = if self == none { "symbol" } else {
+    self.store.at("callout-icons", default: "symbol")
+  }
+  let icon-sets = (
+    symbol: (note: "ℹ", tip: "✓", warning: "⚠", important: "‼"),
+    emoji: (
+      note: emoji.page.pencil,
+      tip: emoji.lightbulb,
+      warning: emoji.warning,
+      important: emoji.excl,
+    ),
+    drawn: (
+      note: disc(bips-blue, mark("i")),
+      tip: disc(bips-green, box(width: 0.46em, height: 0.34em, check)),
+      warning: triangle(bips-orange, "!"),
+      important: disc(red, mark("!")),
+    ),
+  )
+  let icons = if style == none { (:) } else { icon-sets.at(style) }
 
   let color-scheme = colors.at(type, default: colors.default)
-  let default-icon = icons.at(type, default: icons.default)
+  let default-icon = icons.at(type, default: none)
   let display-icon = pick-first(icon, default-icon)
   //
 
@@ -163,6 +198,24 @@
   ]
 }
 
+/// Create compact styled callout blocks with inline icons
+///
+/// Available types: note, tip, warning, important
+/// Displays icon inline with content for space efficiency
+///
+/// Example: #callout(type: "warning")[Content here]
+#let callout(
+  type: "default",
+  title: none,
+  icon: none,
+  body,
+) = touying-fn-wrapper-raw(
+  _callout,
+  type: type,
+  title: title,
+  icon: icon,
+  body,
+)
 
 /// Convenience wrapper: note callout
 #let callout-note(title: none, body) = callout(type: "note", title: title, body)

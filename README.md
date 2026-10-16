@@ -155,8 +155,19 @@ Putting them there has no effect.
 #callout(type: "warning")[Caution]
 #callout(type: "important")[Critical]
 #callout(type: "tip", title: "Custom Title")[With a title]
-#callout(type: "note", icon: emoji.rocket)[Custom icon]
+#callout(type: "note", icon: [→])[Custom icon]
 ```
+
+The icon style is set once for the deck with `bips-theme(callout-icons: ...)`:
+
+| Value | Icons | Needs |
+|-------|-------|-------|
+| `"symbol"` (default) | ℹ ✓ ⚠ ‼ in the callout colour | nothing: Typst's bundled fonts cover them, though their design varies with the fonts installed |
+| `"emoji"` | 📝 💡 ⚠️ ❗ | an emoji font, otherwise they render as empty boxes |
+| `"drawn"` | coloured shapes with `i`, a check mark, `!` | nothing, and identical on every machine |
+| `none` | no icons | |
+
+A per-callout `icon:` overrides the style and takes any content.
 
 Per-type shorthands are available: `#callout-note[…]`, `#callout-tip[…]`,
 `#callout-warning[…]`, `#callout-important[…]` (each takes an optional `title:`).

@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `thanks-slide()` gained `contact-title`, `institution`, `address` and `website` parameters. The contact block was previously hardcoded to BIPS's English name and Bremen address with no way to change it; all four now default to the language-appropriate BIPS values.
 - `gallery/german.typ` — a German-language deck showing that one `#set text(lang: "de")` localizes Typst's output and the theme's chrome together.
 - `gallery/knitr.Rtyp` — R code chunks, inline R results, figures and tables in a bips deck via knitr's `.Rtyp` format (knitr >= 1.52). Build with `just knitr`.
+- `callout-icons` parameter on `bips-theme()`: `"symbol"` (default), `"emoji"`, `"drawn"` (font-independent shapes) or `none`.
 - `#card()` — a titled content box: a solid title bar over a shaded body, in the spirit of a Beamer theorem block. For framing a definition, a result, or an aside that wants more weight than a `#callout()` and no icon. `color:` sets the bar and, unless `fill:` overrides it, a light tint of the same color for the body; `title-color:`, `radius:`, `width:` and `inset:` are available for the rest. Without `title:` it degrades to a plain shaded panel.
 
 ### Changed
@@ -25,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Callout icons no longer need an emoji font. The default is now Unicode symbols (ℹ ✓ ⚠ ‼) that Typst's bundled fonts always cover, drawn in the callout's colour; the emoji, which rendered as empty boxes without an emoji font and ignored the colour, are opt-in.
 - The `basic` package template passed `institute:` to `title-slide()`, a parameter renamed to `institution:` in 0.5.0. It was silently ignored, so editing it had no effect.
 - Speaker-note second-screen output (`config-common(show-notes-on-second-screen: right)`) now renders the BIPS logo and confines the slide background to the slide half. Touying 0.7.x placed the page background/foreground across the full spread, which clipped the logo away.
 

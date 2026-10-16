@@ -59,6 +59,10 @@
   // Opt-in deck progress bar: a full-bleed BIPS-blue bar at the bottom page
   // edge, filling as the deck advances. Shown only on counted content slides.
   progress-bar: false,
+  // Callout icon style: "symbol" (Unicode, always renders via Typst's bundled
+  // fonts), "emoji" (needs an emoji font), "drawn" (shapes, identical
+  // everywhere), or none.
+  callout-icons: "symbol",
   // Extra Touying config dicts (e.g. config-info(...), config-common(...),
   // config-page(...)) forwarded to touying-slides(). They deep-merge after
   // the theme's own config, so user values override on conflict. This is how
@@ -66,6 +70,11 @@
   ..args,
   body,
 ) = {
+  assert(
+    callout-icons in ("symbol", "emoji", "drawn", none),
+    message: "bips-theme: callout-icons must be \"symbol\", \"emoji\", \"drawn\" or none, got "
+      + repr(callout-icons),
+  )
   // Calculate effective font sizes (use override if provided, otherwise theme default)
   let effective-font-size-base = pick-first(base-size, font-size-base)
   let effective-code-block-scale = pick-first(
@@ -229,6 +238,7 @@
       title-align: title-align,
       logo: effective-logo,
       progress-bar: progress-bar,
+      callout-icons: callout-icons,
     ),
     config-page(
       ..utils.page-args-from-aspect-ratio(aspect-ratio),
