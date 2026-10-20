@@ -2,18 +2,22 @@
 // #import "@local/bypst:0.6.0": *
 #import "@preview/bypst:0.6.0": *
 
-// config-info() sets the PDF document metadata (title/author shown in viewers).
-// Multi-author title-slide layout (authors:/institutions:) is supplied directly.
+// One `#set text(lang: "de")` here would switch Typst's output and the
+// theme's own strings (thanks slide, references title) to German.
 #show: bips-theme.with(
   config-info(
     title: "Complete BIPS Presentation Example",
-    author: "BIPS",
+    subtitle: "A tour of the theme's features",
+    author: "Jane Doe",
+    date: datetime.today().display(),
   ),
+  // logo: image("bips-logo.png"),
+  progress-bar: true,
+  // callout-icons: "drawn", // or "emoji", none
 )
 
+// Several authors need the plural forms, which config-info() does not carry.
 #title-slide(
-  title: "Complete BIPS Presentation Example",
-  subtitle: "Showcasing all features",
   authors: (
     [Jane Doe#inst(1, 2)],
     [John Smith#inst(1)],
@@ -22,60 +26,86 @@
     bips-en,
     "University of Bremen",
   ),
-  date: datetime.today().display(),
   occasion: "Annual Conference",
 )
 
-#bips-slide(title: "Features Overview")[
-  This template includes:
-
-  - Multiple slide types (content, section, thanks, empty)
-  - Callout boxes (note, tip, warning, important)
-  - Animations via `#pause`, `#uncover`, `#only`
-  - Multi-column layouts
-  - Bibliography support
-  - QR code generation
+#bips-slide(title: "Overview", subtitle: "What this template shows")[
+  - Slide types: title, content, section, empty, references, thanks
+  - Cards and callouts for definitions and key messages
+  - Citations, tables, figures and quotes in the theme's styling
+  - Reveals with `#pause`, `#uncover` and `#only`
+  - Column layouts and composer panes
 ]
 
-#section-slide("Examples")
+// Trailing content appears below the section title; the title alone goes
+// into the PDF outline.
+#section-slide("Methods")[Estimands and study design]
 
-#bips-slide(title: "Callout Boxes")[
-  #callout(type: "note")[
-    This is a note callout.
+#bips-slide(title: "Definitions")[
+  #card(title: "Definition: average treatment effect")[
+    $ tau = EE[Y(1) - Y(0)] $
+    the mean difference between the potential outcomes under treatment and control #citep(<rubin1974>).
   ]
 
-  #callout(type: "tip", title: "Pro Tip")[
-    Callouts can have custom titles.
-  ]
-
-  #callout(type: "warning")[
-    This is a warning callout.
+  #card(title: "Assumption", color: bips-green.darken(35%))[
+    No unmeasured confounding: $Y(a) perp A | L$ for $a in {0, 1}$.
   ]
 ]
 
-#bips-slide(title: "Animations")[
-  - First item
+#bips-slide(title: "Callouts")[
+  #callout-note[A note for background information.]
+  #callout-tip(title: "Tip")[Callouts take an optional title.]
+  #callout-warning[A warning about a common pitfall.]
+  #callout-important[A point the audience must not miss.]
+]
 
+#bips-slide(title: "Step-by-Step Reveals")[
+  + Define the target population
   #pause
-
-  - Second item appears on click
-
+  + Specify the estimand
   #pause
+  + Choose the estimator
 
-  - Third item appears last
+  #uncover(3)[#blue[All three steps follow #citet(<rothman2008>).]]
 ]
 
-#bips-slide(title: "Two-Column Layout")[
+#section-slide("Results")
+
+#bips-slide(title: "Results Table")[
+  #figure(
+    table(
+      columns: 3,
+      align: (left, right, right),
+      [*Group*], [*n*], [*Risk (%)*],
+      [Exposed], [1 204], [12.4],
+      [Unexposed], [3 518], [8.1],
+    ),
+    caption: [Risk of the outcome by exposure (illustrative numbers).],
+  )
+]
+
+// `composer:` splits the slide into panes; each trailing block fills one.
+#bips-slide(title: "Composer Panes", composer: (2fr, 1fr))[
+  The wider pane carries the main argument.
+
   #two-columns[
-    *Left column*
-
-    Text, images, or any content.
+    #orange[Nested left column]
   ][
-    *Right column*
+    #green[Nested right column]
+  ]
 
-    Side-by-side comparisons.
+  #small[Smaller text]#footnote[Footnotes collect at the bottom of the slide.] and #tiny[fine print].
+][
+  #quote(block: true, attribution: [George Box])[
+    All models are wrong, but some are useful.
   ]
 ]
+
+#empty-slide(content-align: center + horizon)[
+  #huge[#blue[An empty slide for a single statement]]
+]
+
+#bibliography-slide(bib: read("references.bib"))
 
 #thanks-slide(
   contact-author: "Jane Doe",

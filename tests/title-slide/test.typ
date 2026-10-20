@@ -26,3 +26,14 @@
   date: "2026-01-01",
   occasion: "Test Conference",
 )
+
+// Per-line size overrides
+#title-slide(
+  title: "Sized Test",
+  author: "Jane Doe",
+  title-size: 30pt,
+  subtitle-size: 22pt,
+  author-size: 26pt,
+  institution-size: 16pt,
+  date-size: 14pt,
+)

@@ -87,10 +87,9 @@ reasons to skip a check — each has a substitute:
 
 - `just all` — compile every gallery deck, plus the speaker-notes pdfpc sidecar
   and inline-notes preview
-- `just test` / `just test-verbose` — tytanic suite (compile-only feature tests
-  plus a template test)
-- `just compile-check` — compile every gallery deck **and** every test with
-  whatever `typst` is on `PATH`. This is the only version-compatibility check:
+- `just test` / `just test-verbose` — tytanic suite (compile-only feature tests)
+- `just compile-check` — compile every gallery deck, every test **and** both
+  package templates with whatever `typst` is on `PATH`. This is the only version-compatibility check:
   `just test` runs tytanic, which embeds its own Typst and therefore pins one
   version regardless of what is installed. CI runs this across the version
   matrix; locally, put another Typst first on `PATH`.

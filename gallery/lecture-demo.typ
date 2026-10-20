@@ -18,7 +18,7 @@
 // INTRODUCTION TO STATISTICAL MODELING - LECTURE DEMO
 // ============================================================================
 //
-// This is a demonstration of a full-length lecture (100 slides) to test
+// This is a demonstration of a full-length lecture (about 60 slides) to test
 // compilation performance with the BIPS theme on realistic content volumes.
 
 #title-slide(occasion: "STAT 42 - Lecture 1")
@@ -1005,5 +1005,5 @@
   email: "example@leibniz-bips.de",
 )
 
-// Final slide count: 100 slides (including title and thanks slide)
+// Final slide count: about 60 slides (including title and thanks slide)
 // This demonstrates the BIPS theme performance with lecture-length content

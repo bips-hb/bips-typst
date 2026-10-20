@@ -55,7 +55,7 @@
 
   == Layout-specific helpers
 
-  Each supporting passthrouygh of the `form` argument of typst's native `cite()` function:
+  Both pass the `form` argument through to Typst's native `cite()` function:
 
   - `#footcite(<label>)`: footnote-area citation #footcite(<brown2024>)
   - `#footcite(<label>, form: "full")`: Full citation #footcite(<brown2024>, form: "full")

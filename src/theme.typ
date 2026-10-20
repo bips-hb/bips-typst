@@ -122,14 +122,15 @@
     fill: heading-color-3,
   )
   let effective-logo = if logo == auto { default-logo } else { logo }
-  // Emphasis (_text_) in BIPS blue (color only, no italic)
+  // Emphasis and strong text are coloured as well as italic/bold
   show emph: it => text(
     fill: font-color-emphasis,
     style: "italic",
     weight: "regular",
-  )[#it.body] // Strong text (*text*) in BIPS blue (color only, no bold)
-  show strong: it => text(fill: font-color-strong, weight: "bold")[#it.body] // Links in BIPS blue with thin underline to distinguish from emphasis
-  show link: it => underline(text(fill: bips-blue)[#it]) // Table styling - set elegant defaults
+  )[#it.body]
+  show strong: it => text(fill: font-color-strong, weight: "bold")[#it.body]
+  // Underlined so links stay distinguishable from emphasis
+  show link: it => underline(text(fill: bips-blue)[#it])
   set table(
     stroke: none,
     fill: (_, y) => if y == 0 { bips-blue.lighten(85%) } else { none },

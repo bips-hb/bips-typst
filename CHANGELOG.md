@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Term lists (`/ Term: definition`) now use the same line metrics and item spacing as bullet and numbered lists. Previously they inherited Typst defaults and rendered roughly half an em tighter per row than the surrounding lists. `#compact[]` and nesting inside a list/enum tighten them alongside the other list types.
 - Block quotes (`#quote(block: true)`) now carry a thin left rule in the same light blue as table borders, with the attribution set small and blue below. Typst's default renders a block quote flush left with no marker, so it read as ordinary body text. `#callout()` keeps the heavier 4pt rule plus fill, so the two stay tellable apart. Inline quotes are untouched.
 - Figure captions are set at `caption-scale` (0.8) of the surrounding text size instead of full body size. Relative, so `#small[]` and a changed `base-size` both carry through.
+- Package templates: `basic` reads its title fields from `config-info()` and shows a reveal and a callout; `complete` now tours the theme's features (cards, callouts, citations with a bundled `references.bib`, styled tables, figures and quotes, composer panes, progress bar, references and thanks slides).
 
 ### Fixed
 

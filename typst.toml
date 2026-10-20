@@ -30,6 +30,8 @@ exclude = [
   ".adr-dir",
   ".github/",
   "bips-logo.png",
+  "TODO.md",
+  ".fonts/",
 ]
 
 [tool.tyler]

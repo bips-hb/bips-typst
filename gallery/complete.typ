@@ -5,7 +5,7 @@
 // gallery demo and user-facing documentation.
 //
 // Features are annotated with their source:
-//   [BIPS]   — provided by the BIPS theme (theme.typ)
+//   [BIPS]   — provided by the BIPS theme (src/)
 //   [Touying] — provided by the Touying package
 //   [Typst]  — built-in Typst functionality
 //
@@ -134,10 +134,10 @@
   #set heading(outlined: false)
   = Heading level 1
   == Heading level 2
-  // [BIPS] Headings are styled in BIPS blue at all levels:
+  // [BIPS] Levels 1–2 are styled in BIPS blue, level 3 in the body gray:
   === Heading Level 3
-  Content below a heading. Levels 1--2 render in BIPS blue with
-  em-based sizing that scales proportionally with `base-size`.
+  Content below a heading. Levels 1--2 render in BIPS blue, level 3 in gray,
+  with em-based sizing that scales proportionally with `base-size`.
 ]
 
 // ===================================================================
@@ -484,7 +484,7 @@
 ]
 
 #bips-slide(title: "Progress bar")[
-  Enable with `#bips-theme.with(progress-bar: true)`. The bar spans the bottom
+  Enable with `#show: bips-theme.with(progress-bar: true)`. The bar spans the bottom
   edge and fills as the deck advances.
 
   - Shown only on counted content slides

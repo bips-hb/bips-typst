@@ -187,7 +187,7 @@
 
 /// Standard BIPS content slide: title/subtitle header, logo, page number, and
 /// gradient divider, over a native Touying body. A preset over `base-slide`
-/// with all chrome enabled. Signature is unchanged from earlier versions.
+/// with all chrome enabled.
 #let bips-slide(
   title: none,
   subtitle: none,
@@ -424,6 +424,7 @@
   bib-title: none, // bibliography()'s own heading; off by default (slide already has a title)
   ..body, // or pass pre-built bibliography content as a trailing block
 ) = {
+  _reject-unknown(body, (), "bibliography-slide")
   let title = if title == auto { _localized("references") } else { title }
   let refs = if bib != none {
     // read() returns a string by default; bibliography() needs bytes (a plain

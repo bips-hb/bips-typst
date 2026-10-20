@@ -49,7 +49,7 @@
   out of the slide and is delivered only to the presenter.
 
   - Record notes for export: `config-common(enable-pdfpc: true)`
-  - Show them beside each slide (as in this deck):
+  - Show them beside each slide (this deck with `--input notes=true`):
     `config-common(show-notes-on-second-screen: right)`
 ]
 #speaker-note[

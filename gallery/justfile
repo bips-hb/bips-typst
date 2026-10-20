@@ -2,8 +2,8 @@
 
 # Compile all demo files
 all:
-    @find . -name "*.typ" -exec typst compile {} \;
+    @find . -name "*.typ" -exec typst compile --root .. {} \;
 
-# Clean all generated PDFs  
+# Clean all generated PDFs
 clean:
     rm -f *.pdf

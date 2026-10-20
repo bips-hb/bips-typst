@@ -5,7 +5,9 @@
 // intentionally distinct from complete.typ (which showcases the bips theme
 // and Touying). Everything below is built-in Typst — no extra packages.
 //
-//   [Typst] — built-in Typst functionality
+//   [Typst]   — built-in Typst functionality
+//   [BIPS]    — how the theme styles it
+//   [Touying] — provided by the Touying package
 //
 // Run: typst compile --root . gallery/typst-basics.typ
 

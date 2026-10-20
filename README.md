@@ -120,6 +120,17 @@ superscript marker linking an author to the *n*-th entry of `institutions:`:
 Unlike the singular forms, the plurals are not read from `config-info()`.
 Putting them there has no effect.
 
+### Title slide sizes
+
+Each line of the title slide takes its own size override, e.g. a larger name for a single-speaker talk:
+
+```typst
+#title-slide(author-size: 26pt)
+```
+
+The defaults are `title-size: 26pt`, `subtitle-size: 20pt`, `author-size: 20pt`, `institution-size: 18pt` and `date-size: 16pt` (`date-size` also applies to `occasion`).
+`author-size` and `institution-size` apply to the plural `authors:` and `institutions:` as well.
+
 ### Section slides
 
 ```typst
@@ -325,6 +336,7 @@ It is off by default. The bar appears only on counted content slides, so title, 
 ```typst
 #show: bips-theme.with(
   aspect-ratio: "16-9",       // default
+  title-align: left,          // slide title alignment: left (default), center, right
   // Font families (string or array with fallbacks)
   font: "Fira Sans",
   code-font: "Fira Mono",
@@ -354,18 +366,11 @@ It is off by default. The bar appears only on counted content slides, so title, 
 
 ## Examples
 
-The `gallery/` directory contains example presentations:
+The [`gallery/`](https://github.com/bips-hb/bips-typst/tree/main/gallery) directory in the repository holds example decks, one per feature area or ecosystem topic (citations, speaker notes, diagrams, data visualisation, a German deck, R with knitr, and more); its README lists them all.
+They are not part of the package.
 
-- `basic.typ` — starter template
-- `complete.typ` — comprehensive feature showcase
-- `bibliography.typ` — citations and references
-- `aspect-ratio.typ` — 4:3 format
-- `lecture-demo.typ` — realistic 100-slide scale test
-- `speaker-notes.typ` — presenter notes (pdfpc export and inline preview)
-- `typst-basics.typ` — native Typst features (quotes, term lists, tables, figures, footnotes, code, links, refs)
-- `diagrams.typ` — drawing and diagrams with CeTZ and Fletcher (TikZ-style)
-- `dataviz.typ` — ggplot2-style grammar-of-graphics plots with gribouille
-- `german.typ` — German-language deck; one `#set text(lang: "de")` localizes Typst and the theme together
+`typst init @preview/bypst` starts from the `basic` template.
+The package also ships `complete.typ`, a longer template that walks through the theme's features.
 
 ## Development
 
@@ -373,10 +378,13 @@ The `gallery/` directory contains example presentations:
 just install    # install package locally
 just all        # compile all gallery demos
 just test       # run test suite
+just format     # format all Typst sources
+just fonts      # download the Fira fonts into .fonts/
 just clean      # remove generated PDFs
 ```
 
-After editing theme files, run `just install` before compiling.
+Gallery decks and tests import the theme from the working tree, so they pick up edits immediately.
+Run `just install` again only for decks that import `@local/bypst`.
 
 ### Project Structure
 
@@ -388,6 +396,7 @@ src/
   helpers.typ    # internal plumbing (title area, page number, background)
   slides.typ     # slide types
   extras.typ     # public layout/color utilities
+docs/            # design notes and architecture decision records
 logo.png         # bundled placeholder logo (override via bips-theme(logo: ...))
 bips-logo.png    # the real BIPS logo (not shipped in the package)
 typst.toml       # package metadata
@@ -430,7 +439,7 @@ Override the families with the `font:`, `code-font:`, and `math-font:` parameter
 ## Requirements
 
 - Typst >= 0.15.0
-- Dependencies: touying and codetastic, resolved automatically by Typst (exact versions live in `typst.toml` and `src/`)
+- Dependencies: touying and codetastic, resolved automatically by Typst (exact versions are in the imports of `src/theme.typ` and `src/slides.typ`)
 
 ## License
 

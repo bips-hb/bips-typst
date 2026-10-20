@@ -95,7 +95,7 @@ format:
 format-check:
     typstyle --check {{ typst_sources }}
 
-# Compile every gallery deck AND every test with whatever `typst` is on PATH,
+# Compile every gallery deck, test AND template with whatever `typst` is on PATH,
 # discarding output. CI runs this once per Typst version in the matrix.
 # tytanic embeds its own Typst, so `just test` pins one version no matter what
 # is installed — this recipe is the only thing that proves version compatibility.
@@ -108,6 +108,17 @@ compile-check:
     trap 'rm -rf "$out"' EXIT
     for f in gallery/*.typ tests/*/test.typ; do
         if typst compile --root . "$f" "$out/out.pdf" >/dev/null 2>/tmp/typst-compile-err; then
+            printf '  ✅ %s\n' "$f"
+        else
+            printf '  ❌ %s\n' "$f"
+            grep '^error' /tmp/typst-compile-err | head -3
+            rc=1
+        fi
+    done
+    # Templates import the published package; point them at the working tree.
+    for f in template/*.typ; do
+        if sed 's|@preview/bypst:[0-9.]*|/bypst.typ|; s|read("|read("/template/|' "$f" \
+            | typst compile --root . - "$out/out.pdf" >/dev/null 2>/tmp/typst-compile-err; then
             printf '  ✅ %s\n' "$f"
         else
             printf '  ❌ %s\n' "$f"
@@ -206,15 +217,17 @@ set-version VERSION:
 publish:
     tyler build . --no-bump --publish
 
-# Print the ordered release checklist (human-judgment steps stay manual).
+# Print the ordered release checklist. AGENTS.md ("Publishing to Typst
+# Universe") is the source of truth; keep the two in step.
 release:
-    @echo "Release checklist (publish to Typst Universe first, then tag):"
-    @echo "  1. just set-version X.Y.Z   — bump typst.toml + all import refs"
-    @echo "  2. Edit CHANGELOG.md: move [Unreleased] -> [X.Y.Z] - DATE, update compare links"
-    @echo "  3. just release-check       — tests + format-check + gallery all green"
-    @echo "  4. Commit the release changes, then merge to main"
-    @echo "  5. just publish             — tyler build --no-bump --publish (opens typst/packages PR)"
-    @echo "  6. Wait for the typst/packages PR checks; fix + re-run 'just publish' if flagged"
-    @echo "  7. Only once the published commit is final: tag + GitHub release"
-    @echo "       git tag -a vX.Y.Z -m 'Release vX.Y.Z' && git push origin vX.Y.Z"
-    @echo "       gh release create vX.Y.Z"
+    @echo "Release checklist (publish from dev first; main and the tag come last):"
+    @echo "  1. On dev: version set (grep '^version' typst.toml); date the CHANGELOG section"
+    @echo "  2. just release-check       — tests, format, deps, gallery"
+    @echo "  3. Inspect the bundle: tyler build . --no-bump --no-check --outdir /tmp/bypst-check"
+    @echo "  4. just publish             — opens/updates the typst/packages PR"
+    @echo "  5. Fix any review findings on dev, re-run 'just publish'"
+    @echo "  6. Wait for the typst/packages PR to MERGE"
+    @echo "  7. git switch main && git merge --squash dev && git commit -m 'Release vX.Y.Z'"
+    @echo "  8. git tag -a vX.Y.Z -m 'Release vX.Y.Z' && git push origin main vX.Y.Z && gh release create vX.Y.Z"
+    @echo "  9. CHANGELOG compare link ...HEAD -> ...vX.Y.Z; new dev from main (keep old dev)"
+    @echo " 10. On new dev: just set-version <next>, fresh CHANGELOG section"
