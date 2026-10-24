@@ -211,7 +211,8 @@ release-check:
 set-version VERSION:
     perl -i -pe 's/^version = "[^"]*"/version = "{{VERSION}}"/' typst.toml
     perl -i -pe 's{bypst:\d+\.\d+\.\d+}{bypst:{{VERSION}}}g' README.md gallery/README.md template/basic.typ template/complete.typ
-    @echo 'Version set to {{VERSION}} — verify: grep -rn "bypst:" README.md gallery/README.md template/ ; grep "^version" typst.toml'
+    perl -i -pe 's{bips-typst/tree/v\d+\.\d+\.\d+/}{bips-typst/tree/v{{VERSION}}/}g' README.md
+    @echo 'Version set to {{VERSION}} — verify: grep -rn "bypst:\|tree/v" README.md gallery/README.md template/ ; grep "^version" typst.toml'
 
 # Publish to Typst Universe (opens/updates the typst/packages PR). Needs tyler >=0.10 + GitHub auth.
 publish:
