@@ -2,16 +2,16 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [0.6.0]
+## [0.6.0] - October 2026
 
 ### Added
 
 - `lang` parameter on `bips-theme()` (default `auto`) plus German translations of every string the theme renders itself: the thank-you line, the contact block heading, the references slide title, and the institution name. With `auto` the theme follows the document's `text.lang`, so `#set text(lang: "de")` alone now yields a fully German deck; passing `lang:` explicitly sets `text.lang` too, so the theme's strings and Typst's built-in ones (figure supplements, quotation marks, hyphenation, bibliography terms) can never disagree. Unsupported languages fall back to English.
 - `thanks-slide()` gained `contact-title`, `institution`, `address` and `website` parameters. The contact block was previously hardcoded to BIPS's English name and Bremen address with no way to change it; all four now default to the language-appropriate BIPS values.
-- `gallery/german.typ` — a German-language deck showing that one `#set text(lang: "de")` localizes Typst's output and the theme's chrome together.
-- `gallery/knitr.Rtyp` — R code chunks, inline R results, figures and tables in a bips deck via knitr's `.Rtyp` format (knitr >= 1.52). Build with `just knitr`.
+- `gallery/german.typ`: a German-language deck showing that one `#set text(lang: "de")` localizes Typst's output and the theme's chrome together.
+- `gallery/knitr.Rtyp`: R code chunks, inline R results, figures and tables in a bips deck via knitr's `.Rtyp` format (knitr >= 1.52). Build with `just knitr`.
 - `callout-icons` parameter on `bips-theme()`: `"symbol"` (default), `"emoji"`, `"drawn"` (font-independent shapes) or `none`.
-- `#card()` — a titled content box: a solid title bar over a shaded body, in the spirit of a Beamer theorem block. For framing a definition, a result, or an aside that wants more weight than a `#callout()` and no icon. `color:` sets the bar and, unless `fill:` overrides it, a light tint of the same color for the body; `title-color:`, `radius:`, `width:` and `inset:` are available for the rest. Without `title:` it degrades to a plain shaded panel.
+- `#card()`: a titled content box: a solid title bar over a shaded body, in the spirit of a Beamer theorem block. For framing a definition, a result, or an aside that wants more weight than a `#callout()` and no icon. `color:` sets the bar and, unless `fill:` overrides it, a light tint of the same color for the body; `title-color:`, `radius:`, `width:` and `inset:` are available for the rest. Without `title:` it degrades to a plain shaded panel.
 
 ### Changed
 
