@@ -34,6 +34,6 @@ just all
 ## Creating Your Own
 
 1. Copy `basic.typ` as your starting point
-2. Import the theme: `#import "@preview/bypst:0.6.0": *`
+2. Import the theme: `#import "@preview/bypst:0.7.0": *`
 3. Refer to `complete.typ` for feature examples
 4. Compile and present!

@@ -1,6 +1,6 @@
 // To use with a local installation (after `just install`):
-// #import "@local/bypst:0.6.0": *
-#import "@preview/bypst:0.6.0": *
+// #import "@local/bypst:0.7.0": *
+#import "@preview/bypst:0.7.0": *
 
 // One `#set text(lang: "de")` here would switch Typst's output and the
 // theme's own strings (thanks slide, references title) to German.

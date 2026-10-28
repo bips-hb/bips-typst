@@ -5,7 +5,7 @@ A 16:9 presentation template for [BIPS](https://www.leibniz-bips.de/) using [Typ
 ## Quick Start
 
 ```typst
-#import "@preview/bypst:0.6.0": *
+#import "@preview/bypst:0.7.0": *
 
 // Declare presentation info once: config-info() sets the PDF document metadata
 // and title-slide() reads these fields, so they need not be repeated.
@@ -43,7 +43,7 @@ A 16:9 presentation template for [BIPS](https://www.leibniz-bips.de/) using [Typ
 The theme is available from the [Typst package registry](https://typst.app/universe/package/bypst), just import it like any other package:
 
 ```typst
-#import "@preview/bypst:0.6.0": *
+#import "@preview/bypst:0.7.0": *
 ```
 
 Please note that the official BIPS logo is not bundled with the package to avoid licensing concerns.
@@ -62,7 +62,7 @@ just install
 Then use the local import instead:
 
 ```typst
-#import "@local/bypst:0.6.0": *
+#import "@local/bypst:0.7.0": *
 ```
 
 ## Slide Types
@@ -366,7 +366,7 @@ It is off by default. The bar appears only on counted content slides, so title, 
 
 ## Examples
 
-The [`gallery/`](https://github.com/bips-hb/bips-typst/tree/v0.6.0/gallery) directory in the repository holds example decks, one per feature area or ecosystem topic (citations, speaker notes, diagrams, data visualisation, a German deck, R with knitr, and more); its README lists them all.
+The [`gallery/`](https://github.com/bips-hb/bips-typst/tree/v0.7.0/gallery) directory in the repository holds example decks, one per feature area or ecosystem topic (citations, speaker notes, diagrams, data visualisation, a German deck, R with knitr, and more); its README lists them all.
 They are not part of the package.
 
 `typst init @preview/bypst` starts from the `basic` template.

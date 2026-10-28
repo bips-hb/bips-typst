@@ -1,6 +1,6 @@
 // To use with a local installation (after `just install`):
-// #import "@local/bypst:0.6.0": *
-#import "@preview/bypst:0.6.0": *
+// #import "@local/bypst:0.7.0": *
+#import "@preview/bypst:0.7.0": *
 
 // config-info() sets the PDF metadata; title-slide() reads the same fields.
 #show: bips-theme.with(
