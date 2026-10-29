@@ -384,6 +384,63 @@
 })
 
 // -------------------------------------------------------------------
+// Outline Slide
+// -------------------------------------------------------------------
+
+/// Agenda slide listing every section slide, each linked to it and followed by
+/// the number of the first slide in that section. Entries are sized to fill the
+/// slide; see the outline constants in config.typ. Uncounted, so adding it
+/// does not shift the numbers it shows.
+#let outline-slide(title: auto, ..args) = base-slide(
+  title: if title == auto { _localized("outline") } else { title },
+  count: false,
+  page-number: false,
+  ..args,
+)[
+  // No #pause on this slide, so `context` cannot swallow any.
+  #context {
+    let sections = query(heading.where(level: 1, outlined: true))
+    // Line height is ~0.7em with the theme's cap-height/baseline text edges.
+    let n = calc.max(sections.len(), outline-fill-count)
+    let em-per-height = n * 0.7 + (n - 1) * outline-row-gap
+    layout(region => {
+      let size = calc.max(
+        region.height * outline-fill-height / em-per-height,
+        outline-min-size * text.size,
+      )
+      set text(size: size)
+      // Entries are links; the theme's link underline would clutter them.
+      show underline: it => it.body
+      block(height: region.height, width: 100%, align(
+        horizon,
+        grid(
+          columns: 2,
+          column-gutter: outline-page-gap,
+          row-gutter: outline-row-gap * 1em,
+          align: (left + top, right + top),
+          ..sections
+            .map(h => {
+              let loc = h.location()
+              // The section slide itself is uncounted, so its section starts
+              // at the next number.
+              let page = utils.slide-counter.at(loc).first() + 1
+              (
+                link(loc, text(
+                  fill: font-color-outline,
+                  weight: font-weight-outline,
+                  h.body,
+                )),
+                link(loc, text(fill: font-color-outline-page, str(page))),
+              )
+            })
+            .flatten(),
+        ),
+      ))
+    })
+  }
+]
+
+// -------------------------------------------------------------------
 // Bibliography Slide
 // -------------------------------------------------------------------
 

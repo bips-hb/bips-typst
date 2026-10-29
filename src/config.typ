@@ -100,6 +100,18 @@
 #let font-color-section-slide = bips-blue
 #let font-weight-section-slide = "bold"
 
+// Outline slide styling. Entries are sized so that `outline-fill-count`
+// of them span `outline-fill-height` of the content area; fewer keep that
+// size, more shrink down to `outline-min-size` (em of the body text).
+#let font-color-outline = bips-blue
+#let font-weight-outline = "medium"
+#let font-color-outline-page = bips-text-gray
+#let outline-fill-count = 5
+#let outline-fill-height = 0.85
+#let outline-row-gap = 0.9 // em, between entries
+#let outline-min-size = 0.7 // em; ~14 entries fit at this size
+#let outline-page-gap = 2em // between an entry and its slide number
+
 // Thanks slide styling
 #let font-size-thanks-slide-main = 24pt
 #let font-color-thanks-slide-main = bips-blue
@@ -154,6 +166,7 @@
     thanks: "Thank you for your attention!",
     contact: "Contact",
     references: "References",
+    outline: "Outline",
     institution: bips-en,
     address: [Achterstraße 30\ 28359 Bremen\ Germany],
   ),
@@ -161,6 +174,7 @@
     thanks: "Vielen Dank für Ihre Aufmerksamkeit!",
     contact: "Kontakt",
     references: "Literatur",
+    outline: "Gliederung",
     institution: bips-de,
     address: [Achterstraße 30\ 28359 Bremen\ Deutschland],
   ),

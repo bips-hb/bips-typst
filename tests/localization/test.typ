@@ -6,6 +6,9 @@
 // institution defaults to the German name via config-info
 #title-slide(title: "Deutscher Foliensatz", author: "Max Mustermann")
 
+// title: auto resolves to "Gliederung"
+#outline-slide()
+
 // title: auto resolves to "Literatur"
 #bibliography-slide[Keine Einträge.]
 

@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [0.7.0]
 
+### Added
+
+- `#outline-slide()` — an agenda listing every section slide in BIPS blue, each with the number of its first slide and linked to it. Entries are sized to fill the slide: five fill it, fewer keep that size, more shrink to 0.7× body text. Its title is localized ("Outline" / "Gliederung").
+
 ## [0.6.0] - October 2026
 
 ### Added

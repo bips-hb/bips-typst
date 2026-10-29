@@ -72,6 +72,7 @@ Then use the local import instead:
 | `#title-slide()` | Opening slide with author, institution, date |
 | `#bips-slide()` | Content slide with optional title/subtitle (preset over `base-slide`) |
 | `#section-slide()` | Section divider |
+| `#outline-slide()` | Agenda listing every section slide |
 | `#thanks-slide()` | Closing slide with contact info and optional QR code |
 | `#bibliography-slide[]` | References |
 | `#empty-slide[]` | Minimal slide without branding (preset over `base-slide`) |
@@ -130,6 +131,17 @@ Each line of the title slide takes its own size override, e.g. a larger name for
 
 The defaults are `title-size: 26pt`, `subtitle-size: 20pt`, `author-size: 20pt`, `institution-size: 18pt` and `date-size: 16pt` (`date-size` also applies to `occasion`).
 `author-size` and `institution-size` apply to the plural `authors:` and `institutions:` as well.
+
+### Outline slide
+
+```typst
+#outline-slide()                  // title follows the deck language
+#outline-slide(title: "Agenda")
+```
+
+Lists every `#section-slide()` in BIPS blue, each with the number of the first slide in that section and linked to it.
+The entries are sized so that five fill the slide; fewer keep that size, more get smaller, down to 0.7× the body text, where about 14 entries fit.
+The slide itself is uncounted, so adding it does not change any slide number.
 
 ### Section slides
 

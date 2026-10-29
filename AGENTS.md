@@ -135,7 +135,7 @@ lives in `src/`.
   under `src/`.
 - **`src/slides.typ`** — all slide types: `base-slide` plus the presets
   (`bips-slide`, `empty-slide`) and special slides (`title-slide`,
-  `section-slide`, `thanks-slide`, `bibliography-slide`).
+  `section-slide`, `outline-slide`, `thanks-slide`, `bibliography-slide`).
 - **`src/extras.typ`** — public layout and color utilities.
 - **`logo.png`** (root) — bundled placeholder logo, shipped in the package.
 - **`bips-logo.png`** (root) — the real institutional logo, excluded from the

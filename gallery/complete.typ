@@ -62,17 +62,10 @@
 // AGENDA / OUTLINE
 // ===================================================================
 
-// [Touying] `outline()` builds an agenda from the section slides — each
-// `section-slide` emits an outlined heading, so the table of contents stays
-// in sync automatically. (For a long outline that needs more than one column,
-// wrap it in `components.adaptive-columns(...)`.)
-// [BIPS] An agenda is conventionally unnumbered, so this uses `base-slide`
-// with `count: false` (does not advance the counter) and `page-number: false`
-// (no number, which would otherwise crowd the outline's right-aligned page
-// references). The logo stays on.
-#base-slide(title: "Outline", count: false, page-number: false)[
-  #outline(title: none, indent: 1em)
-]
+// [BIPS] `outline-slide` lists every `section-slide` with the number of the
+// section's first slide, each entry linked to its section. Entries are sized
+// to fill the slide. The slide itself is uncounted and has no page number.
+#outline-slide()
 
 // ===================================================================
 // SLIDE TYPES
